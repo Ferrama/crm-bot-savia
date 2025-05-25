@@ -29,7 +29,7 @@ class Invoices extends Model<Invoices> {
 
   @Column
   value: number;
-  
+
   @Column
   txId: string;
 

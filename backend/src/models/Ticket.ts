@@ -1,31 +1,31 @@
 import {
-  Table,
+  AutoIncrement,
+  BeforeCreate,
+  BelongsTo,
+  BelongsToMany,
   Column,
   CreatedAt,
-  UpdatedAt,
+  Default,
+  ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
-  ForeignKey,
-  BelongsTo,
-  HasMany,
-  AutoIncrement,
-  Default,
-  BeforeCreate,
-  BelongsToMany,
-  HasOne
+  Table,
+  UpdatedAt
 } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid";
 
+import Company from "./Company";
 import Contact from "./Contact";
+import Lead from "./Lead";
 import Message from "./Message";
 import Queue from "./Queue";
-import User from "./User";
-import Whatsapp from "./Whatsapp";
-import Company from "./Company";
 import QueueOption from "./QueueOption";
 import Tag from "./Tag";
 import TicketTag from "./TicketTag";
 import TicketTraking from "./TicketTraking";
+import User from "./User";
+import Whatsapp from "./Whatsapp";
 
 @Table
 class Ticket extends Model<Ticket> {
@@ -74,7 +74,6 @@ class Ticket extends Model<Ticket> {
   @Column
   whatsappId: number;
 
-
   @BelongsTo(() => Whatsapp)
   whatsapp: Whatsapp;
 
@@ -122,6 +121,13 @@ class Ticket extends Model<Ticket> {
 
   @HasMany(() => TicketTraking)
   ticketTrakings: TicketTraking;
+
+  @ForeignKey(() => Lead)
+  @Column
+  leadId: number;
+
+  @BelongsTo(() => Lead)
+  lead: Lead;
 }
 
 export default Ticket;

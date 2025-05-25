@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 
+import { head } from "lodash";
+import fs from "fs";
+import path from "path";
 import CreateService from "../services/QueueOptionService/CreateService";
 import ListService from "../services/QueueOptionService/ListService";
 import UpdateService from "../services/QueueOptionService/UpdateService";
 import ShowService from "../services/QueueOptionService/ShowService";
 import DeleteService from "../services/QueueOptionService/DeleteService";
 
-import { head } from "lodash";
-import fs from "fs";
-import path from "path";
 import AppError from "../errors/AppError";
 import QueueOption from "../models/QueueOption";
 
@@ -25,11 +25,11 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
   const convertedQueueId: number = parseInt(queueId, 10);
   const convertedQueueOptionId = parseInt(queueOptionId, 10);
   const convertedParentId = parseInt(parentId, 10);
-  
-  const queueOptions = await ListService({ 
+
+  const queueOptions = await ListService({
     queueId: convertedQueueId,
     queueOptionId: convertedQueueOptionId,
-    parentId: convertedParentId 
+    parentId: convertedParentId
   });
 
   return res.json(queueOptions);
@@ -55,7 +55,7 @@ export const update = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { queueOptionId } = req.params
+  const { queueOptionId } = req.params;
   const queueOptionData = req.body;
 
   const queueOption = await UpdateService(queueOptionId, queueOptionData);
@@ -67,7 +67,7 @@ export const remove = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { queueOptionId } = req.params
+  const { queueOptionId } = req.params;
 
   await DeleteService(queueOptionId);
 
@@ -84,12 +84,12 @@ export const mediaUpload = async (
 
   try {
     const queue = await QueueOption.findByPk(queueOptionId);
-   
+
     queue.update({
       mediaPath: file.filename,
       mediaName: file.originalname
     });
-   
+
     return res.send({ mensagem: "Arquivo Salvo" });
   } catch (err: any) {
     throw new AppError(err.message);

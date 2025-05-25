@@ -1,0 +1,10 @@
+FROM node:20
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+RUN npm install
+
+# No copies src/ aquí
+
+CMD ["npx", "nodemon", "--watch", "src", "--exec", "npm", "run", "start:dev"]

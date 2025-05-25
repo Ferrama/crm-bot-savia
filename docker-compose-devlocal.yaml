@@ -1,0 +1,94 @@
+networks:
+  ticketz:
+
+volumes:
+  postgres_data:
+  redis_data:
+  backend_public:
+  backend_private:
+  backend_node_modules:
+  frontend_node_modules:
+
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - ./backend:/usr/src/app
+      - backend_public:/usr/src/app/public
+      - backend_private:/usr/src/app/private
+      - backend_node_modules:/usr/src/app/node_modules
+    env_file:
+      - .env-backend-local
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - ${BACKEND_PORT:-8080}:3000
+    networks:
+      - ticketz
+    command: sh -c "npm install && npm run start:dev"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - ./frontend:/usr/src/app
+      - frontend_node_modules:/usr/src/app/node_modules
+      - backend_public:/var/www/backend-public
+    env_file:
+      - .env-frontend-local
+    ports:
+      - ${FRONTEND_PORT:-3000}:3000
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - ticketz
+    command: sh -c "npm install && npm start"
+
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-ticketz}
+      - POSTGRES_DB=${POSTGRES_DB:-ticketz}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - TZ=${TZ:-America/Sao_Paulo}
+    expose:
+      - 5432
+    restart: always
+    networks:
+      - ticketz
+
+  redis:
+    image: redis:alpine
+    command: redis-server --appendonly yes
+    expose:
+      - 6379
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - ticketz
+
+  sidekick:
+    image: ghcr.io/ticketz-oss/ticketz-sidekick:latest
+    profiles: ["do-not-start"]
+    env_file:
+      - .env-backend-local
+    restart: unless-stopped
+    volumes:
+      - backend_public:/backend-public
+      - backend_private:/backend-private
+      - ./backups:/backups
+      - ./retrieve:/retrieve
+    depends_on:
+      - postgres
+    networks:
+      - ticketz

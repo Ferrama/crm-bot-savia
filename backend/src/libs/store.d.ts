@@ -60,10 +60,7 @@ export interface Store {
     jid: string,
     sock: WASocket | undefined
   ) => Promise<proto.IWebMessageInfo>;
-  fetchImageUrl: (
-    jid: string,
-    sock: WASocket | undefined
-  ) => Promise<string>;
+  fetchImageUrl: (jid: string, sock: WASocket | undefined) => Promise<string>;
   fetchGroupMetadata: (
     jid: string,
     sock: WASocket | undefined

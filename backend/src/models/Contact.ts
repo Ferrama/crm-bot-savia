@@ -1,25 +1,27 @@
 import {
-  Table,
+  AllowNull,
+  AutoIncrement,
+  BelongsTo,
+  BelongsToMany,
   Column,
   CreatedAt,
-  UpdatedAt,
+  Default,
+  ForeignKey,
+  HasMany,
+  HasOne,
   Model,
   PrimaryKey,
-  AutoIncrement,
-  AllowNull,
+  Table,
   Unique,
-  Default,
-  HasMany,
-  ForeignKey,
-  BelongsTo,
-  BelongsToMany
+  UpdatedAt
 } from "sequelize-typescript";
-import ContactCustomField from "./ContactCustomField";
-import Ticket from "./Ticket";
 import Company from "./Company";
-import Schedule from "./Schedule";
+import ContactCustomField from "./ContactCustomField";
 import ContactTag from "./ContactTag";
+import Lead from "./Lead";
+import Schedule from "./Schedule";
 import Tag from "./Tag";
+import Ticket from "./Ticket";
 
 @Table
 class Contact extends Model {
@@ -92,6 +94,9 @@ class Contact extends Model {
 
   @BelongsToMany(() => Tag, () => ContactTag)
   tags: Tag[];
+
+  @HasOne(() => Lead)
+  lead: Lead;
 }
 
 export default Contact;

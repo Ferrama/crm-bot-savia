@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import { toast } from "react-toastify";
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import { toast } from 'react-toastify';
 
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import Title from "../../components/Title";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import api from "../../services/api";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import MainContainer from '../../components/MainContainer';
+import MainHeader from '../../components/MainHeader';
+import Title from '../../components/Title';
+import api from '../../services/api';
 
-import { i18n } from "../../translate/i18n";
 import {
   Box,
   Button,
@@ -27,18 +26,19 @@ import {
   TableRow,
   TextField,
   Typography,
-} from "@material-ui/core";
-import ConfirmationModal from "../../components/ConfirmationModal";
+} from '@material-ui/core';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import { i18n } from '../../translate/i18n';
 
 const useStyles = makeStyles((theme) => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
-    overflowY: "scroll",
+    overflowY: 'scroll',
     ...theme.scrollbarStyles,
   },
   textRight: {
-    textAlign: "right",
+    textAlign: 'right',
   },
   tabPanelsContainer: {
     padding: theme.spacing(2),
@@ -59,10 +59,10 @@ const CampaignsConfig = () => {
   const [showVariablesForm, setShowVariablesForm] = useState(false);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [selectedKey, setSelectedKey] = useState(null);
-  const [variable, setVariable] = useState({ key: "", value: "" });
+  const [variable, setVariable] = useState({ key: '', value: '' });
 
   useEffect(() => {
-    api.get("/campaign-settings").then(({ data }) => {
+    api.get('/campaign-settings').then(({ data }) => {
       const settingsList = [];
       if (Array.isArray(data) && data.length > 0) {
         data.forEach((item) => {
@@ -95,7 +95,7 @@ const CampaignsConfig = () => {
       const variables = prev.variables;
       if (variablesExists.length === 0) {
         variables.push(Object.assign({}, variable));
-        setVariable({ key: "", value: "" });
+        setVariable({ key: '', value: '' });
       }
       return { ...prev, variables };
     });
@@ -108,143 +108,177 @@ const CampaignsConfig = () => {
   };
 
   const saveSettings = async () => {
-    await api.post("/campaign-settings", { settings });
-    toast.success("Configurações salvas");
+    await api.post('/campaign-settings', { settings });
+    toast.success(i18n.t('settings.success'));
   };
 
   return (
     <MainContainer>
       <ConfirmationModal
-        title={i18n.t("campaigns.confirmationModal.deleteTitle")}
+        title={i18n.t('campaigns.confirmationModal.deleteTitle')}
         open={confirmationOpen}
         onClose={() => setConfirmationOpen(false)}
         onConfirm={removeVariable}
       >
-        {i18n.t("campaigns.confirmationModal.deleteMessage")}
+        {i18n.t('campaigns.confirmationModal.deleteMessage')}
       </ConfirmationModal>
       <MainHeader>
-        <Grid style={{ width: "99.6%" }} container>
+        <Grid style={{ width: '99.6%' }} container>
           <Grid xs={12} item>
-            <Title>{i18n.t("campaignsConfig.title")}</Title>
+            <Title>{i18n.t('campaignsConfig.title')}</Title>
           </Grid>
         </Grid>
       </MainHeader>
-      <Paper className={classes.mainPaper} variant="outlined">
+      <Paper className={classes.mainPaper} variant='outlined'>
         <Box className={classes.tabPanelsContainer}>
           <Grid spacing={2} container>
             <Grid xs={12} item>
-              <Typography component={"h3"}>Intervalos</Typography>
+              <Typography component={'h3'}>
+                {i18n.t('campaignsConfig.intervals')}
+              </Typography>
             </Grid>
             <Grid xs={12} md={4} item>
               <FormControl
-                variant="outlined"
+                variant='outlined'
                 className={classes.formControl}
                 fullWidth
               >
-                <InputLabel id="messageInterval-label">
-                  Intervalo Randômico de Disparo
+                <InputLabel id='messageInterval-label'>
+                  {i18n.t('campaignsConfig.messageInterval')}
                 </InputLabel>
                 <Select
-                  name="messageInterval"
-                  id="messageInterval"
-                  labelId="messageInterval-label"
-                  label="Intervalo Randômico de Disparo"
+                  name='messageInterval'
+                  id='messageInterval'
+                  labelId='messageInterval-label'
+                  label={i18n.t('campaignsConfig.messageInterval')}
                   value={settings.messageInterval}
                   onChange={(e) => handleOnChangeSettings(e)}
                 >
-                  <MenuItem value={0}>Sem Intervalo</MenuItem>
-                  <MenuItem value={5}>5 segundos</MenuItem>
-                  <MenuItem value={10}>10 segundos</MenuItem>
-                  <MenuItem value={15}>15 segundos</MenuItem>
-                  <MenuItem value={20}>20 segundos</MenuItem>
+                  <MenuItem value={0}>
+                    {i18n.t('campaignsConfig.noInterval')}
+                  </MenuItem>
+                  <MenuItem value={5}>
+                    5 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
+                  <MenuItem value={10}>
+                    10 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
+                  <MenuItem value={15}>
+                    15 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
+                  <MenuItem value={20}>
+                    20 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid xs={12} md={4} item>
               <FormControl
-                variant="outlined"
+                variant='outlined'
                 className={classes.formControl}
                 fullWidth
               >
-                <InputLabel id="longerIntervalAfter-label">
-                  Intervalo Maior Após
+                <InputLabel id='longerIntervalAfter-label'>
+                  {i18n.t('campaignsConfig.longerIntervalAfter')}
                 </InputLabel>
                 <Select
-                  name="longerIntervalAfter"
-                  id="longerIntervalAfter"
-                  labelId="longerIntervalAfter-label"
-                  label="Intervalo Maior Após"
+                  name='longerIntervalAfter'
+                  id='longerIntervalAfter'
+                  labelId='longerIntervalAfter-label'
+                  label={i18n.t('campaignsConfig.longerIntervalAfter')}
                   value={settings.longerIntervalAfter}
                   onChange={(e) => handleOnChangeSettings(e)}
                 >
-                  <MenuItem value={0}>Não definido</MenuItem>
-                  <MenuItem value={5}>5 mensagens</MenuItem>
-                  <MenuItem value={10}>10 mensagens</MenuItem>
-                  <MenuItem value={15}>15 mensagens</MenuItem>
-                  <MenuItem value={20}>20 mensagens</MenuItem>
+                  <MenuItem value={0}>
+                    {i18n.t('campaignsConfig.notDefined')}
+                  </MenuItem>
+                  <MenuItem value={5}>
+                    5 {i18n.t('campaignsConfig.messages')}
+                  </MenuItem>
+                  <MenuItem value={10}>
+                    10 {i18n.t('campaignsConfig.messages')}
+                  </MenuItem>
+                  <MenuItem value={15}>
+                    15 {i18n.t('campaignsConfig.messages')}
+                  </MenuItem>
+                  <MenuItem value={20}>
+                    20 {i18n.t('campaignsConfig.messages')}
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid xs={12} md={4} item>
               <FormControl
-                variant="outlined"
+                variant='outlined'
                 className={classes.formControl}
                 fullWidth
               >
-                <InputLabel id="greaterInterval-label">
-                  Intervalo de Disparo Maior
+                <InputLabel id='greaterInterval-label'>
+                  {i18n.t('campaignsConfig.greaterInterval')}
                 </InputLabel>
                 <Select
-                  name="greaterInterval"
-                  id="greaterInterval"
-                  labelId="greaterInterval-label"
-                  label="Intervalo de Disparo Maior"
+                  name='greaterInterval'
+                  id='greaterInterval'
+                  labelId='greaterInterval-label'
+                  label={i18n.t('campaignsConfig.greaterInterval')}
                   value={settings.greaterInterval}
                   onChange={(e) => handleOnChangeSettings(e)}
                 >
-                  <MenuItem value={0}>Sem Intervalo</MenuItem>
-                  <MenuItem value={20}>20 segundos</MenuItem>
-                  <MenuItem value={30}>30 segundos</MenuItem>
-                  <MenuItem value={40}>40 segundos</MenuItem>
-                  <MenuItem value={50}>50 segundos</MenuItem>
-                  <MenuItem value={60}>60 segundos</MenuItem>
+                  <MenuItem value={0}>
+                    {i18n.t('campaignsConfig.noInterval')}
+                  </MenuItem>
+                  <MenuItem value={20}>
+                    20 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
+                  <MenuItem value={30}>
+                    30 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
+                  <MenuItem value={40}>
+                    40 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
+                  <MenuItem value={50}>
+                    50 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
+                  <MenuItem value={60}>
+                    60 {i18n.t('campaignsConfig.seconds')}
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid xs={12} className={classes.textRight} item>
               <Button
                 onClick={() => setShowVariablesForm(!showVariablesForm)}
-                color="primary"
+                color='primary'
                 style={{ marginRight: 10 }}
               >
-                Adicionar Variável
+                {i18n.t('campaignsConfig.addVariable')}
               </Button>
               <Button
                 onClick={saveSettings}
-                color="primary"
-                variant="contained"
+                color='primary'
+                variant='contained'
               >
-                Salvar Configurações
+                {i18n.t('campaignsConfig.saveSettings')}
               </Button>
             </Grid>
             {showVariablesForm && (
               <>
                 <Grid xs={12} md={6} item>
                   <TextField
-                    label="Atalho"
-                    variant="outlined"
+                    label={i18n.t('campaignsConfig.shortcode')}
+                    variant='outlined'
                     value={variable.key}
-                    name="key"
+                    name='key'
                     onChange={handleOnChangeVariable}
                     fullWidth
                   />
                 </Grid>
                 <Grid xs={12} md={6} item>
                   <TextField
-                    label="Conteúdo"
-                    variant="outlined"
+                    label={i18n.t('campaignsConfig.content')}
+                    variant='outlined'
                     value={variable.value}
-                    name="value"
+                    name='value'
                     onChange={handleOnChangeVariable}
                     fullWidth
                   />
@@ -252,29 +286,31 @@ const CampaignsConfig = () => {
                 <Grid xs={12} className={classes.textRight} item>
                   <Button
                     onClick={() => setShowVariablesForm(!showVariablesForm)}
-                    color="primary"
+                    color='primary'
                     style={{ marginRight: 10 }}
                   >
-                    Fechar
+                    {i18n.t('common.close')}
                   </Button>
                   <Button
                     onClick={addVariable}
-                    color="primary"
-                    variant="contained"
+                    color='primary'
+                    variant='contained'
                   >
-                    Adicionar
+                    {i18n.t('common.add')}
                   </Button>
                 </Grid>
               </>
             )}
             {settings.variables.length > 0 && (
               <Grid xs={12} className={classes.textRight} item>
-                <Table size="small">
+                <Table size='small'>
                   <TableHead>
                     <TableRow>
-                      <TableCell style={{ width: "1%" }}></TableCell>
-                      <TableCell>Atalho</TableCell>
-                      <TableCell>Conteúdo</TableCell>
+                      <TableCell style={{ width: '1%' }}></TableCell>
+                      <TableCell>
+                        {i18n.t('campaignsConfig.shortcode')}
+                      </TableCell>
+                      <TableCell>{i18n.t('campaignsConfig.content')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -283,7 +319,7 @@ const CampaignsConfig = () => {
                         <TableRow key={k}>
                           <TableCell>
                             <IconButton
-                              size="small"
+                              size='small'
                               onClick={() => {
                                 setSelectedKey(v.key);
                                 setConfirmationOpen(true);
@@ -292,7 +328,7 @@ const CampaignsConfig = () => {
                               <DeleteOutlineIcon />
                             </IconButton>
                           </TableCell>
-                          <TableCell>{"{" + v.key + "}"}</TableCell>
+                          <TableCell>{'{' + v.key + '}'}</TableCell>
                           <TableCell>{v.value}</TableCell>
                         </TableRow>
                       ))}

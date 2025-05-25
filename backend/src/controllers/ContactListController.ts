@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 import { Request, Response } from "express";
+import { head } from "lodash";
 import { getIO } from "../libs/socket";
 
 import ListService from "../services/ContactListService/ListService";
@@ -8,7 +9,6 @@ import ShowService from "../services/ContactListService/ShowService";
 import UpdateService from "../services/ContactListService/UpdateService";
 import DeleteService from "../services/ContactListService/DeleteService";
 import FindService from "../services/ContactListService/FindService";
-import { head } from "lodash";
 
 import ContactList from "../models/ContactList";
 

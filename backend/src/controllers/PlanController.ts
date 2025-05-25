@@ -40,13 +40,12 @@ type UpdatePlanData = {
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const { searchParam, pageNumber, listPublic } = req.query as IndexQuery;
 
-
   const { plans, count, hasMore } = await ListPlansService({
     searchParam,
     pageNumber,
     listPublic
   });
-  console.log(plans)
+  console.log(plans);
   return res.json({ plans, count, hasMore });
 };
 
@@ -55,7 +54,10 @@ export const list = async (req: Request, res: Response): Promise<Response> => {
   return res.status(200).json(plans);
 };
 
-export const listPublic = async (req: Request, res: Response): Promise<Response> => {
+export const listPublic = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const plans: Plan[] = await FindAllPlanService(true);
   return res.status(200).json(plans);
 };

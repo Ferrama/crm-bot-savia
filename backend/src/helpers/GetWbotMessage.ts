@@ -11,19 +11,17 @@ export const GetWbotMessage = async (
 ): Promise<proto.WebMessageInfo | Message> => {
   const getSock = await GetTicketWbot(ticket);
 
-  let limit = 20;
+  const limit = 20;
 
   const fetchWbotMessagesGradually = async (): Promise<
     proto.WebMessageInfo | Message | null | undefined
   > => {
+    const msgFound = await GetMessageService({
+      id: messageId,
+      ticketId: ticket.id
+    });
 
-      const msgFound = await GetMessageService({
-        id: messageId,
-        ticketId: ticket.id
-      });
-
-      return msgFound;
-    
+    return msgFound;
 
     return null;
   };

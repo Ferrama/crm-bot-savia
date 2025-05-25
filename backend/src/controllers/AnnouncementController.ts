@@ -1,16 +1,16 @@
-import * as Yup from "yup";
 import { Request, Response } from "express";
-import { getIO } from "../libs/socket";
-import { head } from "lodash";
 import fs from "fs";
+import { head } from "lodash";
 import path from "path";
+import * as Yup from "yup";
+import { getIO } from "../libs/socket";
 
-import ListService from "../services/AnnouncementService/ListService";
 import CreateService from "../services/AnnouncementService/CreateService";
-import ShowService from "../services/AnnouncementService/ShowService";
-import UpdateService from "../services/AnnouncementService/UpdateService";
 import DeleteService from "../services/AnnouncementService/DeleteService";
 import FindService from "../services/AnnouncementService/FindService";
+import ListService from "../services/AnnouncementService/ListService";
+import ShowService from "../services/AnnouncementService/ShowService";
+import UpdateService from "../services/AnnouncementService/UpdateService";
 
 import Announcement from "../models/Announcement";
 
@@ -67,7 +67,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
   });
 
   const io = getIO();
-  io.emit(`company-announcement`, {
+  io.emit("company-announcement", {
     action: "create",
     record
   });
@@ -107,7 +107,7 @@ export const update = async (
   });
 
   const io = getIO();
-  io.emit(`company-announcement`, {
+  io.emit("company-announcement", {
     action: "update",
     record
   });
@@ -161,7 +161,7 @@ export const mediaUpload = async (
     await announcement.reload();
 
     const io = getIO();
-    io.emit(`company-announcement`, {
+    io.emit("company-announcement", {
       action: "update",
       record: announcement
     });
@@ -193,7 +193,7 @@ export const deleteMedia = async (
     await announcement.reload();
 
     const io = getIO();
-    io.emit(`company-announcement`, {
+    io.emit("company-announcement", {
       action: "update",
       record: announcement
     });

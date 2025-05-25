@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useField } from 'formik';
+import DateFnsUtils from '@date-io/date-fns';
 import Grid from '@material-ui/core/Grid';
 import {
+  KeyboardDatePicker,
   MuiPickersUtilsProvider,
-  KeyboardDatePicker
 } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import { useField } from 'formik';
+import React, { useEffect, useState } from 'react';
 
 export default function DatePickerField(props) {
   const [field, meta, helper] = useField(props);
@@ -17,22 +17,33 @@ export default function DatePickerField(props) {
 
   useEffect(() => {
     if (value) {
-      const date = new Date(value);
-      setSelectedDate(date);
+      try {
+        const date = new Date(value);
+        if (!isNaN(date.getTime())) {
+          setSelectedDate(date);
+        } else {
+          setSelectedDate(null);
+        }
+      } catch (error) {
+        setSelectedDate(null);
+      }
+    } else {
+      setSelectedDate(null);
     }
   }, [value]);
 
   function _onChange(date) {
-    if (date) {
+    if (date && !isNaN(date.getTime())) {
       setSelectedDate(date);
       try {
         const ISODateString = date.toISOString();
         setValue(ISODateString);
       } catch (error) {
-        setValue(date);
+        setValue(null);
       }
     } else {
-      setValue(date);
+      setSelectedDate(null);
+      setValue(null);
     }
   }
 
@@ -47,6 +58,12 @@ export default function DatePickerField(props) {
           error={isError}
           invalidDateMessage={isError && error}
           helperText={isError && error}
+          clearable
+          format='dd/MM/yyyy'
+          InputProps={{
+            ...props.InputProps,
+            value: selectedDate ? selectedDate.toLocaleDateString() : '',
+          }}
         />
       </MuiPickersUtilsProvider>
     </Grid>

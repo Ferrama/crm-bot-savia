@@ -1,0 +1,66 @@
+{
+    "title": "Leads",
+    "search": "Buscar leads...",
+    "table": {
+        "name": "Nome",
+        "contact": "Contato",
+        "stage": "Estágio",
+        "temperature": "Temperatura",
+        "source": "Origem",
+        "expectedValue": "Valor Esperado",
+        "probability": "Probabilidade",
+        "expectedClosingDate": "Data Prevista de Fechamento",
+        "assignedTo": "Atribuído a",
+        "actions": "Ações"
+    },
+    "buttons": {
+        "add": "Adicionar Lead",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "save": "Salvar",
+        "cancel": "Cancelar"
+    },
+    "modal": {
+        "add": {
+            "title": "Adicionar Novo Lead"
+        },
+        "edit": {
+            "title": "Editar Lead"
+        },
+        "form": {
+            "contact": "Contato",
+            "stage": "Estágio",
+            "temperature": "Temperatura",
+            "source": "Origem",
+            "expectedValue": "Valor Esperado",
+            "probability": "Probabilidade (%)",
+            "expectedClosingDate": "Data Prevista de Fechamento",
+            "assignedTo": "Atribuído a",
+            "notes": "Observações",
+            "selectUser": "Selecione um usuário..."
+        }
+    },
+    "stages": {
+        "new": "Novo",
+        "contacted": "Contatado",
+        "qualified": "Qualificado",
+        "proposal": "Proposta",
+        "negotiation": "Negociação",
+        "closed_won": "Fechado (Ganho)",
+        "closed_lost": "Fechado (Perdido)"
+    },
+    "temperatures": {
+        "hot": "Quente",
+        "warm": "Morno",
+        "cold": "Frio"
+    },
+    "toasts": {
+        "created": "Lead criado com sucesso!",
+        "updated": "Lead atualizado com sucesso!",
+        "deleted": "Lead excluído com sucesso!"
+    },
+    "delete": {
+        "title": "Excluir Lead",
+        "message": "Tem certeza que deseja excluir este lead? Esta ação não pode ser desfeita."
+    }
+}

@@ -57,7 +57,7 @@ export const useMultiFileAuthState = async (
         get: async (type, ids) => {
           const data: { [_: string]: SignalDataTypeMap[typeof type] } = {};
 
-          for (let id of ids) {
+          for (const id of ids) {
             try {
               let value = await readData(`${type}-${id}`);
               if (type === "app-state-sync-key") {

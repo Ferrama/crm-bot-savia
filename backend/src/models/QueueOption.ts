@@ -1,17 +1,19 @@
 import {
-  Table,
+  AllowNull,
+  AutoIncrement,
+  BelongsTo,
   Column,
   CreatedAt,
-  UpdatedAt,
+  ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
-  AutoIncrement,
-  ForeignKey,
-  BelongsTo,
-  AllowNull,
-  HasMany
+  Table,
+  UpdatedAt
 } from "sequelize-typescript";
 import Queue from "./Queue";
+
+type QueueOptionModel = Model<QueueOption>;
 
 @Table
 class QueueOption extends Model<QueueOption> {
@@ -34,7 +36,7 @@ class QueueOption extends Model<QueueOption> {
   @ForeignKey(() => Queue)
   @Column
   queueId: number;
-  
+
   @ForeignKey(() => QueueOption)
   @Column
   parentId: number;
@@ -46,7 +48,7 @@ class QueueOption extends Model<QueueOption> {
 
   @Column
   exitChatbot: boolean;
-  
+
   @CreatedAt
   createdAt: Date;
 
@@ -56,7 +58,7 @@ class QueueOption extends Model<QueueOption> {
   @BelongsTo(() => Queue)
   queue: Queue;
 
-  @BelongsTo(() => QueueOption, { foreignKey: 'parentId' })
+  @BelongsTo(() => QueueOption, { foreignKey: "parentId" })
   parent: QueueOption;
 
   @BelongsTo(() => Queue, { foreignKey: "forwardQueueId" })

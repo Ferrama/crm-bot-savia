@@ -8,7 +8,7 @@ import {
   AutoIncrement,
   BelongsTo,
   ForeignKey,
-  DataType,
+  DataType
 } from "sequelize-typescript";
 import User from "./User";
 import Chat from "./Chat";
@@ -34,7 +34,9 @@ class ChatMessage extends Model<ChatMessage> {
   @Column(DataType.STRING)
   get mediaPath(): string | null {
     if (this.getDataValue("mediaPath")) {
-      return `${process.env.BACKEND_URL}/public/${this.getDataValue("mediaPath")}`;
+      return `${process.env.BACKEND_URL}/public/${this.getDataValue(
+        "mediaPath"
+      )}`;
     }
     return null;
   }
