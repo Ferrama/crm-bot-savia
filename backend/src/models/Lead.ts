@@ -23,6 +23,11 @@ class Lead extends Model<Lead> {
   @Column
   id: number;
 
+  @Column({
+    allowNull: false
+  })
+  name: string;
+
   @ForeignKey(() => Contact)
   @Column
   contactId: number;
@@ -30,22 +35,21 @@ class Lead extends Model<Lead> {
   @BelongsTo(() => Contact)
   contact: Contact;
 
-  @Column({
-    type: DataType.ENUM(
-      "new",
-      "contacted",
-      "qualified",
-      "proposal",
-      "negotiation",
-      "closed_won",
-      "closed_lost"
-    ),
-    defaultValue: "new"
+  @ForeignKey(() => {
+    const LeadColumn = require("./LeadColumn").default;
+    return LeadColumn;
   })
-  stage: string;
+  @Column
+  columnId: number;
+
+  @BelongsTo(() => {
+    const LeadColumn = require("./LeadColumn").default;
+    return LeadColumn;
+  })
+  column: any;
 
   @Column({
-    type: DataType.ENUM("hot", "warm", "cold"),
+    type: DataType.ENUM("cold", "warm", "hot"),
     defaultValue: "cold"
   })
   temperature: string;
@@ -53,13 +57,13 @@ class Lead extends Model<Lead> {
   @Column
   source: string;
 
-  @Column
+  @Column(DataType.DECIMAL(10, 2))
   expectedValue: number;
 
-  @Column
+  @Column(DataType.INTEGER)
   probability: number;
 
-  @Column
+  @Column(DataType.DATE)
   expectedClosingDate: Date;
 
   @ForeignKey(() => User)
@@ -82,8 +86,8 @@ class Lead extends Model<Lead> {
   @Column(DataType.TEXT)
   notes: string;
 
-  @Column(DataType.JSONB)
-  customFields: Record<string, any>;
+  @Column(DataType.JSON)
+  customFields: any;
 
   @CreatedAt
   createdAt: Date;

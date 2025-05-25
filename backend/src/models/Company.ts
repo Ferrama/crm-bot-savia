@@ -1,19 +1,21 @@
 import {
-  Table,
+  AutoIncrement,
+  BelongsTo,
   Column,
   CreatedAt,
-  UpdatedAt,
+  DataType,
+  ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
-  AutoIncrement,
-  ForeignKey,
-  BelongsTo,
-  DataType,
-  HasMany
+  Table,
+  UpdatedAt
 } from "sequelize-typescript";
 import Contact from "./Contact";
 import Message from "./Message";
 
+import Lead from "./Lead";
+import LeadColumn from "./LeadColumn";
 import Plan from "./Plan";
 import Queue from "./Queue";
 import Setting from "./Setting";
@@ -128,6 +130,12 @@ class Company extends Model<Company> {
     hooks: true
   })
   ticketTrankins: TicketTraking[];
+
+  @HasMany(() => LeadColumn)
+  leadColumns: LeadColumn[];
+
+  @HasMany(() => Lead)
+  leads: Lead[];
 }
 
 export default Company;

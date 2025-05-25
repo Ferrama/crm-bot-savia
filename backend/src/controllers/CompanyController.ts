@@ -1,19 +1,19 @@
-import * as Yup from "yup";
-import { Request, Response } from "express";
-// import { getIO } from "../libs/socket";
 import axios from "axios";
+import { Request, Response } from "express";
 import moment from "moment";
+import * as Yup from "yup";
 import AppError from "../errors/AppError";
+import { getIO } from "../libs/socket";
 import Company from "../models/Company";
+import LeadColumn from "../models/LeadColumn";
 
-import ListCompaniesService from "../services/CompanyService/ListCompaniesService";
-import CreateCompanyService from "../services/CompanyService/CreateCompanyService";
-import UpdateCompanyService from "../services/CompanyService/UpdateCompanyService";
-import ShowCompanyService from "../services/CompanyService/ShowCompanyService";
-import UpdateSchedulesService from "../services/CompanyService/UpdateSchedulesService";
+import User from "../models/User";
 import DeleteCompanyService from "../services/CompanyService/DeleteCompanyService";
 import FindAllCompaniesService from "../services/CompanyService/FindAllCompaniesService";
-import User from "../models/User";
+import ListCompaniesService from "../services/CompanyService/ListCompaniesService";
+import ShowCompanyService from "../services/CompanyService/ShowCompanyService";
+import UpdateCompanyService from "../services/CompanyService/UpdateCompanyService";
+import UpdateSchedulesService from "../services/CompanyService/UpdateSchedulesService";
 
 import CheckSettings from "../helpers/CheckSettings";
 
@@ -29,9 +29,7 @@ type CompanyData = {
   email?: string;
   status?: boolean;
   planId?: number;
-  campaignsEnabled?: boolean;
   dueDate?: string;
-  recurrence?: string;
 };
 
 type SchedulesData = {
@@ -50,19 +48,56 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
-  const newCompany: CompanyData = req.body;
+  const { name, email, phone, status, planId, dueDate } =
+    req.body as CompanyData;
 
   const schema = Yup.object().shape({
-    name: Yup.string().required()
+    name: Yup.string().required(),
+    email: Yup.string().email().required(),
+    phone: Yup.string().required(),
+    status: Yup.boolean().required(),
+    planId: Yup.number().required(),
+    dueDate: Yup.date().required()
   });
 
   try {
-    await schema.validate(newCompany);
+    await schema.validate(req.body);
   } catch (err) {
     throw new AppError(err.message);
   }
 
-  const company = await CreateCompanyService(newCompany);
+  const company = await Company.create({
+    name,
+    email,
+    phone,
+    status,
+    planId,
+    dueDate
+  });
+
+  // Create default lead columns
+  const defaultColumns = [
+    { name: "New", color: "#4CAF50", order: 1 },
+    { name: "Contacted", color: "#2196F3", order: 2 },
+    { name: "Qualified", color: "#FFC107", order: 3 },
+    { name: "Proposal", color: "#9C27B0", order: 4 },
+    { name: "Negotiation", color: "#FF9800", order: 5 },
+    { name: "Closed Won", color: "#4CAF50", order: 6 },
+    { name: "Closed Lost", color: "#F44336", order: 7 }
+  ];
+
+  await LeadColumn.bulkCreate(
+    defaultColumns.map(column => ({
+      ...column,
+      companyId: company.id
+    }))
+  );
+
+  const io = getIO();
+  io.emit("company:create", {
+    action: "create",
+    company
+  });
 
   return res.status(200).json(company);
 };

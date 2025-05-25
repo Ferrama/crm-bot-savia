@@ -18,6 +18,7 @@ import Counter from "../models/Counter";
 import Help from "../models/Help";
 import Invoices from "../models/Invoices";
 import Lead from "../models/Lead";
+import LeadColumn from "../models/LeadColumn";
 import Message from "../models/Message";
 import OldMessage from "../models/OldMessage";
 import OutOfTicketMessage from "../models/OutOfTicketMessages";
@@ -85,6 +86,7 @@ const models = [
   Invoices,
   OutOfTicketMessage,
   Subscriptions,
+  LeadColumn,
   Lead
 ];
 

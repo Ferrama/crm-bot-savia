@@ -5,12 +5,14 @@ import AppError from "../errors/AppError";
 import { getIO } from "../libs/socket";
 import Contact from "../models/Contact";
 import Lead from "../models/Lead";
+import LeadColumn from "../models/LeadColumn";
 import Ticket from "../models/Ticket";
 import User from "../models/User";
 
 interface LeadData {
+  name: string;
   contactId: number;
-  stage: string;
+  columnId: number;
   temperature: string;
   source: string;
   expectedValue: number;
@@ -18,7 +20,7 @@ interface LeadData {
   expectedClosingDate: Date;
   assignedToId: number;
   notes: string;
-  customFields: Record<string, unknown>;
+  customFields: any;
 }
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
@@ -32,15 +34,15 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     companyId,
     ...(searchParam && {
       [Op.or]: [
+        { name: { [Op.like]: `%${searchParam}%` } },
         { "$contact.name$": { [Op.like]: `%${searchParam}%` } },
-        { "$contact.number$": { [Op.like]: `%${searchParam}%` } },
-        { "$contact.email$": { [Op.like]: `%${searchParam}%` } }
+        { "$contact.number$": { [Op.like]: `%${searchParam}%` } }
       ]
     })
   };
 
   const limit = 20;
-  const offset = limit * (+pageNumber - 1);
+  const offset = pageNumber ? (Number(pageNumber) - 1) * limit : 0;
 
   const { count, rows: leads } = await Lead.findAndCountAll({
     where: whereCondition,
@@ -48,12 +50,15 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     offset,
     order: [["createdAt", "DESC"]],
     include: [
-      { model: Contact, as: "contact" },
-      { model: User, as: "assignedTo", attributes: ["id", "name"] }
+      { model: Contact, as: "contact", attributes: ["id", "name", "number"] },
+      { model: User, as: "assignedTo", attributes: ["id", "name"] },
+      { model: LeadColumn, as: "column", attributes: ["id", "name", "color"] }
     ]
   });
 
-  return res.json({ leads, count, hasMore: count > offset + leads.length });
+  const hasMore = count > offset + leads.length;
+
+  return res.json({ leads, count, hasMore });
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
@@ -61,8 +66,9 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
   const data = req.body as LeadData;
 
   const schema = Yup.object().shape({
+    name: Yup.string().required(),
     contactId: Yup.number().required(),
-    stage: Yup.string().required(),
+    columnId: Yup.number().required(),
     temperature: Yup.string().required(),
     source: Yup.string(),
     expectedValue: Yup.number(),
@@ -79,12 +85,18 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     throw new AppError(err.message);
   }
 
-  const contact = await Contact.findOne({
-    where: { id: data.contactId, companyId }
+  const contact = await Contact.findByPk(data.contactId);
+
+  if (!contact || contact.companyId !== companyId) {
+    throw new AppError("Contact not found");
+  }
+
+  const column = await LeadColumn.findOne({
+    where: { id: data.columnId, companyId }
   });
 
-  if (!contact) {
-    throw new AppError("Contact not found");
+  if (!column) {
+    throw new AppError("Lead column not found");
   }
 
   if (data.assignedToId) {
@@ -102,20 +114,13 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     companyId
   });
 
-  const leadReloaded = await Lead.findByPk(lead.id, {
-    include: [
-      { model: Contact, as: "contact" },
-      { model: User, as: "assignedTo", attributes: ["id", "name"] }
-    ]
-  });
-
   const io = getIO();
   io.emit(`lead:${companyId}`, {
     action: "create",
-    lead: leadReloaded
+    lead
   });
 
-  return res.status(200).json(leadReloaded);
+  return res.status(200).json(lead);
 };
 
 export const show = async (req: Request, res: Response): Promise<Response> => {
@@ -146,8 +151,10 @@ export const update = async (
   const data = req.body as LeadData;
 
   const schema = Yup.object().shape({
-    stage: Yup.string(),
-    temperature: Yup.string(),
+    name: Yup.string().required(),
+    contactId: Yup.number().required(),
+    columnId: Yup.number().required(),
+    temperature: Yup.string().required(),
     source: Yup.string(),
     expectedValue: Yup.number(),
     probability: Yup.number(),
@@ -169,6 +176,20 @@ export const update = async (
     throw new AppError("Lead not found");
   }
 
+  const contact = await Contact.findByPk(data.contactId);
+
+  if (!contact || contact.companyId !== companyId) {
+    throw new AppError("Contact not found");
+  }
+
+  const column = await LeadColumn.findOne({
+    where: { id: data.columnId, companyId }
+  });
+
+  if (!column) {
+    throw new AppError("Lead column not found");
+  }
+
   if (data.assignedToId) {
     const user = await User.findOne({
       where: { id: data.assignedToId, companyId }
@@ -181,20 +202,13 @@ export const update = async (
 
   await lead.update(data);
 
-  const leadReloaded = await Lead.findByPk(id, {
-    include: [
-      { model: Contact, as: "contact" },
-      { model: User, as: "assignedTo", attributes: ["id", "name"] }
-    ]
-  });
-
   const io = getIO();
   io.emit(`lead:${companyId}`, {
     action: "update",
-    lead: leadReloaded
+    lead
   });
 
-  return res.status(200).json(leadReloaded);
+  return res.status(200).json(lead);
 };
 
 export const remove = async (
@@ -219,4 +233,54 @@ export const remove = async (
   });
 
   return res.status(200).json({ message: "Lead deleted" });
+};
+
+export const moveLead = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { companyId } = req.user;
+  const { leadId, columnId } = req.body as { leadId: number; columnId: number };
+
+  const schema = Yup.object().shape({
+    leadId: Yup.number().required(),
+    columnId: Yup.number().required()
+  });
+
+  try {
+    await schema.validate(req.body);
+  } catch (err) {
+    throw new AppError(err.message);
+  }
+
+  const lead = await Lead.findOne({
+    where: { id: leadId, companyId },
+    include: [
+      { model: Contact, as: "contact", attributes: ["id", "name", "number"] },
+      { model: User, as: "assignedTo", attributes: ["id", "name"] },
+      { model: LeadColumn, as: "column", attributes: ["id", "name", "color"] }
+    ]
+  });
+
+  if (!lead) {
+    throw new AppError("Lead not found");
+  }
+
+  const column = await LeadColumn.findOne({
+    where: { id: columnId, companyId }
+  });
+
+  if (!column) {
+    throw new AppError("Lead column not found");
+  }
+
+  await lead.update({ columnId });
+
+  const io = getIO();
+  io.emit(`lead:${companyId}`, {
+    action: "update",
+    lead
+  });
+
+  return res.status(200).json(lead);
 };

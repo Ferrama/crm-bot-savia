@@ -14,4 +14,6 @@ leadRoutes.put("/leads/:id", isAuth, LeadController.update);
 
 leadRoutes.delete("/leads/:id", isAuth, LeadController.remove);
 
+leadRoutes.post("/leads/move", isAuth, LeadController.moveLead);
+
 export default leadRoutes;

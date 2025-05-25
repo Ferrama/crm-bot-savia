@@ -12,6 +12,7 @@ import contactRoutes from "./contactRoutes";
 import dashboardRoutes from "./dashboardRoutes";
 import helpRoutes from "./helpRoutes";
 import invoiceRoutes from "./invoicesRoutes";
+import leadColumnRoutes from "./leadColumnRoutes";
 import leadRoutes from "./leadRoutes";
 import messageRoutes from "./messageRoutes";
 import planRoutes from "./planRoutes";
@@ -65,5 +66,6 @@ routes.use(leadRoutes);
 routes.use(pwaRoutes);
 routes.use(versionRoutes);
 routes.use(ticketzOSSRoutes);
+routes.use(leadColumnRoutes);
 
 export default routes;
