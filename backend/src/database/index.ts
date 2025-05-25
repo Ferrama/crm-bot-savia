@@ -20,6 +20,7 @@ import Invoices from "../models/Invoices";
 import Lead from "../models/Lead";
 import Message from "../models/Message";
 import OldMessage from "../models/OldMessage";
+import OutOfTicketMessage from "../models/OutOfTicketMessages";
 import Plan from "../models/Plan";
 import Queue from "../models/Queue";
 import QueueOption from "../models/QueueOption";
@@ -82,6 +83,7 @@ const models = [
   ChatUser,
   ChatMessage,
   Invoices,
+  OutOfTicketMessage,
   Subscriptions,
   Lead
 ];
