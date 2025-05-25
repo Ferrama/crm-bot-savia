@@ -141,7 +141,7 @@ const messages = {
         success: 'WhatsApp salvato con successo.',
       },
       qrCode: {
-        message: 'Scansiona il QR Code per avviare la sessione',
+        message: 'Scansiona QR',
       },
       contacts: {
         title: 'Contatti',
@@ -1022,6 +1022,7 @@ const messages = {
       },
       leads: {
         title: 'Lead',
+        searchPlaceholder: 'Cerca lead',
         modal: {
           add: {
             title: 'Nuovo Lead',

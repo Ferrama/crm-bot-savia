@@ -211,7 +211,7 @@ const messages = {
         success: 'WhatsApp saved successfully.',
       },
       qrCode: {
-        message: 'Scan the QR Code to start the session',
+        message: 'Scan QR',
       },
       contacts: {
         title: 'Contacts',
@@ -1141,6 +1141,12 @@ const messages = {
       },
       leads: {
         title: 'Leads',
+        searchPlaceholder: 'Search leads',
+        buttons: {
+          add: 'New Lead',
+          save: 'Save',
+          cancel: 'Cancel',
+        },
         modal: {
           add: {
             title: 'New Lead',
@@ -1186,10 +1192,6 @@ const messages = {
           hot: 'Hot',
           warm: 'Warm',
           cold: 'Cold',
-        },
-        buttons: {
-          save: 'Save',
-          cancel: 'Cancel',
         },
         toasts: {
           created: 'Lead created successfully',

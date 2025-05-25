@@ -146,7 +146,7 @@ const messages = {
         success: 'WhatsApp berhasil disimpan.',
       },
       qrCode: {
-        message: 'Pindai Kode QR untuk memulai sesi',
+        message: 'Pindai QR',
       },
       contacts: {
         title: 'Kontak',
@@ -1077,6 +1077,7 @@ const messages = {
       },
       leads: {
         title: 'Lead',
+        searchPlaceholder: 'Cari lead',
         modal: {
           add: {
             title: 'Lead Baru',
