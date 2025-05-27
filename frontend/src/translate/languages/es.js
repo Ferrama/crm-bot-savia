@@ -1155,6 +1155,7 @@ const messages = {
             title: 'Editar Lead',
           },
           form: {
+            name: 'Nombre',
             contact: 'Contacto',
             stage: 'Etapa',
             temperature: 'Temperatura',
@@ -1197,6 +1198,30 @@ const messages = {
           created: 'Lead creado con éxito',
           updated: 'Lead actualizado con éxito',
           contactRequired: 'Se requiere un contacto',
+        },
+        leadColumns: {
+          buttons: {
+            add: 'Nueva Columna',
+            save: 'Guardar',
+            cancel: 'Cancelar',
+          },
+          modal: {
+            add: {
+              title: 'Nueva Columna',
+            },
+            edit: {
+              title: 'Editar Columna',
+            },
+            form: {
+              name: 'Nombre',
+              color: 'Color',
+            },
+          },
+          toasts: {
+            created: 'Columna creada con éxito',
+            updated: 'Columna actualizada con éxito',
+            deleted: 'Columna eliminada con éxito',
+          },
         },
       },
       todoList: {

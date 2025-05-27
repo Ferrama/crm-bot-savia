@@ -1186,8 +1186,8 @@ const messages = {
           qualified: 'Qualificado',
           proposal: 'Proposta',
           negotiation: 'Negociação',
-          closed_won: 'Fechado Ganho',
-          closed_lost: 'Fechado Perdido',
+          closed_won: 'Ganho',
+          closed_lost: 'Perdido',
         },
         temperatures: {
           hot: 'Quente',
@@ -1198,6 +1198,30 @@ const messages = {
           created: 'Lead criado com sucesso',
           updated: 'Lead atualizado com sucesso',
           contactRequired: 'Contato é obrigatório',
+        },
+        leadColumns: {
+          buttons: {
+            add: 'Nova Coluna',
+            save: 'Salvar',
+            cancel: 'Cancelar',
+          },
+          modal: {
+            add: {
+              title: 'Nova Coluna',
+            },
+            edit: {
+              title: 'Editar Coluna',
+            },
+            form: {
+              name: 'Nome',
+              color: 'Cor',
+            },
+          },
+          toasts: {
+            created: 'Coluna criada com sucesso',
+            updated: 'Coluna atualizada com sucesso',
+            deleted: 'Coluna excluída com sucesso',
+          },
         },
       },
     },

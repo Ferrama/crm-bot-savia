@@ -15,10 +15,12 @@ import ContactList from "../models/ContactList";
 import ContactListItem from "../models/ContactListItem";
 import ContactTag from "../models/ContactTag";
 import Counter from "../models/Counter";
+import Currency from "../models/Currency";
 import Help from "../models/Help";
 import Invoices from "../models/Invoices";
 import Lead from "../models/Lead";
 import LeadColumn from "../models/LeadColumn";
+import LeadTag from "../models/LeadTag";
 import Message from "../models/Message";
 import OldMessage from "../models/OldMessage";
 import OutOfTicketMessage from "../models/OutOfTicketMessages";
@@ -87,7 +89,9 @@ const models = [
   OutOfTicketMessage,
   Subscriptions,
   LeadColumn,
-  Lead
+  Lead,
+  LeadTag,
+  Currency
 ];
 
 sequelize.addModels(models);

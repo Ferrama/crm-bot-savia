@@ -1,26 +1,26 @@
+import { endOfDay, parseISO, startOfDay } from "date-fns";
 import {
-  Op,
-  fn,
-  where,
   col,
   Filterable,
+  fn,
   Includeable,
+  Op,
+  where,
   WhereOptions
 } from "sequelize";
-import { startOfDay, endOfDay, parseISO } from "date-fns";
 
 import { intersection } from "lodash";
-import Ticket from "../../models/Ticket";
+import { GetCompanySetting } from "../../helpers/CheckSettings";
 import Contact from "../../models/Contact";
+import ContactTag from "../../models/ContactTag";
 import Message from "../../models/Message";
 import Queue from "../../models/Queue";
-import User from "../../models/User";
-import ShowUserService from "../UserServices/ShowUserService";
 import Tag from "../../models/Tag";
+import Ticket from "../../models/Ticket";
 import TicketTag from "../../models/TicketTag";
+import User from "../../models/User";
 import Whatsapp from "../../models/Whatsapp";
-import { GetCompanySetting } from "../../helpers/CheckSettings";
-import ContactTag from "../../models/ContactTag";
+import ShowUserService from "../UserServices/ShowUserService";
 
 interface Request {
   isSearch?: boolean;
@@ -109,7 +109,8 @@ const ListTicketsService = async ({
     {
       model: Tag,
       as: "tags",
-      attributes: ["id", "name", "color"]
+      attributes: ["id", "name", "color"],
+      through: { attributes: [] }
     },
     {
       model: Whatsapp,

@@ -1,6 +1,6 @@
-import { Op, fn, col } from "sequelize";
+import { Op, col, fn } from "sequelize";
 import Tag from "../../models/Tag";
-import TicketTag from "../../models/TicketTag";
+import Ticket from "../../models/Ticket";
 
 interface Request {
   companyId: number;
@@ -42,10 +42,11 @@ const ListService = async ({
     subQuery: false,
     include: [
       {
-        model: TicketTag,
-        as: "ticketTags",
+        model: Ticket,
+        as: "tickets",
         attributes: [],
-        required: false
+        required: false,
+        through: { attributes: [] }
       }
     ],
     attributes: [
@@ -53,7 +54,7 @@ const ListService = async ({
       "name",
       "color",
       "kanban",
-      [fn("count", col("ticketTags.tagId")), "ticketsCount"]
+      [fn("count", col("tickets.id")), "ticketsCount"]
     ],
     group: ["Tag.id"]
   });

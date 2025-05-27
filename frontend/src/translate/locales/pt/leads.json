@@ -4,6 +4,7 @@
     "table": {
         "name": "Nome",
         "contact": "Contato",
+        "column": "Coluna",
         "stage": "Estágio",
         "temperature": "Temperatura",
         "source": "Origem",
@@ -28,16 +29,18 @@
             "title": "Editar Lead"
         },
         "form": {
+            "name": "Nome",
             "contact": "Contato",
-            "stage": "Estágio",
+            "column": "Coluna",
             "temperature": "Temperatura",
             "source": "Origem",
             "expectedValue": "Valor Esperado",
-            "probability": "Probabilidade (%)",
+            "currency": "Moeda",
+            "probability": "Probabilidade",
             "expectedClosingDate": "Data Prevista de Fechamento",
             "assignedTo": "Atribuído a",
-            "notes": "Observações",
-            "selectUser": "Selecione um usuário..."
+            "tags": "Tags",
+            "none": "Nenhum"
         }
     },
     "stages": {
@@ -57,10 +60,35 @@
     "toasts": {
         "created": "Lead criado com sucesso!",
         "updated": "Lead atualizado com sucesso!",
-        "deleted": "Lead excluído com sucesso!"
+        "deleted": "Lead excluído com sucesso!",
+        "contactRequired": "Por favor, selecione um contato"
     },
     "delete": {
         "title": "Excluir Lead",
         "message": "Tem certeza que deseja excluir este lead? Esta ação não pode ser desfeita."
+    },
+    "validation": {
+        "name": {
+            "required": "Nome é obrigatório"
+        },
+        "contact": {
+            "required": "Contato é obrigatório"
+        },
+        "column": {
+            "required": "Coluna é obrigatória"
+        },
+        "temperature": {
+            "required": "Temperatura é obrigatória"
+        },
+        "source": {
+            "required": "Origem é obrigatória"
+        },
+        "currency": {
+            "required": "Moeda é obrigatória"
+        },
+        "probability": {
+            "min": "Probabilidade deve ser no mínimo 0",
+            "max": "Probabilidade deve ser no máximo 100"
+        }
     }
 }

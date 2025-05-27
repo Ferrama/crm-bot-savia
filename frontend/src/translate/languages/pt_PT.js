@@ -1031,6 +1031,11 @@ const messages = {
       leads: {
         title: 'Leads',
         searchPlaceholder: 'Pesquisar leads',
+        buttons: {
+          add: 'Novo Lead',
+          save: 'Guardar',
+          cancel: 'Cancelar',
+        },
         modal: {
           add: {
             title: 'Novo Lead',
@@ -1040,12 +1045,12 @@ const messages = {
           },
           form: {
             contact: 'Contacto',
-            stage: 'Estágio',
+            stage: 'Fase',
             temperature: 'Temperatura',
-            source: 'Fonte',
+            source: 'Origem',
             expectedValue: 'Valor Esperado',
             probability: 'Probabilidade (%)',
-            expectedClosingDate: 'Data Esperada de Fechamento',
+            expectedClosingDate: 'Data Esperada de Fecho',
             assignedTo: 'Atribuído a',
             notes: 'Notas',
             selectUser: 'Selecionar utilizador',
@@ -1054,12 +1059,12 @@ const messages = {
         table: {
           name: 'Nome',
           contact: 'Contacto',
-          stage: 'Estágio',
+          stage: 'Fase',
           temperature: 'Temperatura',
-          source: 'Fonte',
+          source: 'Origem',
           expectedValue: 'Valor Esperado',
           probability: 'Probabilidade',
-          expectedClosingDate: 'Data de Fechamento',
+          expectedClosingDate: 'Data de Fecho',
           assignedTo: 'Atribuído a',
           actions: 'Ações',
         },
@@ -1069,22 +1074,42 @@ const messages = {
           qualified: 'Qualificado',
           proposal: 'Proposta',
           negotiation: 'Negociação',
-          closed_won: 'Fechado Ganho',
-          closed_lost: 'Fechado Perdido',
+          closed_won: 'Ganho',
+          closed_lost: 'Perdido',
         },
         temperatures: {
           hot: 'Quente',
           warm: 'Morno',
           cold: 'Frio',
         },
-        buttons: {
-          save: 'Guardar',
-          cancel: 'Cancelar',
-        },
         toasts: {
           created: 'Lead criado com sucesso',
           updated: 'Lead atualizado com sucesso',
           contactRequired: 'Contacto é obrigatório',
+        },
+        leadColumns: {
+          buttons: {
+            add: 'Nova Coluna',
+            save: 'Guardar',
+            cancel: 'Cancelar',
+          },
+          modal: {
+            add: {
+              title: 'Nova Coluna',
+            },
+            edit: {
+              title: 'Editar Coluna',
+            },
+            form: {
+              name: 'Nome',
+              color: 'Cor',
+            },
+          },
+          toasts: {
+            created: 'Coluna criada com sucesso',
+            updated: 'Coluna atualizada com sucesso',
+            deleted: 'Coluna eliminada com sucesso',
+          },
         },
       },
     },

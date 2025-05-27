@@ -128,6 +128,17 @@ const LeadList = () => {
     return colors[temperature] || classes.coldChip;
   };
 
+  const formatExpectedValue = (lead) => {
+    if (!lead.expectedValue) return '';
+    const currency = lead.currency;
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency.code,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(lead.expectedValue);
+  };
+
   return (
     <MainContainer>
       <MainHeader>
@@ -161,6 +172,7 @@ const LeadList = () => {
               <TableCell>{i18n.t('leads.table.column')}</TableCell>
               <TableCell>{i18n.t('leads.table.temperature')}</TableCell>
               <TableCell>{i18n.t('leads.table.source')}</TableCell>
+              <TableCell>{i18n.t('leads.table.tags')}</TableCell>
               <TableCell>{i18n.t('leads.table.expectedValue')}</TableCell>
               <TableCell>{i18n.t('leads.table.probability')}</TableCell>
               <TableCell>{i18n.t('leads.table.expectedClosingDate')}</TableCell>
@@ -201,11 +213,20 @@ const LeadList = () => {
                 </TableCell>
                 <TableCell>{lead.source}</TableCell>
                 <TableCell>
-                  {lead.expectedValue?.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
+                  {lead.tags?.map((tag) => (
+                    <Chip
+                      key={tag.id}
+                      label={tag.name}
+                      size='small'
+                      style={{
+                        backgroundColor: tag.color || '#ccc',
+                        color: 'white',
+                        margin: '2px',
+                      }}
+                    />
+                  ))}
                 </TableCell>
+                <TableCell>{formatExpectedValue(lead)}</TableCell>
                 <TableCell>{lead.probability}%</TableCell>
                 <TableCell>
                   {lead.expectedClosingDate &&

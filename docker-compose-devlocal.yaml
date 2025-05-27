@@ -10,18 +10,21 @@ volumes:
   frontend_node_modules:
 
 services:
-
   backend:
     build:
       context: ./backend
       dockerfile: ./Dockerfile.dev
     volumes:
       - ./backend:/usr/src/app
+      - backend_node_modules:/usr/src/app/node_modules
       - backend_public:/usr/src/app/public
       - backend_private:/usr/src/app/private
-      - backend_node_modules:/usr/src/app/node_modules
     env_file:
       - .env-backend-local
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - TZ=America/Sao_Paulo
     restart: always
     depends_on:
       - postgres
@@ -30,7 +33,7 @@ services:
       - ${BACKEND_PORT:-8080}:3000
     networks:
       - ticketz
-    command: sh -c "npm install && npm run start:dev"
+    command: sh -c "npm install && npx sequelize db:migrate && npx sequelize db:seed:all && npm run start:dev"
 
   frontend:
     build:
@@ -42,6 +45,15 @@ services:
       - backend_public:/var/www/backend-public
     env_file:
       - .env-frontend-local
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - TZ=America/Sao_Paulo
+      - REACT_APP_BACKEND_URL=http://localhost:8080
+      - REACT_APP_HOURS_CLOSE_TICKETS_AUTO=24
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - FAST_REFRESH=true
     ports:
       - ${FRONTEND_PORT:-3000}:3000
     restart: always
@@ -60,8 +72,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-ticketz}
       - POSTGRES_HOST_AUTH_METHOD=trust
       - TZ=${TZ:-America/Sao_Paulo}
-    expose:
-      - 5432
+    ports:
+      - 5432:5432
     restart: always
     networks:
       - ticketz
@@ -69,26 +81,10 @@ services:
   redis:
     image: redis:alpine
     command: redis-server --appendonly yes
-    expose:
-      - 6379
+    ports:
+      - 6379:6379
     restart: always
     volumes:
       - redis_data:/data
     networks:
-      - ticketz
-
-  sidekick:
-    image: ghcr.io/ticketz-oss/ticketz-sidekick:latest
-    profiles: ["do-not-start"]
-    env_file:
-      - .env-backend-local
-    restart: unless-stopped
-    volumes:
-      - backend_public:/backend-public
-      - backend_private:/backend-private
-      - ./backups:/backups
-      - ./retrieve:/retrieve
-    depends_on:
-      - postgres
-    networks:
-      - ticketz
+      - ticketz 

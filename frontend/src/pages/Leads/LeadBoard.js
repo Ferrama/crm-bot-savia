@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Chip,
   Dialog,
@@ -18,6 +19,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import toastError from '../../errors/toastError';
 import api from '../../services/api';
 import { i18n } from '../../translate/i18n';
@@ -106,7 +108,17 @@ const useStyles = makeStyles((theme) => ({
   addButton: {
     marginTop: theme.spacing(1),
   },
+  tagChip: {
+    margin: theme.spacing(0.5),
+    height: 20,
+    fontSize: '0.75rem',
+  },
 }));
+
+const LeadSchema = Yup.object().shape({
+  contactId: Yup.number().required(i18n.t('leads.validation.contact.required')),
+  // ...otros campos
+});
 
 const LeadBoard = () => {
   const classes = useStyles();
@@ -298,15 +310,29 @@ const LeadBoard = () => {
                             <Typography className={classes.leadInfo}>
                               {lead.contact.number}
                             </Typography>
-                            <Chip
-                              label={i18n.t(
-                                `leads.temperatures.${lead.temperature}`
-                              )}
-                              size='small'
-                              className={`${
-                                classes.temperatureChip
-                              } ${getTemperatureColor(lead.temperature)}`}
-                            />
+                            <Box display='flex' flexWrap='wrap' mt={1}>
+                              <Chip
+                                label={i18n.t(
+                                  `leads.temperatures.${lead.temperature}`
+                                )}
+                                size='small'
+                                className={`${
+                                  classes.temperatureChip
+                                } ${getTemperatureColor(lead.temperature)}`}
+                              />
+                              {lead.tags?.map((tag) => (
+                                <Chip
+                                  key={tag.id}
+                                  label={tag.name}
+                                  size='small'
+                                  className={classes.tagChip}
+                                  style={{
+                                    backgroundColor: tag.color || '#ccc',
+                                    color: 'white',
+                                  }}
+                                />
+                              ))}
+                            </Box>
                           </div>
                         )}
                       </Draggable>
@@ -332,9 +358,7 @@ const LeadBoard = () => {
               setSelectedColumn(null);
               setShowColumnModal(true);
             }}
-          >
-            {i18n.t('leadColumns.buttons.add')}
-          </Button>
+          ></Button>
         </div>
       </DragDropContext>
 
@@ -348,15 +372,15 @@ const LeadBoard = () => {
       >
         <DialogTitle>
           {selectedColumn
-            ? i18n.t('leadColumns.modal.edit.title')
-            : i18n.t('leadColumns.modal.add.title')}
+            ? i18n.t('leads.leadColumns.modal.edit.title')
+            : i18n.t('leads.leadColumns.modal.add.title')}
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label={i18n.t('leadColumns.modal.form.name')}
+                label={i18n.t('leads.leadColumns.modal.form.name')}
                 value={selectedColumn ? selectedColumn.name : newColumn.name}
                 onChange={(e) =>
                   selectedColumn
@@ -372,7 +396,7 @@ const LeadBoard = () => {
               <TextField
                 fullWidth
                 type='color'
-                label={i18n.t('leadColumns.modal.form.color')}
+                label={i18n.t('leads.leadColumns.modal.form.color')}
                 value={selectedColumn ? selectedColumn.color : newColumn.color}
                 onChange={(e) =>
                   selectedColumn
@@ -394,14 +418,14 @@ const LeadBoard = () => {
               setNewColumn({ name: '', color: '#000000' });
             }}
           >
-            {i18n.t('leadColumns.buttons.cancel')}
+            {i18n.t('leads.leadColumns.buttons.cancel')}
           </Button>
           <Button
             onClick={selectedColumn ? handleEditColumn : handleAddColumn}
             color='primary'
             variant='contained'
           >
-            {i18n.t('leadColumns.buttons.save')}
+            {i18n.t('leads.leadColumns.buttons.save')}
           </Button>
         </DialogActions>
       </Dialog>

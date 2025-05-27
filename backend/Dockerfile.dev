@@ -1,10 +1,36 @@
-FROM node:20
+FROM node:20-alpine
+
+# Instalar dependencias necesarias
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git \
+    curl
 
 WORKDIR /usr/src/app
 
+# Copiar archivos de configuración primero
 COPY package*.json ./
+COPY tsconfig.json ./
+
+# Instalar dependencias
 RUN npm install
 
-# No copies src/ aquí
+# Copiar el resto del código
+COPY . .
 
-CMD ["npx", "nodemon", "--watch", "src", "--exec", "npm", "run", "start:dev"]
+# Configurar variables de entorno
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV TZ=America/Sao_Paulo
+
+# Exponer puerto
+EXPOSE 3000
+
+# Configurar healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/ || exit 1
+
+# Comando para desarrollo con hot-reload
+CMD ["npm", "run", "start:dev"]

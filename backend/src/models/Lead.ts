@@ -1,6 +1,7 @@
 import {
   AutoIncrement,
   BelongsTo,
+  BelongsToMany,
   Column,
   CreatedAt,
   DataType,
@@ -13,6 +14,9 @@ import {
 } from "sequelize-typescript";
 import Company from "./Company";
 import Contact from "./Contact";
+import Currency from "./Currency";
+import LeadTag from "./LeadTag";
+import Tag from "./Tag";
 import Ticket from "./Ticket";
 import User from "./User";
 
@@ -88,6 +92,16 @@ class Lead extends Model<Lead> {
 
   @Column(DataType.JSON)
   customFields: any;
+
+  @BelongsToMany(() => Tag, () => LeadTag)
+  tags: Tag[];
+
+  @ForeignKey(() => Currency)
+  @Column
+  currencyId: number;
+
+  @BelongsTo(() => Currency)
+  currency: Currency;
 
   @CreatedAt
   createdAt: Date;

@@ -45,7 +45,7 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     pageNumber,
     listPublic
   });
-  console.log(plans);
+
   return res.json({ plans, count, hasMore });
 };
 

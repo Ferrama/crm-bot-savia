@@ -1023,6 +1023,11 @@ const messages = {
       leads: {
         title: 'Lead',
         searchPlaceholder: 'Cerca lead',
+        buttons: {
+          add: 'Nuovo Lead',
+          save: 'Salva',
+          cancel: 'Annulla',
+        },
         modal: {
           add: {
             title: 'Nuovo Lead',
@@ -1069,14 +1074,34 @@ const messages = {
           warm: 'Tiepido',
           cold: 'Freddo',
         },
-        buttons: {
-          save: 'Salva',
-          cancel: 'Annulla',
-        },
         toasts: {
           created: 'Lead creato con successo',
           updated: 'Lead aggiornato con successo',
           contactRequired: 'Il contatto è obbligatorio',
+        },
+        leadColumns: {
+          buttons: {
+            add: 'Nuova Colonna',
+            save: 'Salva',
+            cancel: 'Annulla',
+          },
+          modal: {
+            add: {
+              title: 'Nuova Colonna',
+            },
+            edit: {
+              title: 'Modifica Colonna',
+            },
+            form: {
+              name: 'Nome',
+              color: 'Colore',
+            },
+          },
+          toasts: {
+            created: 'Colonna creata con successo',
+            updated: 'Colonna aggiornata con successo',
+            deleted: 'Colonna eliminata con successo',
+          },
         },
       },
       todoList: {

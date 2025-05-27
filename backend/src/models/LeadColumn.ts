@@ -49,3 +49,4 @@ class LeadColumn extends Model<LeadColumn> {
 }
 
 export default LeadColumn;
+ 

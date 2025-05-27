@@ -1034,6 +1034,11 @@ const messages = {
       leads: {
         title: 'Leads',
         searchPlaceholder: 'Leads suchen',
+        buttons: {
+          add: 'Neuer Lead',
+          save: 'Speichern',
+          cancel: 'Abbrechen',
+        },
         modal: {
           add: {
             title: 'Neuer Lead',
@@ -1070,7 +1075,7 @@ const messages = {
           new: 'Neu',
           contacted: 'Kontaktiert',
           qualified: 'Qualifiziert',
-          proposal: 'Vorschlag',
+          proposal: 'Angebot',
           negotiation: 'Verhandlung',
           closed_won: 'Gewonnen',
           closed_lost: 'Verloren',
@@ -1080,14 +1085,34 @@ const messages = {
           warm: 'Warm',
           cold: 'Kalt',
         },
-        buttons: {
-          save: 'Speichern',
-          cancel: 'Abbrechen',
-        },
         toasts: {
           created: 'Lead erfolgreich erstellt',
           updated: 'Lead erfolgreich aktualisiert',
           contactRequired: 'Kontakt ist erforderlich',
+        },
+        leadColumns: {
+          buttons: {
+            add: 'Neue Spalte',
+            save: 'Speichern',
+            cancel: 'Abbrechen',
+          },
+          modal: {
+            add: {
+              title: 'Neue Spalte',
+            },
+            edit: {
+              title: 'Spalte bearbeiten',
+            },
+            form: {
+              name: 'Name',
+              color: 'Farbe',
+            },
+          },
+          toasts: {
+            created: 'Spalte erfolgreich erstellt',
+            updated: 'Spalte erfolgreich aktualisiert',
+            deleted: 'Spalte erfolgreich gelöscht',
+          },
         },
       },
       todoList: {

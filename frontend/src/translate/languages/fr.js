@@ -1030,14 +1030,19 @@ const messages = {
         },
       },
       leads: {
-        title: 'Prospects',
-        searchPlaceholder: 'Rechercher des prospects',
+        title: 'Pistes',
+        searchPlaceholder: 'Rechercher des pistes',
+        buttons: {
+          add: 'Nouvelle Piste',
+          save: 'Enregistrer',
+          cancel: 'Annuler',
+        },
         modal: {
           add: {
-            title: 'Nouveau Prospect',
+            title: 'Nouvelle Piste',
           },
           edit: {
-            title: 'Modifier Prospect',
+            title: 'Modifier la Piste',
           },
           form: {
             contact: 'Contact',
@@ -1078,14 +1083,34 @@ const messages = {
           warm: 'Tiède',
           cold: 'Froid',
         },
-        buttons: {
-          save: 'Enregistrer',
-          cancel: 'Annuler',
-        },
         toasts: {
-          created: 'Prospect créé avec succès',
-          updated: 'Prospect mis à jour avec succès',
+          created: 'Piste créée avec succès',
+          updated: 'Piste mise à jour avec succès',
           contactRequired: 'Le contact est requis',
+        },
+        leadColumns: {
+          buttons: {
+            add: 'Nouvelle Colonne',
+            save: 'Enregistrer',
+            cancel: 'Annuler',
+          },
+          modal: {
+            add: {
+              title: 'Nouvelle Colonne',
+            },
+            edit: {
+              title: 'Modifier la Colonne',
+            },
+            form: {
+              name: 'Nom',
+              color: 'Couleur',
+            },
+          },
+          toasts: {
+            created: 'Colonne créée avec succès',
+            updated: 'Colonne mise à jour avec succès',
+            deleted: 'Colonne supprimée avec succès',
+          },
         },
       },
     },

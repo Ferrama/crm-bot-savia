@@ -33,11 +33,16 @@
             "temperature": "Temperature",
             "source": "Source",
             "expectedValue": "Expected Value",
+            "currency": "Currency",
             "probability": "Probability (%)",
             "expectedClosingDate": "Expected Closing Date",
             "assignedTo": "Assigned To",
             "notes": "Notes",
-            "selectUser": "Select a user..."
+            "selectUser": "Select a user...",
+            "name": "Name",
+            "column": "Column",
+            "tags": "Tags",
+            "none": "None"
         }
     },
     "stages": {
@@ -57,10 +62,35 @@
     "toasts": {
         "created": "Lead created successfully!",
         "updated": "Lead updated successfully!",
-        "deleted": "Lead deleted successfully!"
+        "deleted": "Lead deleted successfully!",
+        "contactRequired": "Please select a contact"
     },
     "delete": {
         "title": "Delete Lead",
         "message": "Are you sure you want to delete this lead? This action cannot be undone."
+    },
+    "validation": {
+        "name": {
+            "required": "Name is required"
+        },
+        "contact": {
+            "required": "Contact is required"
+        },
+        "column": {
+            "required": "Column is required"
+        },
+        "temperature": {
+            "required": "Temperature is required"
+        },
+        "source": {
+            "required": "Source is required"
+        },
+        "currency": {
+            "required": "Currency is required"
+        },
+        "probability": {
+            "min": "Probability must be at least 0",
+            "max": "Probability must be at most 100"
+        }
     }
 }

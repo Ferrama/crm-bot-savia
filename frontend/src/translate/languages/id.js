@@ -1076,14 +1076,19 @@ const messages = {
         },
       },
       leads: {
-        title: 'Lead',
-        searchPlaceholder: 'Cari lead',
+        title: 'Prospek',
+        searchPlaceholder: 'Cari prospek',
+        buttons: {
+          add: 'Prospek Baru',
+          save: 'Simpan',
+          cancel: 'Batal',
+        },
         modal: {
           add: {
-            title: 'Lead Baru',
+            title: 'Prospek Baru',
           },
           edit: {
-            title: 'Edit Lead',
+            title: 'Edit Prospek',
           },
           form: {
             contact: 'Kontak',
@@ -1108,7 +1113,7 @@ const messages = {
           probability: 'Probabilitas',
           expectedClosingDate: 'Tanggal Penutupan',
           assignedTo: 'Ditugaskan ke',
-          actions: 'Aksi',
+          actions: 'Tindakan',
         },
         stages: {
           new: 'Baru',
@@ -1124,14 +1129,34 @@ const messages = {
           warm: 'Hangat',
           cold: 'Dingin',
         },
-        buttons: {
-          save: 'Simpan',
-          cancel: 'Batal',
-        },
         toasts: {
-          created: 'Lead berhasil dibuat',
-          updated: 'Lead berhasil diperbarui',
+          created: 'Prospek berhasil dibuat',
+          updated: 'Prospek berhasil diperbarui',
           contactRequired: 'Kontak diperlukan',
+        },
+        leadColumns: {
+          buttons: {
+            add: 'Kolom Baru',
+            save: 'Simpan',
+            cancel: 'Batal',
+          },
+          modal: {
+            add: {
+              title: 'Kolom Baru',
+            },
+            edit: {
+              title: 'Edit Kolom',
+            },
+            form: {
+              name: 'Nama',
+              color: 'Warna',
+            },
+          },
+          toasts: {
+            created: 'Kolom berhasil dibuat',
+            updated: 'Kolom berhasil diperbarui',
+            deleted: 'Kolom berhasil dihapus',
+          },
         },
       },
     },

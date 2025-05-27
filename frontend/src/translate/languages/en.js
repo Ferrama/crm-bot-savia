@@ -1185,8 +1185,8 @@ const messages = {
           qualified: 'Qualified',
           proposal: 'Proposal',
           negotiation: 'Negotiation',
-          closed_won: 'Closed Won',
-          closed_lost: 'Closed Lost',
+          closed_won: 'Won',
+          closed_lost: 'Lost',
         },
         temperatures: {
           hot: 'Hot',
@@ -1197,6 +1197,30 @@ const messages = {
           created: 'Lead created successfully',
           updated: 'Lead updated successfully',
           contactRequired: 'Contact is required',
+        },
+        leadColumns: {
+          buttons: {
+            add: 'New Column',
+            save: 'Save',
+            cancel: 'Cancel',
+          },
+          modal: {
+            add: {
+              title: 'New Column',
+            },
+            edit: {
+              title: 'Edit Column',
+            },
+            form: {
+              name: 'Name',
+              color: 'Color',
+            },
+          },
+          toasts: {
+            created: 'Column created successfully',
+            updated: 'Column updated successfully',
+            deleted: 'Column deleted successfully',
+          },
         },
       },
       todoList: {

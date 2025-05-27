@@ -4,8 +4,10 @@ import * as Yup from "yup";
 import AppError from "../errors/AppError";
 import { getIO } from "../libs/socket";
 import Contact from "../models/Contact";
+import Currency from "../models/Currency";
 import Lead from "../models/Lead";
 import LeadColumn from "../models/LeadColumn";
+import Tag from "../models/Tag";
 import Ticket from "../models/Ticket";
 import User from "../models/User";
 
@@ -16,11 +18,13 @@ interface LeadData {
   temperature: string;
   source: string;
   expectedValue: number;
+  currencyId: number;
   probability: number;
   expectedClosingDate: Date;
   assignedToId: number;
   notes: string;
   customFields: any;
+  tagIds?: number[];
 }
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
@@ -52,7 +56,13 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     include: [
       { model: Contact, as: "contact", attributes: ["id", "name", "number"] },
       { model: User, as: "assignedTo", attributes: ["id", "name"] },
-      { model: LeadColumn, as: "column", attributes: ["id", "name", "color"] }
+      { model: LeadColumn, as: "column", attributes: ["id", "name", "color"] },
+      { model: Tag, as: "tags", attributes: ["id", "name", "color"] },
+      {
+        model: Currency,
+        as: "currency",
+        attributes: ["id", "code", "symbol", "name"]
+      }
     ]
   });
 
@@ -72,11 +82,13 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     temperature: Yup.string().required(),
     source: Yup.string(),
     expectedValue: Yup.number(),
+    currencyId: Yup.number().required(),
     probability: Yup.number(),
     expectedClosingDate: Yup.date(),
     assignedToId: Yup.number(),
     notes: Yup.string(),
-    customFields: Yup.object()
+    customFields: Yup.object(),
+    tagIds: Yup.array().of(Yup.number())
   });
 
   try {
@@ -99,6 +111,12 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     throw new AppError("Lead column not found");
   }
 
+  const currency = await Currency.findByPk(data.currencyId);
+
+  if (!currency) {
+    throw new AppError("Currency not found");
+  }
+
   if (data.assignedToId) {
     const user = await User.findOne({
       where: { id: data.assignedToId, companyId }
@@ -109,10 +127,24 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     }
   }
 
+  if (data.tagIds) {
+    const tags = await Tag.findAll({
+      where: { id: { [Op.in]: data.tagIds }, companyId }
+    });
+
+    if (tags.length !== data.tagIds.length) {
+      throw new AppError("One or more tags not found");
+    }
+  }
+
   const lead = await Lead.create({
     ...data,
     companyId
   });
+
+  if (data.tagIds) {
+    await lead.$set("tags", data.tagIds);
+  }
 
   const io = getIO();
   io.emit(`lead:${companyId}`, {
@@ -131,7 +163,13 @@ export const show = async (req: Request, res: Response): Promise<Response> => {
     include: [
       { model: Contact, as: "contact" },
       { model: User, as: "assignedTo", attributes: ["id", "name"] },
-      { model: Ticket, as: "tickets" }
+      { model: Ticket, as: "tickets" },
+      { model: Tag, as: "tags", attributes: ["id", "name", "color"] },
+      {
+        model: Currency,
+        as: "currency",
+        attributes: ["id", "code", "symbol", "name"]
+      }
     ]
   });
 
@@ -157,11 +195,13 @@ export const update = async (
     temperature: Yup.string().required(),
     source: Yup.string(),
     expectedValue: Yup.number(),
+    currencyId: Yup.number().required(),
     probability: Yup.number(),
     expectedClosingDate: Yup.date(),
     assignedToId: Yup.number(),
     notes: Yup.string(),
-    customFields: Yup.object()
+    customFields: Yup.object(),
+    tagIds: Yup.array().of(Yup.number())
   });
 
   try {
@@ -190,6 +230,12 @@ export const update = async (
     throw new AppError("Lead column not found");
   }
 
+  const currency = await Currency.findByPk(data.currencyId);
+
+  if (!currency) {
+    throw new AppError("Currency not found");
+  }
+
   if (data.assignedToId) {
     const user = await User.findOne({
       where: { id: data.assignedToId, companyId }
@@ -200,7 +246,21 @@ export const update = async (
     }
   }
 
+  if (data.tagIds) {
+    const tags = await Tag.findAll({
+      where: { id: { [Op.in]: data.tagIds }, companyId }
+    });
+
+    if (tags.length !== data.tagIds.length) {
+      throw new AppError("One or more tags not found");
+    }
+  }
+
   await lead.update(data);
+
+  if (data.tagIds) {
+    await lead.$set("tags", data.tagIds);
+  }
 
   const io = getIO();
   io.emit(`lead:${companyId}`, {

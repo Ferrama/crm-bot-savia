@@ -187,3 +187,4 @@ export default {
     await queryInterface.dropTable("LeadColumns");
   }
 };
+ 

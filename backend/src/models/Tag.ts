@@ -1,49 +1,47 @@
 import {
-  Table,
+  AutoIncrement,
+  BelongsTo,
+  BelongsToMany,
   Column,
   CreatedAt,
-  UpdatedAt,
+  DataType,
+  ForeignKey,
   Model,
   PrimaryKey,
-  AutoIncrement,
-  BelongsToMany,
-  ForeignKey,
-  BelongsTo,
-  HasMany
+  Table,
+  UpdatedAt
 } from "sequelize-typescript";
 import Company from "./Company";
+import Lead from "./Lead";
+import LeadTag from "./LeadTag";
 import Ticket from "./Ticket";
 import TicketTag from "./TicketTag";
-import Contact from "./Contact";
-import ContactTag from "./ContactTag";
 
 @Table
-class Tag extends Model {
+class Tag extends Model<Tag> {
   @PrimaryKey
   @AutoIncrement
   @Column
   id: number;
 
-  @Column
+  @Column({
+    allowNull: false,
+    unique: true
+  })
   name: string;
 
-  @Column
+  @Column({
+    type: DataType.STRING,
+    allowNull: true
+  })
   color: string;
 
-  @Column
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+    defaultValue: 0
+  })
   kanban: number;
-
-  @HasMany(() => TicketTag)
-  ticketTags: TicketTag[];
-
-  @BelongsToMany(() => Ticket, () => TicketTag)
-  tickets: Ticket[];
-
-  @HasMany(() => ContactTag)
-  contactTags: ContactTag[];
-
-  @BelongsToMany(() => Contact, () => ContactTag)
-  contacts: Contact[];
 
   @ForeignKey(() => Company)
   @Column
@@ -51,6 +49,12 @@ class Tag extends Model {
 
   @BelongsTo(() => Company)
   company: Company;
+
+  @BelongsToMany(() => Lead, () => LeadTag)
+  leads: Lead[];
+
+  @BelongsToMany(() => Ticket, () => TicketTag)
+  tickets: Ticket[];
 
   @CreatedAt
   createdAt: Date;

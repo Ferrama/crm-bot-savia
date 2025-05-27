@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -36,6 +38,14 @@ const useStyles = makeStyles((theme) => ({
   dialogPaper: {
     minWidth: '600px',
   },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: theme.spacing(0.5),
+  },
+  chip: {
+    margin: 2,
+  },
 }));
 
 const LeadSchema = Yup.object().shape({
@@ -46,6 +56,9 @@ const LeadSchema = Yup.object().shape({
     i18n.t('leads.validation.temperature.required')
   ),
   source: Yup.string().required(i18n.t('leads.validation.source.required')),
+  currencyId: Yup.number().required(
+    i18n.t('leads.validation.currency.required')
+  ),
   expectedValue: Yup.number().nullable(),
   probability: Yup.number()
     .min(0, i18n.t('leads.validation.probability.min'))
@@ -62,6 +75,9 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
   const [contacts, setContacts] = useState([]);
   const [users, setUsers] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [searchParam, setSearchParam] = useState('');
@@ -77,10 +93,11 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
     columnId: lead?.columnId || columnId || '',
     temperature: lead?.temperature || 'cold',
     source: lead?.source || '',
-    expectedValue: lead?.expectedValue || null,
-    probability: lead?.probability || null,
-    expectedClosingDate: lead?.expectedClosingDate || null,
-    assignedToId: lead?.assignedToId || null,
+    expectedValue: lead?.expectedValue || '',
+    currencyId: lead?.currencyId || 1, // USD por defecto
+    probability: lead?.probability || '',
+    expectedClosingDate: lead?.expectedClosingDate || '',
+    assignedToId: lead?.assignedToId || '',
   };
 
   useEffect(() => {
@@ -88,8 +105,25 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
       loadContacts();
       loadUsers();
       loadColumns();
+      loadTags();
+      loadCurrencies();
+      if (lead) {
+        setCurrentContact({
+          id: lead.contact.id,
+          name: lead.contact.name,
+          number: lead.contact.number,
+        });
+        setSelectedTags(lead.tags || []);
+      } else {
+        setCurrentContact({
+          id: '',
+          name: '',
+          number: '',
+        });
+        setSelectedTags([]);
+      }
     }
-  }, [open]);
+  }, [open, lead]);
 
   useEffect(() => {
     setContacts([]);
@@ -120,7 +154,7 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
   const loadContacts = async () => {
     try {
       const { data } = await api.get('/contacts');
-      setContacts(data);
+      setContacts(data.contacts);
     } catch (err) {
       toastError(err);
     }
@@ -129,7 +163,7 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
   const loadUsers = async () => {
     try {
       const { data } = await api.get('/users');
-      setUsers(data);
+      setUsers(data.users);
     } catch (err) {
       toastError(err);
     }
@@ -139,6 +173,24 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
     try {
       const { data } = await api.get('/lead-columns');
       setColumns(data);
+    } catch (err) {
+      toastError(err);
+    }
+  };
+
+  const loadTags = async () => {
+    try {
+      const { data } = await api.get('/tags');
+      setTags(data.tags);
+    } catch (err) {
+      toastError(err);
+    }
+  };
+
+  const loadCurrencies = async () => {
+    try {
+      const { data } = await api.get('/currencies');
+      setCurrencies(data);
     } catch (err) {
       toastError(err);
     }
@@ -162,14 +214,34 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
         ...values,
         contactId: Number(values.contactId),
         name: currentContact.name,
-        expectedValue: values.expectedValue
-          ? Number(values.expectedValue)
-          : null,
-        probability: values.probability ? Number(values.probability) : null,
-        assignedToId: values.assignedToId ? Number(values.assignedToId) : null,
-        source: values.source || null,
-        expectedClosingDate: values.expectedClosingDate || null,
+        columnId: Number(values.columnId),
+        temperature: values.temperature,
+        source: values.source,
+        currencyId: Number(values.currencyId),
+        tagIds: selectedTags.map((tag) => tag.id),
       };
+
+      if (values.expectedValue !== '') {
+        processedValues.expectedValue = Number(values.expectedValue);
+      }
+      if (values.probability !== '') {
+        processedValues.probability = Number(values.probability);
+      }
+      if (
+        values.expectedClosingDate &&
+        values.expectedClosingDate.trim() !== ''
+      ) {
+        processedValues.expectedClosingDate = values.expectedClosingDate;
+      }
+      if (
+        values.assignedToId &&
+        values.assignedToId !== '' &&
+        !isNaN(Number(values.assignedToId))
+      ) {
+        processedValues.assignedToId = Number(values.assignedToId);
+      } else {
+        processedValues.assignedToId = null;
+      }
 
       if (lead) {
         await api.put(`/leads/${lead.id}`, processedValues);
@@ -248,7 +320,19 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
                       <Select
                         name='contactId'
                         value={values.contactId}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          const selectedContact = contacts.find(
+                            (contact) => contact.id === e.target.value
+                          );
+                          if (selectedContact) {
+                            setCurrentContact({
+                              id: selectedContact.id,
+                              name: selectedContact.name,
+                              number: selectedContact.number,
+                            });
+                          }
+                        }}
                         onBlur={handleBlur}
                         label={i18n.t('leads.modal.form.contact')}
                       >
@@ -335,20 +419,56 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      name='expectedValue'
-                      label={i18n.t('leads.modal.form.expectedValue')}
-                      type='number'
-                      error={
-                        touched.expectedValue && Boolean(errors.expectedValue)
-                      }
-                      helperText={touched.expectedValue && errors.expectedValue}
-                      value={values.expectedValue || ''}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      variant='outlined'
-                    />
+                    <Grid container spacing={1}>
+                      <Grid item xs={8}>
+                        <TextField
+                          fullWidth
+                          name='expectedValue'
+                          label={i18n.t('leads.modal.form.expectedValue')}
+                          type='number'
+                          error={
+                            touched.expectedValue &&
+                            Boolean(errors.expectedValue)
+                          }
+                          helperText={
+                            touched.expectedValue && errors.expectedValue
+                          }
+                          value={values.expectedValue || ''}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          variant='outlined'
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        <FormControl
+                          fullWidth
+                          error={
+                            touched.currencyId && Boolean(errors.currencyId)
+                          }
+                          variant='outlined'
+                        >
+                          <InputLabel>
+                            {i18n.t('leads.modal.form.currency')}
+                          </InputLabel>
+                          <Select
+                            name='currencyId'
+                            value={values.currencyId}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            label={i18n.t('leads.modal.form.currency')}
+                          >
+                            {currencies.map((currency) => (
+                              <MenuItem key={currency.id} value={currency.id}>
+                                {currency.code} - {currency.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          {touched.currencyId && errors.currencyId && (
+                            <FormHelperText>{errors.currencyId}</FormHelperText>
+                          )}
+                        </FormControl>
+                      </Grid>
+                    </Grid>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -417,6 +537,36 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
                       {touched.assignedToId && errors.assignedToId && (
                         <FormHelperText>{errors.assignedToId}</FormHelperText>
                       )}
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth variant='outlined'>
+                      <InputLabel>{i18n.t('leads.modal.form.tags')}</InputLabel>
+                      <Select
+                        multiple
+                        value={selectedTags}
+                        onChange={(event) => {
+                          setSelectedTags(event.target.value);
+                        }}
+                        renderValue={(selected) => (
+                          <Box className={classes.chips}>
+                            {selected.map((tag) => (
+                              <Chip
+                                key={tag.id}
+                                label={tag.name}
+                                className={classes.chip}
+                                style={{ backgroundColor: tag.color || '#ccc' }}
+                              />
+                            ))}
+                          </Box>
+                        )}
+                      >
+                        {tags.map((tag) => (
+                          <MenuItem key={tag.id} value={tag}>
+                            {tag.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
                     </FormControl>
                   </Grid>
                 </Grid>
