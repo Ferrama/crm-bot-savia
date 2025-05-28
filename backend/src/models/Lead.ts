@@ -1,10 +1,12 @@
 import {
+  AllowNull,
   AutoIncrement,
   BelongsTo,
   BelongsToMany,
   Column,
   CreatedAt,
   DataType,
+  Default,
   ForeignKey,
   HasMany,
   Model,
@@ -12,102 +14,179 @@ import {
   Table,
   UpdatedAt
 } from "sequelize-typescript";
+import { LeadMetadata, LeadPipeline, LeadStatus } from "../types/lead";
 import Company from "./Company";
 import Contact from "./Contact";
 import Currency from "./Currency";
+import Interaction from "./Interaction";
+import LeadColumn from "./LeadColumn";
 import LeadTag from "./LeadTag";
 import Tag from "./Tag";
-import Ticket from "./Ticket";
 import User from "./User";
 
-@Table
-class Lead extends Model<Lead> {
+@Table({
+  tableName: "Leads",
+  modelName: "Lead"
+})
+class Lead extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
   id: number;
 
-  @Column({
-    allowNull: false
-  })
+  @AllowNull(false)
+  @Column
   name: string;
 
-  @ForeignKey(() => Contact)
-  @Column
-  contactId: number;
-
-  @BelongsTo(() => Contact)
-  contact: Contact;
-
-  @ForeignKey(() => {
-    const LeadColumn = require("./LeadColumn").default;
-    return LeadColumn;
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true
   })
-  @Column
-  columnId: number;
-
-  @BelongsTo(() => {
-    const LeadColumn = require("./LeadColumn").default;
-    return LeadColumn;
-  })
-  column: any;
+  title: string;
 
   @Column({
-    type: DataType.ENUM("cold", "warm", "hot"),
-    defaultValue: "cold"
+    type: DataType.TEXT,
+    allowNull: true
+  })
+  description: string;
+
+  @ForeignKey(() => Company)
+  @Column({
+    allowNull: true
+  })
+  companyId: number;
+
+  @ForeignKey(() => Contact)
+  @Column({
+    allowNull: true
+  })
+  contactId: number;
+
+  @ForeignKey(() => LeadColumn)
+  @Column({
+    allowNull: true
+  })
+  columnId: number;
+
+  @Default("cold")
+  @Column({
+    type: DataType.ENUM("cold", "warm", "hot")
   })
   temperature: string;
 
-  @Column
-  source: string;
+  @Default(LeadStatus.NEW)
+  @Column({
+    type: DataType.ENUM(...Object.values(LeadStatus))
+  })
+  status: LeadStatus;
 
-  @Column(DataType.DECIMAL(10, 2))
-  expectedValue: number;
-
-  @Column(DataType.INTEGER)
-  probability: number;
-
-  @Column(DataType.DATE)
-  expectedClosingDate: Date;
+  @Default(LeadPipeline.DEFAULT)
+  @Column({
+    type: DataType.ENUM(...Object.values(LeadPipeline))
+  })
+  pipeline: LeadPipeline;
 
   @ForeignKey(() => User)
-  @Column
+  @Column({
+    allowNull: true
+  })
   assignedToId: number;
 
-  @BelongsTo(() => User)
-  assignedTo: User;
+  @ForeignKey(() => User)
+  @Column({
+    allowNull: true
+  })
+  createdById: number;
 
-  @ForeignKey(() => Company)
-  @Column
-  companyId: number;
+  @Column({
+    type: DataType.DATE,
+    allowNull: true
+  })
+  lastContactedAt: Date;
 
-  @BelongsTo(() => Company)
-  company: Company;
+  @Column({
+    allowNull: true
+  })
+  source: string;
 
-  @HasMany(() => Ticket)
-  tickets: Ticket[];
+  @Column({
+    type: DataType.DECIMAL(10, 2),
+    allowNull: true
+  })
+  expectedValue: number;
 
-  @Column(DataType.TEXT)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true
+  })
+  probability: number;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true
+  })
+  expectedClosingDate: Date;
+
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true
+  })
   notes: string;
 
-  @Column(DataType.JSON)
-  customFields: any;
-
-  @BelongsToMany(() => Tag, () => LeadTag)
-  tags: Tag[];
-
   @ForeignKey(() => Currency)
-  @Column
+  @Column({
+    allowNull: true
+  })
   currencyId: number;
 
-  @BelongsTo(() => Currency)
-  currency: Currency;
+  @Default([])
+  @Column({
+    type: DataType.JSON
+  })
+  tags: string[];
+
+  @Default({})
+  @Column({
+    type: DataType.JSON
+  })
+  customFields: Record<string, any>;
+
+  @Column({
+    type: DataType.JSON
+  })
+  metadata: LeadMetadata;
 
   @CreatedAt
   createdAt: Date;
 
   @UpdatedAt
   updatedAt: Date;
+
+  @BelongsTo(() => Company)
+  company: Company;
+
+  @BelongsTo(() => User, { foreignKey: "assignedToId" })
+  assignedTo: User;
+
+  @BelongsTo(() => User, { foreignKey: "createdById" })
+  createdBy: User;
+
+  @BelongsTo(() => Contact)
+  contact: Contact;
+
+  @HasMany(() => Interaction)
+  interactions: Interaction[];
+
+  @BelongsTo(() => Currency)
+  currency: Currency;
+
+  @BelongsTo(() => LeadColumn, {
+    foreignKey: "columnId"
+  })
+  column: LeadColumn;
+
+  @BelongsToMany(() => Tag, () => LeadTag)
+  tagRelations: Tag[];
 }
 
 export default Lead;

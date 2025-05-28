@@ -17,6 +17,7 @@ import ContactTag from "../models/ContactTag";
 import Counter from "../models/Counter";
 import Currency from "../models/Currency";
 import Help from "../models/Help";
+import Interaction from "../models/Interaction";
 import Invoices from "../models/Invoices";
 import Lead from "../models/Lead";
 import LeadColumn from "../models/LeadColumn";
@@ -28,6 +29,7 @@ import Plan from "../models/Plan";
 import Queue from "../models/Queue";
 import QueueOption from "../models/QueueOption";
 import QuickMessage from "../models/QuickMessage";
+import QuoteTemplate from "../models/QuoteTemplate";
 import Schedule from "../models/Schedule";
 import Setting from "../models/Setting";
 import Subscriptions from "../models/Subscriptions";
@@ -46,54 +48,55 @@ import WhatsappQueue from "../models/WhatsappQueue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbConfig = require("../config/database");
 
-const sequelize = new Sequelize(dbConfig);
-
-const models = [
-  Company,
-  User,
-  UserSocketSession,
-  Contact,
-  ContactTag,
-  Ticket,
-  Message,
-  OldMessage,
-  Whatsapp,
-  ContactCustomField,
-  Setting,
-  Queue,
-  WhatsappQueue,
-  UserQueue,
-  Plan,
-  TicketNote,
-  QuickMessage,
-  Help,
-  TicketTraking,
-  Counter,
-  UserRating,
-  QueueOption,
-  Schedule,
-  Tag,
-  TicketTag,
-  ContactList,
-  ContactListItem,
-  Campaign,
-  CampaignSetting,
-  Baileys,
-  BaileysKeys,
-  CampaignShipping,
-  Announcement,
-  Chat,
-  ChatUser,
-  ChatMessage,
-  Invoices,
-  OutOfTicketMessage,
-  Subscriptions,
-  LeadColumn,
-  Lead,
-  LeadTag,
-  Currency
-];
-
-sequelize.addModels(models);
+const sequelize = new Sequelize({
+  ...dbConfig,
+  models: [
+    Company,
+    User,
+    UserSocketSession,
+    Contact,
+    ContactTag,
+    Ticket,
+    Message,
+    OldMessage,
+    Whatsapp,
+    ContactCustomField,
+    Setting,
+    Queue,
+    WhatsappQueue,
+    UserQueue,
+    Plan,
+    TicketNote,
+    QuickMessage,
+    Help,
+    TicketTraking,
+    Counter,
+    UserRating,
+    QueueOption,
+    Schedule,
+    Tag,
+    TicketTag,
+    ContactList,
+    ContactListItem,
+    Campaign,
+    CampaignSetting,
+    Baileys,
+    BaileysKeys,
+    CampaignShipping,
+    Announcement,
+    Chat,
+    ChatUser,
+    ChatMessage,
+    Invoices,
+    OutOfTicketMessage,
+    Subscriptions,
+    LeadColumn,
+    Lead,
+    LeadTag,
+    Currency,
+    Interaction,
+    QuoteTemplate
+  ]
+});
 
 export default sequelize;

@@ -17,7 +17,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     throw new AppError("ERR_NO_PERMISSION", 403);
   }
 
-  await lead.$add("tags", tagId);
+  await lead.$add("tagRelations", tagId);
 
   return res.status(200).json({ message: "Tag added to lead" });
 };
@@ -39,7 +39,7 @@ export const remove = async (
     throw new AppError("ERR_NO_PERMISSION", 403);
   }
 
-  await lead.$remove("tags", tagId);
+  await lead.$remove("tagRelations", tagId);
 
   return res.status(200).json({ message: "Tag removed from lead" });
 };
@@ -61,7 +61,7 @@ export const removeAll = async (
     throw new AppError("ERR_NO_PERMISSION", 403);
   }
 
-  await lead.$set("tags", []);
+  await lead.$set("tagRelations", []);
 
   return res.status(200).json({ message: "All tags removed from lead" });
 };

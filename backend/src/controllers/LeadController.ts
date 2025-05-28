@@ -5,6 +5,10 @@ import AppError from "../errors/AppError";
 import { getIO } from "../libs/socket";
 import Contact from "../models/Contact";
 import Currency from "../models/Currency";
+import Interaction, {
+    InteractionCategory,
+    InteractionType
+} from "../models/Interaction";
 import Lead from "../models/Lead";
 import LeadColumn from "../models/LeadColumn";
 import Tag from "../models/Tag";
@@ -57,7 +61,7 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
       { model: Contact, as: "contact", attributes: ["id", "name", "number"] },
       { model: User, as: "assignedTo", attributes: ["id", "name"] },
       { model: LeadColumn, as: "column", attributes: ["id", "name", "color"] },
-      { model: Tag, as: "tags", attributes: ["id", "name", "color"] },
+      { model: Tag, as: "tagRelations", attributes: ["id", "name", "color"] },
       {
         model: Currency,
         as: "currency",
@@ -72,54 +76,70 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
-  const { companyId } = req.user;
-  const data = req.body as LeadData;
+  const {
+    name,
+    title,
+    description,
+    contactId,
+    columnId,
+    temperature,
+    source,
+    expectedValue,
+    probability,
+    expectedClosingDate,
+    assignedToId,
+    companyId,
+    notes,
+    customFields,
+    currencyId
+  } = req.body;
 
   const schema = Yup.object().shape({
-    name: Yup.string().required(),
-    contactId: Yup.number().required(),
-    columnId: Yup.number().required(),
-    temperature: Yup.string().required(),
+    name: Yup.string().required("Name is required"),
+    title: Yup.string().max(255, "Title must be at most 255 characters"),
+    description: Yup.string(),
+    contactId: Yup.number().required("Contact is required"),
+    columnId: Yup.number().required("Column is required"),
+    temperature: Yup.string().oneOf(["cold", "warm", "hot"]),
     source: Yup.string(),
-    expectedValue: Yup.number(),
-    currencyId: Yup.number().required(),
-    probability: Yup.number(),
+    expectedValue: Yup.number().min(0),
+    probability: Yup.number().min(0).max(100),
     expectedClosingDate: Yup.date(),
     assignedToId: Yup.number(),
     notes: Yup.string(),
     customFields: Yup.object(),
-    tagIds: Yup.array().of(Yup.number())
+    currencyId: Yup.number().required("Currency is required")
   });
 
   try {
-    await schema.validate(data);
+    await schema.validate(req.body);
   } catch (err) {
     throw new AppError(err.message);
   }
 
-  const contact = await Contact.findByPk(data.contactId);
+  const contact = await Contact.findByPk(contactId);
 
   if (!contact || contact.companyId !== companyId) {
     throw new AppError("Contact not found");
   }
 
   const column = await LeadColumn.findOne({
-    where: { id: data.columnId, companyId }
+    where: { id: columnId, companyId }
   });
 
   if (!column) {
     throw new AppError("Lead column not found");
   }
 
-  const currency = await Currency.findByPk(data.currencyId);
+  const currency = await Currency.findByPk(currencyId);
 
   if (!currency) {
     throw new AppError("Currency not found");
   }
 
-  if (data.assignedToId) {
+  if (assignedToId) {
     const user = await User.findOne({
-      where: { id: data.assignedToId, companyId }
+      where: { id: assignedToId, companyId }
     });
 
     if (!user) {
@@ -127,24 +147,33 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     }
   }
 
-  if (data.tagIds) {
-    const tags = await Tag.findAll({
-      where: { id: { [Op.in]: data.tagIds }, companyId }
-    });
-
-    if (tags.length !== data.tagIds.length) {
-      throw new AppError("One or more tags not found");
-    }
-  }
-
   const lead = await Lead.create({
-    ...data,
-    companyId
+    name,
+    title,
+    description,
+    contactId,
+    columnId,
+    temperature,
+    source,
+    expectedValue,
+    probability,
+    expectedClosingDate,
+    assignedToId,
+    companyId,
+    notes,
+    customFields,
+    currencyId
   });
 
-  if (data.tagIds) {
-    await lead.$set("tags", data.tagIds);
-  }
+  // Registrar la interacción de creación
+  await Interaction.create({
+    leadId: lead.id,
+    type: InteractionType.NOTE,
+    category: InteractionCategory.INTERNAL_NOTE,
+    notes: `Lead creado${title ? ` con título: ${title}` : ""}`,
+    userId: Number(req.user.id),
+    isPrivate: true
+  });
 
   const io = getIO();
   io.emit(`lead:${companyId}`, {
@@ -152,7 +181,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     lead
   });
 
-  return res.status(200).json(lead);
+  return res.status(201).json(lead);
 };
 
 export const show = async (req: Request, res: Response): Promise<Response> => {
@@ -164,7 +193,7 @@ export const show = async (req: Request, res: Response): Promise<Response> => {
       { model: Contact, as: "contact" },
       { model: User, as: "assignedTo", attributes: ["id", "name"] },
       { model: Ticket, as: "tickets" },
-      { model: Tag, as: "tags", attributes: ["id", "name", "color"] },
+      { model: Tag, as: "tagRelations", attributes: ["id", "name", "color"] },
       {
         model: Currency,
         as: "currency",
@@ -185,27 +214,43 @@ export const update = async (
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
-  const { companyId } = req.user;
-  const data = req.body as LeadData;
+  const {
+    name,
+    title,
+    description,
+    contactId,
+    columnId,
+    temperature,
+    source,
+    expectedValue,
+    probability,
+    expectedClosingDate,
+    assignedToId,
+    companyId,
+    notes,
+    customFields,
+    currencyId
+  } = req.body;
 
   const schema = Yup.object().shape({
-    name: Yup.string().required(),
-    contactId: Yup.number().required(),
-    columnId: Yup.number().required(),
-    temperature: Yup.string().required(),
+    name: Yup.string().required("Name is required"),
+    title: Yup.string().max(255, "Title must be at most 255 characters"),
+    description: Yup.string(),
+    contactId: Yup.number().required("Contact is required"),
+    columnId: Yup.number().required("Column is required"),
+    temperature: Yup.string().oneOf(["cold", "warm", "hot"]),
     source: Yup.string(),
-    expectedValue: Yup.number(),
-    currencyId: Yup.number().required(),
-    probability: Yup.number(),
+    expectedValue: Yup.number().min(0),
+    probability: Yup.number().min(0).max(100),
     expectedClosingDate: Yup.date(),
     assignedToId: Yup.number(),
     notes: Yup.string(),
     customFields: Yup.object(),
-    tagIds: Yup.array().of(Yup.number())
+    currencyId: Yup.number().required("Currency is required")
   });
 
   try {
-    await schema.validate(data);
+    await schema.validate(req.body);
   } catch (err) {
     throw new AppError(err.message);
   }
@@ -216,50 +261,48 @@ export const update = async (
     throw new AppError("Lead not found");
   }
 
-  const contact = await Contact.findByPk(data.contactId);
+  // Guardar valores anteriores para el registro de cambios
+  const oldTitle = lead.title;
+  const oldDescription = lead.description;
 
-  if (!contact || contact.companyId !== companyId) {
-    throw new AppError("Contact not found");
-  }
-
-  const column = await LeadColumn.findOne({
-    where: { id: data.columnId, companyId }
+  await lead.update({
+    name,
+    title,
+    description,
+    contactId,
+    columnId,
+    temperature,
+    source,
+    expectedValue,
+    probability,
+    expectedClosingDate,
+    assignedToId,
+    companyId,
+    notes,
+    customFields,
+    currencyId
   });
 
-  if (!column) {
-    throw new AppError("Lead column not found");
-  }
-
-  const currency = await Currency.findByPk(data.currencyId);
-
-  if (!currency) {
-    throw new AppError("Currency not found");
-  }
-
-  if (data.assignedToId) {
-    const user = await User.findOne({
-      where: { id: data.assignedToId, companyId }
-    });
-
-    if (!user) {
-      throw new AppError("User not found");
+  // Registrar cambios en el título o descripción
+  if (title !== oldTitle || description !== oldDescription) {
+    let changeNote = "Actualización de lead:";
+    if (title !== oldTitle) {
+      changeNote += `\n- Título cambiado de "${oldTitle || "sin título"}" a "${
+        title || "sin título"
+      }"`;
     }
-  }
-
-  if (data.tagIds) {
-    const tags = await Tag.findAll({
-      where: { id: { [Op.in]: data.tagIds }, companyId }
-    });
-
-    if (tags.length !== data.tagIds.length) {
-      throw new AppError("One or more tags not found");
+    if (description !== oldDescription) {
+      changeNote += "\n- Descripción actualizada";
     }
-  }
 
-  await lead.update(data);
-
-  if (data.tagIds) {
-    await lead.$set("tags", data.tagIds);
+    await Interaction.create({
+      leadId: lead.id,
+      type: InteractionType.NOTE,
+      category: InteractionCategory.INTERNAL_NOTE,
+      notes: changeNote,
+      userId: Number(req.user.id),
+      isPrivate: true
+    });
   }
 
   const io = getIO();
@@ -268,7 +311,7 @@ export const update = async (
     lead
   });
 
-  return res.status(200).json(lead);
+  return res.json(lead);
 };
 
 export const remove = async (

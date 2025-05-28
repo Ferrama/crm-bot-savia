@@ -11,9 +11,13 @@ import {
   UpdatedAt
 } from "sequelize-typescript";
 import Company from "./Company";
+import Lead from "./Lead";
 
-@Table
-class LeadColumn extends Model<LeadColumn> {
+@Table({
+  tableName: "LeadColumns",
+  modelName: "LeadColumn"
+})
+class LeadColumn extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
@@ -35,11 +39,10 @@ class LeadColumn extends Model<LeadColumn> {
   @BelongsTo(() => Company)
   company: Company;
 
-  @HasMany(() => {
-    const Lead = require("./Lead").default;
-    return Lead;
+  @HasMany(() => Lead, {
+    foreignKey: "columnId"
   })
-  leads: any[];
+  leads: Lead[];
 
   @CreatedAt
   createdAt: Date;
@@ -49,4 +52,3 @@ class LeadColumn extends Model<LeadColumn> {
 }
 
 export default LeadColumn;
- 
