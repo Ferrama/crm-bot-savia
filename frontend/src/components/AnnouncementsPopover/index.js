@@ -60,7 +60,7 @@ function AnnouncementDialog({ announcement, open, handleClose }) {
               textAlign: "center",
               width: "90%",
               height: 300,
-              backgroundImage: `url(${getMediaPath(announcement.mediaPath)})`,
+              //backgroundImage: `url(${getMediaPath(announcement.mediaPath)})`,
               backgroundRepeat: "no-repeat",
               backgroundSize: "contain",
               backgroundPosition: "center",
