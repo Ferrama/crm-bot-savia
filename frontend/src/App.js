@@ -323,6 +323,7 @@ const App = () => {
                 position: 'static !important',
                 transform: 'none !important',
                 fontSize: '0.875rem',
+                lineHeight: '1.25rem',
                 fontWeight: 500,
                 color: mode === 'light' ? '#6B7280' : '#9CA3AF',
                 marginBottom: '4px',
@@ -356,6 +357,7 @@ const App = () => {
                 position: 'static !important',
                 transform: 'none !important',
                 fontSize: '0.875rem',
+                lineHeight: '1.25rem',
                 fontWeight: 500,
                 color: mode === 'light' ? '#6B7280' : '#9CA3AF',
                 marginBottom: '4px',
@@ -386,10 +388,19 @@ const App = () => {
             MuiOutlinedInput: {
               root: {
                 '& .MuiOutlinedInput-notchedOutline': {
-                  border: 'none',
+                  display: 'none !important',
                 },
                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  border: 'none',
+                  display: 'none !important',
+                },
+                '&.Mui-error .MuiOutlinedInput-notchedOutline': {
+                  display: 'none !important',
+                },
+                '&.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                  display: 'none !important',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  display: 'none !important',
                 },
                 padding: '8px 12px',
                 marginTop: '0',
@@ -493,6 +504,24 @@ const App = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 },
+                '& .MuiDialogTitle-root': {
+                  position: 'relative',
+                  paddingRight: '48px',
+                },
+                '& .MuiDialogTitle-root .MuiIconButton-root': {
+                  position: 'absolute',
+                  right: 8,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  padding: 8,
+                  color: mode === 'light' ? '#6B7280' : '#9CA3AF',
+                  '&:hover': {
+                    backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '1.25rem',
+                  },
+                },
               },
             },
             MuiDialogTitle: {
@@ -548,6 +577,21 @@ const App = () => {
                 opacity: 0,
                 '&.MuiBackdrop-invisible': {
                   opacity: 1,
+                },
+              },
+            },
+            MuiIconButton: {
+              root: {
+                borderRadius: '6px',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
+                },
+                '&:focus-visible': {
+                  outline: 'none',
+                  boxShadow: `0 0 0 2px ${
+                    mode === 'light' ? primaryColorLight : primaryColorDark
+                  }`,
                 },
               },
             },
@@ -933,6 +977,318 @@ const App = () => {
                 '&[data-popper-placement*="right"] .MuiTooltip-arrow': {
                   left: 0,
                   marginLeft: '-0.71em',
+                },
+              },
+            },
+            MuiSwitch: {
+              root: {
+                width: 52,
+                height: 32,
+                padding: 0,
+                margin: 8,
+                '& .MuiSwitch-switchBase': {
+                  padding: 3,
+                  '&.Mui-checked': {
+                    transform: 'translateX(20px)',
+                    color: '#fff',
+                    '& + .MuiSwitch-track': {
+                      backgroundColor:
+                        mode === 'light' ? primaryColorLight : primaryColorDark,
+                      opacity: 1,
+                      border: 'none',
+                    },
+                  },
+                  '&.Mui-disabled': {
+                    '& + .MuiSwitch-track': {
+                      opacity: mode === 'light' ? 0.5 : 0.3,
+                    },
+                  },
+                },
+                '& .MuiSwitch-thumb': {
+                  width: 24,
+                  height: 24,
+                  boxShadow: '0 1px 3px 0 rgba(0,0,0,0.2)',
+                  backgroundColor: '#fff',
+                  margin: 2,
+                  '&:before': {
+                    content: '""',
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    left: 0,
+                    top: 0,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                  },
+                },
+                '& .MuiSwitch-track': {
+                  borderRadius: 16,
+                  backgroundColor: mode === 'light' ? '#E5E7EB' : '#42484E',
+                  opacity: 1,
+                  transition:
+                    'background-color 150ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&:before, &:after': {
+                    content: '""',
+                    position: 'absolute',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: 20,
+                    height: 20,
+                  },
+                },
+                '&.Mui-focusVisible .MuiSwitch-thumb': {
+                  boxShadow: `0 0 0 2px ${
+                    mode === 'light' ? primaryColorLight : primaryColorDark
+                  }`,
+                },
+              },
+              sizeSmall: {
+                width: 42,
+                height: 30,
+                padding: 7,
+                '& .MuiSwitch-switchBase': {
+                  padding: 0,
+                  '&.Mui-checked': {
+                    transform: 'translateX(12px) !important',
+                  },
+                },
+                '& .MuiSwitch-thumb': {
+                  width: 12,
+                  height: 12,
+                  margin: 9,
+                  boxShadow: '0 1px 2px 0 rgba(0,0,0,0.2)',
+                },
+                '& .MuiSwitch-track': {
+                  borderRadius: 15,
+                  minHeight: 16,
+                  '&:before, &:after': {
+                    width: 12,
+                    height: 12,
+                  },
+                },
+              },
+            },
+            MuiFormControlLabel: {
+              root: {
+                marginLeft: 0,
+                marginRight: 0,
+                '& .MuiFormControlLabel-label': {
+                  fontSize: '0.875rem',
+                  color: mode === 'light' ? '#374151' : '#D1D5DB',
+                  fontWeight: 500,
+                },
+              },
+              labelPlacementStart: {
+                marginLeft: 0,
+                marginRight: 8,
+              },
+              labelPlacementEnd: {
+                marginLeft: 8,
+                marginRight: 0,
+              },
+            },
+            MuiPickersDay: {
+              root: {
+                width: 36,
+                height: 36,
+                margin: 0,
+                fontSize: '0.875rem',
+                fontWeight: 400,
+                color: mode === 'light' ? '#374151' : '#D1D5DB',
+                borderRadius: '6px',
+                '&:hover': {
+                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
+                },
+                '&.Mui-selected': {
+                  backgroundColor:
+                    mode === 'light' ? primaryColorLight : primaryColorDark,
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor:
+                      mode === 'light'
+                        ? `${primaryColorLight}E6`
+                        : `${primaryColorDark}E6`,
+                  },
+                },
+                '&.Mui-disabled': {
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                  opacity: 0.5,
+                },
+                '&.MuiPickersDay-today': {
+                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
+                  color: mode === 'light' ? '#111827' : '#F3F4F6',
+                  fontWeight: 500,
+                },
+              },
+            },
+            MuiPickersCalendarHeader: {
+              root: {
+                marginTop: 8,
+                marginBottom: 8,
+                paddingLeft: 16,
+                paddingRight: 16,
+              },
+              switchHeader: {
+                marginTop: 0,
+                marginBottom: 0,
+              },
+              labelContainer: {
+                padding: 0,
+              },
+              label: {
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                color: mode === 'light' ? '#111827' : '#F3F4F6',
+              },
+              iconButton: {
+                padding: 8,
+                margin: '0 4px',
+                color: mode === 'light' ? '#6B7280' : '#9CA3AF',
+                '&:hover': {
+                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
+                },
+              },
+            },
+            MuiPickersCalendar: {
+              root: {
+                width: '100%',
+                padding: '8px 16px',
+              },
+            },
+            MuiPickersCalendarHeader: {
+              daysHeader: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginTop: 8,
+                marginBottom: 8,
+              },
+            },
+            MuiPickersDay: {
+              dayWithMargin: {
+                margin: '0 2px',
+              },
+            },
+            MuiPickersCalendarHeader: {
+              dayLabel: {
+                width: 36,
+                margin: 0,
+                fontSize: '0.8rem',
+                fontWeight: 400,
+                color: mode === 'light' ? '#6B7280' : '#9CA3AF',
+                textAlign: 'center',
+              },
+            },
+            MuiPickersMonth: {
+              root: {
+                width: '100%',
+                height: '100%',
+                padding: '8px 16px',
+                '& .MuiPickersCalendarHeader-root': {
+                  marginTop: 0,
+                  marginBottom: 0,
+                },
+              },
+            },
+            MuiPickersYear: {
+              root: {
+                width: '100%',
+                height: '100%',
+                padding: '8px 16px',
+                '& .MuiPickersCalendarHeader-root': {
+                  marginTop: 0,
+                  marginBottom: 0,
+                },
+              },
+            },
+            MuiPickersMonthPicker: {
+              root: {
+                width: '100%',
+                height: '100%',
+                padding: '8px 16px',
+                '& .MuiPickersCalendarHeader-root': {
+                  marginTop: 0,
+                  marginBottom: 0,
+                },
+              },
+            },
+            MuiPickersYearPicker: {
+              root: {
+                width: '100%',
+                height: '100%',
+                padding: '8px 16px',
+                '& .MuiPickersCalendarHeader-root': {
+                  marginTop: 0,
+                  marginBottom: 0,
+                },
+              },
+            },
+            MuiPickersBasePicker: {
+              pickerView: {
+                minWidth: 320,
+                minHeight: 320,
+                backgroundColor: mode === 'light' ? '#FFFFFF' : '#2E353B',
+                borderRadius: '8px',
+                border: `1px solid ${mode === 'light' ? '#E5E7EB' : '#696E7B'}`,
+                boxShadow:
+                  '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              },
+            },
+            MuiPickersModal: {
+              dialog: {
+                '& .MuiPickersBasePicker-pickerView': {
+                  minWidth: 320,
+                  minHeight: 320,
+                },
+              },
+            },
+            MuiSelect: {
+              root: {
+                '& .MuiInput-underline': {
+                  display: 'none !important',
+                  '&:before': {
+                    display: 'none !important',
+                    borderBottom: 'none !important',
+                  },
+                  '&:after': {
+                    display: 'none !important',
+                    borderBottom: 'none !important',
+                  },
+                  '&:hover:not(.Mui-disabled):before': {
+                    display: 'none !important',
+                    borderBottom: 'none !important',
+                  },
+                },
+              },
+            },
+            MuiInput: {
+              underline: {
+                '&:before': {
+                  display: 'none !important',
+                  borderBottom: 'none !important',
+                },
+                '&:after': {
+                  display: 'none !important',
+                  borderBottom: 'none !important',
+                },
+                '&:hover:not(.Mui-disabled):before': {
+                  display: 'none !important',
+                  borderBottom: 'none !important',
+                },
+              },
+            },
+            MuiFilledInput: {
+              underline: {
+                '&:before': {
+                  display: 'none !important',
+                  borderBottom: 'none !important',
+                },
+                '&:after': {
+                  display: 'none !important',
+                  borderBottom: 'none !important',
+                },
+                '&:hover:not(.Mui-disabled):before': {
+                  display: 'none !important',
+                  borderBottom: 'none !important',
                 },
               },
             },
