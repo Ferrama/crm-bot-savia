@@ -13,9 +13,9 @@ import {
   MessageUpsertType,
   proto,
   WAMessage,
-  WAMessageStubType,
-  WAMessageUpdate
-} from "@whiskeysockets/baileys";
+  WAMessageUpdate,
+  WAMessageStubType
+} from "baileys";
 import { Mutex } from "async-mutex";
 import { Op } from "sequelize";
 import moment from "moment";
@@ -453,7 +453,7 @@ const downloadMedia = async (
       text: `*Mensagem Automática*:\nNosso sistema aceita apenas arquivos com no máximo ${fileLimit} MiB`
     };
 
-    if (!ticket.isGroup) {
+    if (!ticket.isGroup && !msg.key?.fromMe) {
       const sendMsg = await wbot.sendMessage(
         `${ticket.contact.number}@s.whatsapp.net`,
         fileLimitMessage
@@ -998,99 +998,57 @@ ${JSON.stringify(msg?.message)}`);
   }
 };
 
+const emojiNumberOption = (number: number): string => {
+  const numEmojis = [
+    "0️⃣",
+    "1️⃣",
+    "2️⃣",
+    "3️⃣",
+    "4️⃣",
+    "5️⃣",
+    "6️⃣",
+    "7️⃣",
+    "8️⃣",
+    "9️⃣",
+    "🔟"
+  ];
+
+  return number <= 10 ? numEmojis[number] : `[ ${number} ]`;
+};
+
 const sendMenu = async (
   wbot: Session,
   ticket: Ticket,
   currentOption: Queue | QueueOption,
   sendBackToMain = true
 ) => {
-  const { companyId } = ticket;
-  const buttonActive = await Setting.findOne({
-    where: {
-      key: "chatBotType",
-      companyId
-    }
-  });
-
   const message =
     currentOption instanceof Queue
       ? (currentOption as Queue).greetingMessage
       : (currentOption as QueueOption).message;
 
-  const botList = async () => {
-    const sectionsRows = [];
-
-    currentOption.options.forEach(option => {
-      sectionsRows.push({
-        title: option.title,
-        rowId: `${option.option}`
-      });
-    });
-    if (sendBackToMain) {
-      sectionsRows.push({
-        title: "Voltar Menu Inicial",
-        rowId: "#"
-      });
-    }
-    const sections = [
-      {
-        rows: sectionsRows
-      }
-    ];
-
-    const listMessage = {
-      text: formatBody(`${message}`, ticket),
-      buttonText: "Escolha uma opção",
-      sections
-    };
-
-    const sendMsg = await wbot.sendMessage(
-      `${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`,
-      listMessage
-    );
-
-    await verifyMessage(sendMsg, ticket, ticket.contact);
-  };
-
-  const botButton = async () => {
-    const buttons = [];
-    currentOption.options.forEach(option => {
-      buttons.push({
-        buttonId: `${option.option}`,
-        buttonText: { displayText: option.title },
-        type: 4
-      });
-    });
-    if (sendBackToMain) {
-      buttons.push({
-        buttonId: "#",
-        buttonText: { displayText: "Voltar Menu Inicial" },
-        type: 4
-      });
-    }
-    const buttonMessage = {
-      text: formatBody(`${message}`, ticket),
-      buttons,
-      headerType: 4
-    };
-
-    const sendMsg = await wbot.sendMessage(
-      `${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`,
-      buttonMessage
-    );
-
-    await verifyMessage(sendMsg, ticket, ticket.contact);
-  };
-
   const botText = async () => {
+    const showNumericIcons =
+      currentOption.options.length <= 10 &&
+      (await GetCompanySetting(
+        ticket.companyId,
+        "showNumericIcons",
+        "disabled"
+      )) === "enabled";
+
     let options = "";
 
     currentOption.options.forEach(option => {
-      options += `*[ ${option.option} ]* - ${option.title}\n`;
+      options += showNumericIcons
+        ? `${emojiNumberOption(Number(option.option))} - `
+        : `*[ ${option.option} ]* - `;
+      options += `${option.title}\n`;
     });
 
     if (sendBackToMain) {
-      options += "\n*[ # ]* - Voltar Menu Inicial";
+      options += showNumericIcons
+        ? "\n#️⃣ - Voltar Menu Inicial"
+        : "\n*[ # ]* - Voltar Menu Inicial";
     }
 
     const textMessage = {
@@ -1105,22 +1063,7 @@ const sendMenu = async (
     await verifyMessage(sendMsg, ticket, ticket.contact);
   };
 
-  switch (buttonActive.value) {
-    case "list":
-      botList();
-      break;
-    case "button":
-      if (QueueOption.length > 4) {
-        botText();
-      } else {
-        botButton();
-      }
-      break;
-    case "text":
-      botText();
-      break;
-    default:
-  }
+  botText();
 };
 
 export const startQueue = async (
@@ -1267,6 +1210,14 @@ const verifyQueue = async (
     return;
   }
 
+  const showNumericIcons =
+    queues.length <= 10 &&
+    (await GetCompanySetting(
+      ticket.companyId,
+      "showNumericIcons",
+      "disabled"
+    )) === "enabled";
+
   const selectedOption = msg ? getBodyMessage(msg) : null;
   const choosenQueue = selectedOption ? queues[+selectedOption - 1] : null;
 
@@ -1274,7 +1225,10 @@ const verifyQueue = async (
     let options = "";
 
     queues.forEach((queue, index) => {
-      options += `*[ ${index + 1} ]* - ${queue.name}\n`;
+      options += showNumericIcons
+        ? `${emojiNumberOption(index + 1)} - `
+        : `*[ ${index + 1} ]* - `;
+      options += `${queue.name}\n`;
     });
 
     const textMessage = {
@@ -1438,6 +1392,8 @@ const handleChartbot = async (
         const body = formatBody(`${whatsapp.transferMessage}`, ticket);
         await SendWhatsAppMessage({ body, ticket });
       }
+    } else {
+      await sendMenu(wbot, ticket, queue);
     }
   }
 
@@ -2075,7 +2031,7 @@ const filterMessages = (msg: WAMessage): boolean => {
       WAMessageStubType.E2E_DEVICE_CHANGED,
       WAMessageStubType.E2E_IDENTITY_CHANGED,
       WAMessageStubType.CIPHERTEXT
-    ].includes(msg.messageStubType as WAMessageStubType)
+    ].includes(msg.messageStubType)
   )
     return false;
 
@@ -2150,6 +2106,7 @@ const wbotMessageListener = async (
 ): Promise<void> => {
   try {
     wbot.ev.on("messages.upsert", async (messageUpsert: ImessageUpsert) => {
+      logger.trace({ messageUpsert }, "wbotMessageListener: messages.upsert");
       const messages = messageUpsert.messages
         .filter(filterMessages)
         .map(msg => msg);
@@ -2171,6 +2128,7 @@ const wbotMessageListener = async (
     });
 
     wbot.ev.on("messages.update", (messageUpdate: WAMessageUpdate[]) => {
+      logger.trace({ messageUpdate }, "wbotMessageListener: messages.update");
       if (messageUpdate.length === 0) return;
       messageUpdate.forEach(async (message: WAMessageUpdate) => {
         (wbot as WASocket)!.readMessages([message.key]);

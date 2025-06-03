@@ -31,6 +31,36 @@ const messages = {
         noqueue: 'Sin cola',
         rating: 'Calificación',
         transferTo: 'Transferir a',
+        search: "Buscar",
+        filter: "Filtrar",
+        edit: "Editar",
+        delete: "Eliminar",
+        cancel: "Cancelar",
+        save: "Guardar",
+        confirm: "Confirmar",
+        close: "Cerrar",
+        error: "Error",
+        success: "Éxito",
+        actions: "Acciones",
+        add: "Añadir",
+        name: "Nombre",
+        email: "Correo electrónico",
+        phone: "Teléfono",
+        company: "Empresa",
+        user: "Usuario",
+        connection: "Conexión",
+        queue: "Cola",
+        contact: "Contacto",
+        whatsappNumber: "Número de WhatsApp",
+        dueDate: "Fecha de vencimiento",
+        copy: "Copiar",
+        paste: "Pegar",
+        proceed: "Proceder",
+        enabled: "Activado",
+        disabled: "Desactivado",
+        noqueue: "Sin cola",
+        rating: "Calificación",
+        transferTo: "Transferir a",
       },
       signup: {
         title: 'Registrarse',
@@ -896,6 +926,13 @@ const messages = {
             disabled: 'Desactivado',
           },
         },
+        ShowNumericEmoticons: {
+          title: "Mostrar emojis numéricos en la cola",
+          options: {
+            enabled: "Activado",
+            disabled: "Desactivado",
+          },
+        },
         QuickMessages: {
           title: 'Respuestas rápidas',
           options: {
@@ -929,6 +966,20 @@ const messages = {
             enabled: 'Activado',
             disabled: 'Desactivado',
           },
+        },
+        GracePeriod: {
+          title: "Período de gracia después del vencimiento (días)",
+        },
+        "ticketAcceptedMessage": {
+          "title": "Mensaje de ticket aceptado",
+          "placeholder": "Ingrese su mensaje de ticket aceptado aquí"
+        },
+        "transferMessage": {
+          "title": "Mensaje de transferencia",
+          "placeholder": "Ingrese su mensaje de transferencia aquí"
+        },
+        "mustacheVariables": {
+          "title": "Variables disponibles:",
         },
         WelcomeGreeting: {
           greetings: 'hola',
