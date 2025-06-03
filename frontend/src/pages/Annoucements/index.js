@@ -1,38 +1,37 @@
-import React, { useState, useEffect, useReducer, useContext } from "react";
-import { toast } from "react-toastify";
+import React, { useContext, useEffect, useReducer, useState } from 'react';
+import { toast } from 'react-toastify';
 
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
+import { Search } from 'lucide-react';
 
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
+import { Edit, Trash2 } from 'lucide-react';
 
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import Title from "../../components/Title";
+import MainContainer from '../../components/MainContainer';
+import MainHeader from '../../components/MainHeader';
+import Title from '../../components/Title';
 
-import api from "../../services/api";
-import { i18n } from "../../translate/i18n";
-import TableRowSkeleton from "../../components/TableRowSkeleton";
-import AnnouncementModal from "../../components/AnnouncementModal";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import toastError from "../../errors/toastError";
-import { Grid } from "@material-ui/core";
-import { isArray } from "lodash";
-import { SocketContext } from "../../context/Socket/SocketContext";
+import { Grid } from '@material-ui/core';
+import { isArray } from 'lodash';
+import AnnouncementModal from '../../components/AnnouncementModal';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import TableRowSkeleton from '../../components/TableRowSkeleton';
+import { SocketContext } from '../../context/Socket/SocketContext';
+import toastError from '../../errors/toastError';
+import api from '../../services/api';
+import { i18n } from '../../translate/i18n';
 
 const reducer = (state, action) => {
-  if (action.type === "LOAD_ANNOUNCEMENTS") {
+  if (action.type === 'LOAD_ANNOUNCEMENTS') {
     const announcements = action.payload;
     const newAnnouncements = [];
 
@@ -52,7 +51,7 @@ const reducer = (state, action) => {
     return [...state, ...newAnnouncements];
   }
 
-  if (action.type === "UPDATE_ANNOUNCEMENTS") {
+  if (action.type === 'UPDATE_ANNOUNCEMENTS') {
     const announcement = action.payload;
     const announcementIndex = state.findIndex((u) => u.id === announcement.id);
 
@@ -64,7 +63,7 @@ const reducer = (state, action) => {
     }
   }
 
-  if (action.type === "DELETE_ANNOUNCEMENT") {
+  if (action.type === 'DELETE_ANNOUNCEMENT') {
     const announcementId = action.payload;
 
     const announcementIndex = state.findIndex((u) => u.id === announcementId);
@@ -74,7 +73,7 @@ const reducer = (state, action) => {
     return [...state];
   }
 
-  if (action.type === "RESET") {
+  if (action.type === 'RESET') {
     return [];
   }
 };
@@ -83,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
-    overflowY: "scroll",
+    overflowY: 'scroll',
     ...theme.scrollbarStyles,
   },
 }));
@@ -98,13 +97,13 @@ const Announcements = () => {
   const [deletingAnnouncement, setDeletingAnnouncement] = useState(null);
   const [announcementModalOpen, setAnnouncementModalOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [searchParam, setSearchParam] = useState("");
+  const [searchParam, setSearchParam] = useState('');
   const [announcements, dispatch] = useReducer(reducer, []);
 
   const socketManager = useContext(SocketContext);
 
   useEffect(() => {
-    dispatch({ type: "RESET" });
+    dispatch({ type: 'RESET' });
     setPageNumber(1);
   }, [searchParam]);
 
@@ -118,20 +117,20 @@ const Announcements = () => {
   }, [searchParam, pageNumber]);
 
   useEffect(() => {
-    const companyId = localStorage.getItem("companyId");
+    const companyId = localStorage.getItem('companyId');
     const socket = socketManager.GetSocket(companyId);
 
     const onAnnouncement = (data) => {
-      if (data.action === "update" || data.action === "create") {
-        dispatch({ type: "UPDATE_ANNOUNCEMENTS", payload: data.record });
+      if (data.action === 'update' || data.action === 'create') {
+        dispatch({ type: 'UPDATE_ANNOUNCEMENTS', payload: data.record });
       }
-      if (data.action === "delete") {
-        dispatch({ type: "DELETE_ANNOUNCEMENT", payload: +data.id });
+      if (data.action === 'delete') {
+        dispatch({ type: 'DELETE_ANNOUNCEMENT', payload: +data.id });
       }
-    }
-    
+    };
+
     socket.on(`company-announcement`, onAnnouncement);
-    
+
     return () => {
       socket.disconnect();
     };
@@ -139,10 +138,10 @@ const Announcements = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const { data } = await api.get("/announcements/", {
+      const { data } = await api.get('/announcements/', {
         params: { searchParam, pageNumber },
       });
-      dispatch({ type: "LOAD_ANNOUNCEMENTS", payload: data.records });
+      dispatch({ type: 'LOAD_ANNOUNCEMENTS', payload: data.records });
       setHasMore(data.hasMore);
       setLoading(false);
     } catch (err) {
@@ -172,12 +171,12 @@ const Announcements = () => {
   const handleDeleteAnnouncement = async (announcementId) => {
     try {
       await api.delete(`/announcements/${announcementId}`);
-      toast.success(i18n.t("announcements.toasts.deleted"));
+      toast.success(i18n.t('announcements.toasts.deleted'));
     } catch (err) {
       toastError(err);
     }
     setDeletingAnnouncement(null);
-    setSearchParam("");
+    setSearchParam('');
     setPageNumber(1);
   };
 
@@ -195,13 +194,13 @@ const Announcements = () => {
 
   const translatePriority = (val) => {
     if (val === 1) {
-      return "Alta";
+      return 'Alta';
     }
     if (val === 2) {
-      return "Média";
+      return 'Média';
     }
     if (val === 3) {
-      return "Baixa";
+      return 'Baixa';
     }
   };
 
@@ -210,7 +209,7 @@ const Announcements = () => {
       <ConfirmationModal
         title={
           deletingAnnouncement &&
-          `${i18n.t("announcements.confirmationModal.deleteTitle")} ${
+          `${i18n.t('announcements.confirmationModal.deleteTitle')} ${
             deletingAnnouncement.name
           }?`
         }
@@ -218,7 +217,7 @@ const Announcements = () => {
         onClose={setConfirmModalOpen}
         onConfirm={() => handleDeleteAnnouncement(deletingAnnouncement.id)}
       >
-        {i18n.t("announcements.confirmationModal.deleteMessage")}
+        {i18n.t('announcements.confirmationModal.deleteMessage')}
       </ConfirmationModal>
       <AnnouncementModal
         resetPagination={() => {
@@ -227,27 +226,27 @@ const Announcements = () => {
         }}
         open={announcementModalOpen}
         onClose={handleCloseAnnouncementModal}
-        aria-labelledby="form-dialog-title"
+        aria-labelledby='form-dialog-title'
         announcementId={selectedAnnouncement && selectedAnnouncement.id}
       />
       <MainHeader>
-        <Grid style={{ width: "99.6%" }} container>
+        <Grid style={{ width: '99.6%' }} container>
           <Grid xs={12} sm={8} item>
-            <Title>{i18n.t("announcements.title")}</Title>
+            <Title>{i18n.t('announcements.title')}</Title>
           </Grid>
           <Grid xs={12} sm={4} item>
             <Grid spacing={2} container>
               <Grid xs={6} sm={6} item>
                 <TextField
                   fullWidth
-                  placeholder={i18n.t("announcements.searchPlaceholder")}
-                  type="search"
+                  placeholder={i18n.t('announcements.searchPlaceholder')}
+                  type='search'
                   value={searchParam}
                   onChange={handleSearch}
                   InputProps={{
                     startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon style={{ color: "gray" }} />
+                      <InputAdornment position='start'>
+                        <Search style={{ color: 'gray' }} />
                       </InputAdornment>
                     ),
                   }}
@@ -256,11 +255,11 @@ const Announcements = () => {
               <Grid xs={6} sm={6} item>
                 <Button
                   fullWidth
-                  variant="contained"
+                  variant='contained'
                   onClick={handleOpenAnnouncementModal}
-                  color="primary"
+                  color='primary'
                 >
-                  {i18n.t("announcements.buttons.add")}
+                  {i18n.t('announcements.buttons.add')}
                 </Button>
               </Grid>
             </Grid>
@@ -269,26 +268,26 @@ const Announcements = () => {
       </MainHeader>
       <Paper
         className={classes.mainPaper}
-        variant="outlined"
+        variant='outlined'
         onScroll={handleScroll}
       >
-        <Table size="small">
+        <Table size='small'>
           <TableHead>
             <TableRow>
-              <TableCell align="center">
-                {i18n.t("announcements.table.title")}
+              <TableCell align='center'>
+                {i18n.t('announcements.table.title')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("announcements.table.priority")}
+              <TableCell align='center'>
+                {i18n.t('announcements.table.priority')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("announcements.table.mediaName")}
+              <TableCell align='center'>
+                {i18n.t('announcements.table.mediaName')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("announcements.table.status")}
+              <TableCell align='center'>
+                {i18n.t('announcements.table.status')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("announcements.table.actions")}
+              <TableCell align='center'>
+                {i18n.t('announcements.table.actions')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -296,32 +295,32 @@ const Announcements = () => {
             <>
               {announcements.map((announcement) => (
                 <TableRow key={announcement.id}>
-                  <TableCell align="center">{announcement.title}</TableCell>
-                  <TableCell align="center">
+                  <TableCell align='center'>{announcement.title}</TableCell>
+                  <TableCell align='center'>
                     {translatePriority(announcement.priority)}
                   </TableCell>
-                  <TableCell align="center">
-                    {announcement.mediaName ?? "Sem anexo"}
+                  <TableCell align='center'>
+                    {announcement.mediaName ?? 'Sem anexo'}
                   </TableCell>
-                  <TableCell align="center">
-                    {announcement.status ? "ativo" : "inativo"}
+                  <TableCell align='center'>
+                    {announcement.status ? 'ativo' : 'inativo'}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align='center'>
                     <IconButton
-                      size="small"
+                      size='small'
                       onClick={() => handleEditAnnouncement(announcement)}
                     >
-                      <EditIcon />
+                      <Edit size={20} />
                     </IconButton>
 
                     <IconButton
-                      size="small"
+                      size='small'
                       onClick={(e) => {
                         setConfirmModalOpen(true);
                         setDeletingAnnouncement(announcement);
                       }}
                     >
-                      <DeleteOutlineIcon />
+                      <Trash2 size={20} />
                     </IconButton>
                   </TableCell>
                 </TableRow>

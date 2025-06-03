@@ -31,6 +31,8 @@ const messages = {
         noqueue: 'Sin cola',
         rating: 'Calificación',
         transferTo: 'Transferir a',
+        refreshed: 'Actualizadas con éxito',
+        refreshedError: 'Error al actualizar',
       },
       signup: {
         title: 'Registrarse',

@@ -1,12 +1,12 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
+import React from 'react';
 
-import { i18n } from "../../translate/i18n";
+import { i18n } from '../../translate/i18n';
 
 /** ConfirmationModal
  * @param {string} title - Title of the modal
@@ -30,35 +30,50 @@ import { i18n } from "../../translate/i18n";
  * />
  * */
 
-const ConfirmationModal = ({ title, children, open, onClose, onConfirm, rawChildren, okEnabled=true }) => {
+const ConfirmationModal = ({
+  title,
+  children,
+  open,
+  onClose,
+  onConfirm,
+  rawChildren,
+  okEnabled = true,
+}) => {
   return (
     <Dialog
       open={open}
       onClose={() => onClose(false)}
-      aria-labelledby="confirm-dialog"
+      aria-labelledby='confirm-dialog'
+      showCloseIcon={true}
     >
-      <DialogTitle id="confirm-dialog">{title}</DialogTitle>
-      <DialogContent dividers>
-        {rawChildren ? children : <Typography>{children}</Typography>}
+      <DialogTitle id='confirm-dialog'>{title}</DialogTitle>
+      <DialogContent>
+        {rawChildren ? (
+          children
+        ) : (
+          <Typography className='text-gray-500 dark:text-gray-400'>
+            {children}
+          </Typography>
+        )}
       </DialogContent>
       <DialogActions>
         <Button
-          variant="contained"
+          variant='contained'
           onClick={() => onClose(false)}
-          color="default"
+          color='default'
         >
-          {i18n.t("confirmationModal.buttons.cancel")}
+          {i18n.t('confirmationModal.buttons.cancel')}
         </Button>
         <Button
           disabled={!okEnabled}
-          variant="contained"
+          variant='contained'
           onClick={() => {
             onClose(false);
             onConfirm();
           }}
-          color="secondary"
+          color='secondary'
         >
-          {i18n.t("confirmationModal.buttons.confirm")}
+          {i18n.t('confirmationModal.buttons.confirm')}
         </Button>
       </DialogActions>
     </Dialog>

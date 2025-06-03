@@ -1,58 +1,53 @@
-import React, { useState, useEffect } from "react";
-import * as Yup from "yup";
-import { Formik, Form, Field } from "formik";
-import { toast } from "react-toastify";
+import { Field, Form, Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
-import { makeStyles } from "@material-ui/core/styles";
-import { green } from "@material-ui/core/colors";
+import { green } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles';
 
 import {
+  Button,
+  Checkbox,
+  CircularProgress,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
-  Button,
-  DialogActions,
-  CircularProgress,
-  TextField,
-  Switch,
   FormControlLabel,
-  FormControl,
-  FormGroup,
-  Typography,
-  Tooltip,
-  Paper,
   Grid,
-  Checkbox,
-} from "@material-ui/core";
+  TextField,
+  Typography,
+} from '@material-ui/core';
 
-import api from "../../services/api";
-import { i18n } from "../../translate/i18n";
-import toastError from "../../errors/toastError";
-import QueueSelect from "../QueueSelect";
-import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
+import toastError from '../../errors/toastError';
+import api from '../../services/api';
+import { i18n } from '../../translate/i18n';
+import QueueSelect from '../QueueSelect';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: 'flex',
+    flexWrap: 'wrap',
   },
 
   multFieldLine: {
-    display: "flex",
-    "& > *:not(:last-child)": {
+    display: 'flex',
+    flexDirection: 'column',
+    '& > *:not(:last-child)': {
       marginRight: theme.spacing(1),
     },
   },
 
   btnWrapper: {
-    position: "relative",
+    position: 'relative',
   },
 
   buttonProgress: {
     color: green[500],
-    position: "absolute",
-    top: "50%",
-    left: "50%",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
     marginTop: -12,
     marginLeft: -12,
   },
@@ -60,23 +55,23 @@ const useStyles = makeStyles((theme) => ({
 
 const SessionSchema = Yup.object().shape({
   name: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
 });
 
 const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
   const classes = useStyles();
   const initialState = {
-    name: "",
-    greetingMessage: "",
-    complationMessage: "",
-    outOfHoursMessage: "",
-    ratingMessage: "",
-    transferMessage: "",
+    name: '',
+    greetingMessage: '',
+    complationMessage: '',
+    outOfHoursMessage: '',
+    ratingMessage: '',
+    transferMessage: '',
     isDefault: false,
-    token: "",
-    provider: "beta",
+    token: '',
+    provider: 'beta',
   };
   const [whatsApp, setWhatsApp] = useState(initialState);
   const [selectedQueueIds, setSelectedQueueIds] = useState([]);
@@ -100,16 +95,16 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
 
   const handleSaveWhatsApp = async (values) => {
     const whatsappData = { ...values, queueIds: selectedQueueIds };
-    delete whatsappData["queues"];
-    delete whatsappData["session"];
+    delete whatsappData['queues'];
+    delete whatsappData['session'];
 
     try {
       if (whatsAppId) {
         await api.put(`/whatsapp/${whatsAppId}`, whatsappData);
       } else {
-        await api.post("/whatsapp", whatsappData);
+        await api.post('/whatsapp', whatsappData);
       }
-      toast.success(i18n.t("whatsappModal.success"));
+      toast.success(i18n.t('whatsappModal.success'));
       handleClose();
     } catch (err) {
       toastError(err);
@@ -126,14 +121,15 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
       <Dialog
         open={open}
         onClose={handleClose}
-        maxWidth="sm"
+        maxWidth='sm'
         fullWidth
-        scroll="paper"
+        scroll='paper'
+        showCloseIcon={true}
       >
         <DialogTitle>
           {whatsAppId
-            ? i18n.t("whatsappModal.title.edit")
-            : i18n.t("whatsappModal.title.add")}
+            ? i18n.t('whatsappModal.title.edit')
+            : i18n.t('whatsappModal.title.add')}
         </DialogTitle>
         <Formik
           initialValues={whatsApp}
@@ -148,46 +144,48 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
         >
           {({ values, touched, errors, isSubmitting }) => (
             <Form>
-              <DialogContent dividers>
-                <div className={classes.multFieldLine}>
-                  <Grid spacing={2} container>
-                    <Grid item>
-                      <Field
-                        as={TextField}
-                        label={i18n.t("whatsappModal.form.name")}
-                        autoFocus
-                        name="name"
-                        error={touched.name && Boolean(errors.name)}
-                        helperText={touched.name && errors.name}
-                        variant="outlined"
-                        margin="dense"
-                        className={classes.textField}
-                      />
-                    </Grid>
-                    <Grid style={{ paddingTop: 15 }} item>
-                      <FormControlLabel
-                        control={
-                          <Field
-                            as={Switch}
-                            color="primary"
-                            name="isDefault"
-                            checked={values.isDefault}
-                          />
-                        }
-                        label={i18n.t("whatsappModal.form.default")}
-                      />
-                    </Grid>
+              <DialogContent>
+                <Grid spacing={4} container style={{ flexDirection: 'column' }}>
+                  <Grid item style={{ padding: '16px 16px 0px 16px' }}>
+                    <Field
+                      as={TextField}
+                      label={i18n.t('whatsappModal.form.name')}
+                      autoFocus
+                      name='name'
+                      error={touched.name && Boolean(errors.name)}
+                      helperText={touched.name && errors.name}
+                      variant='outlined'
+                      margin='dense'
+                      className={classes.textField}
+                      fullWidth
+                    />
                   </Grid>
-                </div>
+
+                  <Grid style={{ padding: '8px 16px 16px 16px' }} item>
+                    <FormControlLabel
+                      control={
+                        <Field
+                          as={Checkbox}
+                          color='primary'
+                          name='isDefault'
+                          checked={values.isDefault}
+                        />
+                      }
+                      label={i18n.t('whatsappModal.form.default')}
+                      style={{ gap: 8 }}
+                    />
+                  </Grid>
+                </Grid>
+
                 <div>
                   <Field
                     as={TextField}
-                    label={i18n.t("queueModal.form.greetingMessage")}
-                    type="greetingMessage"
+                    label={i18n.t('queueModal.form.greetingMessage')}
+                    type='greetingMessage'
                     multiline
                     rows={4}
                     fullWidth
-                    name="greetingMessage"
+                    name='greetingMessage'
                     spellCheck={true}
                     error={
                       touched.greetingMessage && Boolean(errors.greetingMessage)
@@ -195,26 +193,26 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
                     helperText={
                       touched.greetingMessage && errors.greetingMessage
                     }
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   />
                 </div>
                 <div>
-                 <Typography style={{fontSize: "11px"}}>
-                  {`Variaveis: ( {{ms}}=> Turno, 
+                  <Typography style={{ fontSize: '11px' }}>
+                    {`Variaveis: ( {{ms}}=> Turno, 
                   {{name}}=> Nome do contato, 
                   {{protocol}}=> protocolo, {{hora}}=> hora )`}
-                 </Typography>
+                  </Typography>
                 </div>
                 <div>
                   <Field
                     as={TextField}
-                    label={i18n.t("queueModal.form.complationMessage")}
-                    type="complationMessage"
+                    label={i18n.t('queueModal.form.complationMessage')}
+                    type='complationMessage'
                     multiline
                     rows={4}
                     fullWidth
-                    name="complationMessage"
+                    name='complationMessage'
                     spellCheck={true}
                     error={
                       touched.complationMessage &&
@@ -223,40 +221,39 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
                     helperText={
                       touched.complationMessage && errors.complationMessage
                     }
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   />
                 </div>
                 <div>
                   <Field
                     as={TextField}
-                    label={i18n.t("queueModal.form.transferMessage")}
-                    type="transferMessage"
+                    label={i18n.t('queueModal.form.transferMessage')}
+                    type='transferMessage'
                     multiline
                     rows={4}
                     fullWidth
-                    name="transferMessage"
+                    name='transferMessage'
                     spellCheck={true}
                     error={
-                      touched.transferMessage &&
-                      Boolean(errors.transferMessage)
+                      touched.transferMessage && Boolean(errors.transferMessage)
                     }
                     helperText={
                       touched.transferMessage && errors.transferMessage
                     }
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   />
                 </div>
                 <div>
                   <Field
                     as={TextField}
-                    label={i18n.t("queueModal.form.outOfHoursMessage")}
-                    type="outOfHoursMessage"
+                    label={i18n.t('queueModal.form.outOfHoursMessage')}
+                    type='outOfHoursMessage'
                     multiline
                     rows={4}
                     fullWidth
-                    name="outOfHoursMessage"
+                    name='outOfHoursMessage'
                     spellCheck={true}
                     error={
                       touched.outOfHoursMessage &&
@@ -265,37 +262,37 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
                     helperText={
                       touched.outOfHoursMessage && errors.outOfHoursMessage
                     }
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   />
                 </div>
                 <div>
                   <Field
                     as={TextField}
-                    label={i18n.t("queueModal.form.ratingMessage")}
-                    type="ratingMessage"
+                    label={i18n.t('queueModal.form.ratingMessage')}
+                    type='ratingMessage'
                     multiline
                     rows={4}
                     fullWidth
-                    name="ratingMessage"
+                    name='ratingMessage'
                     spellCheck={true}
                     error={
                       touched.ratingMessage && Boolean(errors.ratingMessage)
                     }
                     helperText={touched.ratingMessage && errors.ratingMessage}
-                    variant="outlined"
-                    margin="dense"
+                    variant='outlined'
+                    margin='dense'
                   />
                 </div>
                 <div>
                   <Field
                     as={TextField}
-                    label={i18n.t("queueModal.form.token")}
-                    type="token"
+                    label={i18n.t('queueModal.form.token')}
+                    type='token'
                     fullWidth
-                    name="token"
-                    variant="outlined"
-                    margin="dense"
+                    name='token'
+                    variant='outlined'
+                    margin='dense'
                   />
                 </div>
                 <QueueSelect
@@ -306,22 +303,22 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
               <DialogActions>
                 <Button
                   onClick={handleClose}
-                  color="secondary"
+                  color='secondary'
                   disabled={isSubmitting}
-                  variant="outlined"
+                  variant='outlined'
                 >
-                  {i18n.t("whatsappModal.buttons.cancel")}
+                  {i18n.t('whatsappModal.buttons.cancel')}
                 </Button>
                 <Button
-                  type="submit"
-                  color="primary"
+                  type='submit'
+                  color='primary'
                   disabled={isSubmitting}
-                  variant="contained"
+                  variant='contained'
                   className={classes.btnWrapper}
                 >
                   {whatsAppId
-                    ? i18n.t("whatsappModal.buttons.okEdit")
-                    : i18n.t("whatsappModal.buttons.okAdd")}
+                    ? i18n.t('whatsappModal.buttons.okEdit')
+                    : i18n.t('whatsappModal.buttons.okAdd')}
                   {isSubmitting && (
                     <CircularProgress
                       size={24}

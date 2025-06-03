@@ -11,10 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 // ICONS
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import TimerIcon from '@material-ui/icons/Timer';
+import { CheckCircle, Hourglass, Timer, Users } from 'lucide-react';
 
 import { blue, grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
@@ -506,28 +503,28 @@ const Dashboard = () => {
           <InfoCard
             title={i18n.t('dashboard.ticketsDone')}
             value={ticketsData.ticketStatistics?.totalClosed || 0}
-            icon={<CheckCircleIcon style={{ fontSize: 100 }} />}
+            icon={<CheckCircle size={100} />}
           />
 
           {/* NOVOS CONTATOS */}
           <InfoCard
             title={i18n.t('dashboard.newContacts')}
             value={ticketsData.ticketStatistics?.newContacts || 0}
-            icon={<GroupAddIcon style={{ fontSize: 100 }} />}
+            icon={<Users size={100} />}
           />
 
           {/* T.M. DE ATENDIMENTO */}
           <InfoCard
             title={i18n.t('dashboard.avgServiceTime')}
             value={formatTime(ticketsData.ticketStatistics?.avgServiceTime)}
-            icon={<TimerIcon style={{ fontSize: 100 }} />}
+            icon={<Timer size={100} />}
           />
 
           {/* T.M. DE ESPERA */}
           <InfoCard
             title={i18n.t('dashboard.avgWaitTime')}
             value={formatTime(ticketsData.ticketStatistics?.avgWaitTime)}
-            icon={<HourglassEmptyIcon style={{ fontSize: 100 }} />}
+            icon={<Hourglass size={100} />}
           />
 
           {/* DASHBOARD ATENDIMENTOS NO PERÍODO */}

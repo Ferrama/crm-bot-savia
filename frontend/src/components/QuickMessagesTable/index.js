@@ -47,11 +47,11 @@ function QuickMessagesTable(props) {
           {!readOnly ? (
             <TableCell align='center'>
               <IconButton size='small' onClick={() => handleEdit(message)}>
-                <EditIcon />
+                <EditIcon size={20} />
               </IconButton>
 
               <IconButton size='small' onClick={() => handleDelete(message)}>
-                <DeleteOutlineIcon />
+                <DeleteOutlineIcon size={20} />
               </IconButton>
             </TableCell>
           ) : null}

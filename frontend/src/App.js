@@ -81,58 +81,58 @@ const App = () => {
         {
           typography: {
             fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-            fontWeight: 600,
+            fontWeight: 500,
             body1: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             body2: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             h1: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             h2: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             h3: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             h4: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             h5: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             h6: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             button: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             subtitle1: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             subtitle2: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             overline: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
             caption: {
               fontFamily: '"Lato", "Helvetica", "Arial", sans-serif',
-              fontWeight: 600,
+              fontWeight: 500,
             },
           },
           scrollbarStyles: {
@@ -217,7 +217,7 @@ const App = () => {
                 textTransform: 'none',
                 borderRadius: '6px',
                 fontSize: '0.875rem',
-                fontWeight: 600,
+                fontWeight: 500,
                 padding: '8px 16px',
                 maxHeight: '40px',
                 transition: 'all 0.2s ease-in-out',
@@ -326,7 +326,7 @@ const App = () => {
                   }`,
                   borderRadius: '0.375rem',
                   fontSize: '0.875rem',
-                  fontWeight: 600,
+                  fontWeight: 500,
                   padding: '0.5rem 0.75rem',
                   maxHeight: '40px',
                   transition: 'all 0.2s ease-in-out',
@@ -408,7 +408,7 @@ const App = () => {
                 transform: 'none !important',
                 fontSize: '0.875rem',
                 lineHeight: '1.25rem',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: mode === 'light' ? '#6b7280' : '#9ca3af',
                 marginBottom: '0.25rem',
                 '&.Mui-focused': {
@@ -648,7 +648,7 @@ const App = () => {
                 '& .MuiTableCell-head': {
                   backgroundColor: mode === 'light' ? '#F9FAFB' : '#3A4249',
                   color: mode === 'light' ? '#6B7280' : '#9CA3AF',
-                  fontWeight: 600,
+                  fontWeight: 500,
                   fontSize: '0.875rem',
                   padding: '16px',
                   borderBottom: `1px solid ${
@@ -696,7 +696,7 @@ const App = () => {
               root: {
                 padding: '16px',
                 fontSize: '0.875rem',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: mode === 'light' ? '#374151' : '#D1D5DB',
                 borderBottom: `1px solid ${
                   mode === 'light' ? '#E5E7EB' : '#696E7B'
@@ -774,7 +774,7 @@ const App = () => {
                 padding: '0.5rem 0.75rem',
                 borderRadius: '4px',
                 fontSize: '0.875rem',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: mode === 'light' ? '#374151' : '#D1D5DB',
                 transition: 'all 0.2s ease-in-out',
                 '&:hover': {
@@ -805,7 +805,7 @@ const App = () => {
             MuiListSubheader: {
               root: {
                 fontSize: '0.875rem',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: mode === 'light' ? '#111827' : '#F3F4F6',
                 padding: '6px 8px',
                 lineHeight: '1.5',
@@ -821,13 +821,27 @@ const App = () => {
             MuiCheckbox: {
               root: {
                 padding: '0',
-                width: '16px',
-                height: '16px',
-                borderRadius: '2px',
-                border: `1px solid ${mode === 'light' ? '#d1d5db' : '#696e7b'}`,
+                width: '20px',
+                height: '20px',
+                borderRadius: '4px',
+                border: '1px solid',
+                borderColor: mode === 'light' ? '#d1d5db' : '#696e7b',
                 backgroundColor: 'transparent',
                 transition: 'all 0.2s ease-in-out',
-                '&:hover': {
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                '&:focus-visible': {
+                  outline: 'none',
+                  boxShadow: `0 0 0 2px ${
+                    mode === 'light' ? primaryColorLight : primaryColorDark
+                  }`,
+                },
+                '&.Mui-disabled': {
+                  opacity: 0.5,
+                  cursor: 'not-allowed',
+                  borderColor: mode === 'light' ? '#d1d5db' : '#696e7b',
                   backgroundColor: 'transparent',
                 },
                 '&.Mui-checked': {
@@ -843,17 +857,8 @@ const App = () => {
                         : `${primaryColorDark}E6`,
                   },
                 },
-                '&.Mui-disabled': {
-                  opacity: 0.5,
-                  cursor: 'not-allowed',
-                  borderColor: mode === 'light' ? '#d1d5db' : '#696e7b',
+                '&:hover': {
                   backgroundColor: 'transparent',
-                },
-                '&.Mui-focusVisible': {
-                  outline: 'none',
-                  boxShadow: `0 0 0 2px ${
-                    mode === 'light' ? primaryColorLight : primaryColorDark
-                  }`,
                 },
               },
               checked: {},
@@ -867,6 +872,11 @@ const App = () => {
                 '&.Mui-checked': {
                   color: mode === 'light' ? '#fff' : '#111827',
                 },
+              },
+              icon: {
+                fontSize: '20px',
+                width: '20px',
+                height: '20px',
               },
             },
             MuiSvgIcon: {
@@ -895,12 +905,12 @@ const App = () => {
             MuiListItemText: {
               primary: {
                 fontSize: '0.875rem',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: mode === 'light' ? '#374151' : '#D1D5DB',
               },
               secondary: {
                 fontSize: '0.75rem',
-                fontWeight: 600,
+                fontWeight: 500,
                 color: mode === 'light' ? '#6B7280' : '#9CA3AF',
                 opacity: 0.6,
                 letterSpacing: '0.05em',
@@ -1077,7 +1087,7 @@ const App = () => {
                 '& .MuiFormControlLabel-label': {
                   fontSize: '0.875rem',
                   color: mode === 'light' ? '#374151' : '#D1D5DB',
-                  fontWeight: 600,
+                  fontWeight: 500,
                 },
               },
               labelPlacementStart: {

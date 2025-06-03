@@ -1,14 +1,3 @@
-import React, {
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import toastError from "../../errors/toastError";
-import Popover from "@material-ui/core/Popover";
-import ForumIcon from "@material-ui/icons/Forum";
 import {
   Badge,
   IconButton,
@@ -17,15 +6,26 @@ import {
   ListItemText,
   Paper,
   Typography,
-} from "@material-ui/core";
-import api from "../../services/api";
-import { isArray } from "lodash";
-import { SocketContext } from "../../context/Socket/SocketContext";
-import { useDate } from "../../hooks/useDate";
-import { AuthContext } from "../../context/Auth/AuthContext";
+} from '@material-ui/core';
+import Popover from '@material-ui/core/Popover';
+import { makeStyles } from '@material-ui/core/styles';
+import { isArray } from 'lodash';
+import { MessageSquare } from 'lucide-react';
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
+import { AuthContext } from '../../context/Auth/AuthContext';
+import { SocketContext } from '../../context/Socket/SocketContext';
+import toastError from '../../errors/toastError';
+import { useDate } from '../../hooks/useDate';
+import api from '../../services/api';
 
-import notifySound from "../../assets/chat_notify.mp3";
-import useSound from "use-sound";
+import useSound from 'use-sound';
+import notifySound from '../../assets/chat_notify.mp3';
 
 const useStyles = makeStyles((theme) => ({
   mainPaper: {
@@ -33,13 +33,13 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 300,
     maxWidth: 500,
     padding: theme.spacing(1),
-    overflowY: "scroll",
+    overflowY: 'scroll',
     ...theme.scrollbarStyles,
   },
 }));
 
 const reducer = (state, action) => {
-  if (action.type === "LOAD_CHATS") {
+  if (action.type === 'LOAD_CHATS') {
     const chats = action.payload;
     const newChats = [];
 
@@ -57,7 +57,7 @@ const reducer = (state, action) => {
     return [...state, ...newChats];
   }
 
-  if (action.type === "UPDATE_CHATS") {
+  if (action.type === 'UPDATE_CHATS') {
     const chat = action.payload;
     const chatIndex = state.findIndex((u) => u.id === chat.id);
 
@@ -69,7 +69,7 @@ const reducer = (state, action) => {
     }
   }
 
-  if (action.type === "DELETE_CHAT") {
+  if (action.type === 'DELETE_CHAT') {
     const chatId = action.payload;
 
     const chatIndex = state.findIndex((u) => u.id === chatId);
@@ -79,11 +79,11 @@ const reducer = (state, action) => {
     return [...state];
   }
 
-  if (action.type === "RESET") {
+  if (action.type === 'RESET') {
     return [];
   }
 
-  if (action.type === "CHANGE_CHAT") {
+  if (action.type === 'CHANGE_CHAT') {
     const changedChats = state.map((chat) => {
       if (chat.id === action.payload.chat.id) {
         return action.payload.chat;
@@ -103,7 +103,7 @@ export default function ChatPopover() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(false);
-  const [searchParam] = useState("");
+  const [searchParam] = useState('');
   const [chats, dispatch] = useReducer(reducer, []);
   const [invisible, setInvisible] = useState(true);
   const { datetimeToClient } = useDate();
@@ -115,7 +115,7 @@ export default function ChatPopover() {
   useEffect(() => {
     soundAlertRef.current = play;
 
-    if (!("Notification" in window)) {
+    if (!('Notification' in window)) {
       console.log("This browser doesn't support notifications");
     } else {
       Notification.requestPermission();
@@ -123,7 +123,7 @@ export default function ChatPopover() {
   }, [play]);
 
   useEffect(() => {
-    dispatch({ type: "RESET" });
+    dispatch({ type: 'RESET' });
     setPageNumber(1);
   }, [searchParam]);
 
@@ -137,21 +137,20 @@ export default function ChatPopover() {
   }, [searchParam, pageNumber]);
 
   useEffect(() => {
-    const companyId = localStorage.getItem("companyId");
+    const companyId = localStorage.getItem('companyId');
     const socket = socketManager.GetSocket(companyId);
 
     const onCompanyChatPopover = (data) => {
-      if (data.action === "new-message") {
-        dispatch({ type: "CHANGE_CHAT", payload: data });
+      if (data.action === 'new-message') {
+        dispatch({ type: 'CHANGE_CHAT', payload: data });
         if (data.newMessage.senderId !== user.id) {
-        
           soundAlertRef.current();
         }
       }
-      if (data.action === "update") {
-        dispatch({ type: "CHANGE_CHAT", payload: data });
+      if (data.action === 'update') {
+        dispatch({ type: 'CHANGE_CHAT', payload: data });
       }
-    }
+    };
 
     socket.on(`company-${companyId}-chat`, onCompanyChatPopover);
 
@@ -181,10 +180,10 @@ export default function ChatPopover() {
 
   const fetchChats = async () => {
     try {
-      const { data } = await api.get("/chats/", {
+      const { data } = await api.get('/chats/', {
         params: { searchParam, pageNumber },
       });
-      dispatch({ type: "LOAD_CHATS", payload: data.records });
+      dispatch({ type: 'LOAD_CHATS', payload: data.records });
       setHasMore(data.hasMore);
       setLoading(false);
     } catch (err) {
@@ -218,18 +217,18 @@ export default function ChatPopover() {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div>
       <IconButton
         aria-describedby={id}
-        variant="contained"
-        color={invisible ? "default" : "inherit"}
+        variant='contained'
+        color={invisible ? 'default' : 'inherit'}
         onClick={handleClick}
       >
-        <Badge color="secondary" variant="dot" invisible={invisible}>
-          <ForumIcon style={{ color: "white" }} />
+        <Badge color='secondary' variant='dot' invisible={invisible}>
+          <MessageSquare style={{ color: 'white' }} size={22} />
         </Badge>
       </IconButton>
       <Popover
@@ -238,22 +237,22 @@ export default function ChatPopover() {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
+          vertical: 'top',
+          horizontal: 'center',
         }}
       >
         <Paper
-          variant="outlined"
+          variant='outlined'
           onScroll={handleScroll}
           className={classes.mainPaper}
         >
           <List
-            component="nav"
-            aria-label="main mailbox folders"
+            component='nav'
+            aria-label='main mailbox folders'
             style={{ minWidth: 300 }}
           >
             {isArray(chats) &&
@@ -261,8 +260,8 @@ export default function ChatPopover() {
                 <ListItem
                   key={key}
                   style={{
-                    border: "1px solid #eee",
-                    cursor: "pointer",
+                    border: '1px solid #eee',
+                    cursor: 'pointer',
                   }}
                   onClick={() => goToMessages(item)}
                   button
@@ -271,17 +270,17 @@ export default function ChatPopover() {
                     primary={item.lastMessage}
                     secondary={
                       <>
-                        <Typography component="span" style={{ fontSize: 12 }}>
+                        <Typography component='span' style={{ fontSize: 12 }}>
                           {datetimeToClient(item.updatedAt)}
                         </Typography>
-                        <span style={{ marginTop: 5, display: "block" }}></span>
+                        <span style={{ marginTop: 5, display: 'block' }}></span>
                       </>
                     }
                   />
                 </ListItem>
               ))}
             {isArray(chats) && chats.length === 0 && (
-              <ListItemText primary="Nenhum registro" />
+              <ListItemText primary='Nenhum registro' />
             )}
           </List>
         </Paper>

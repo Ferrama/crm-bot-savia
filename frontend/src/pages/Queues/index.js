@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState, useContext } from "react";
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 
 import {
   Button,
@@ -11,38 +11,38 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
-import TableRowSkeleton from "../../components/TableRowSkeleton";
-import Title from "../../components/Title";
-import { i18n } from "../../translate/i18n";
-import toastError from "../../errors/toastError";
-import api from "../../services/api";
-import { DeleteOutline, Edit } from "@material-ui/icons";
-import QueueModal from "../../components/QueueModal";
-import { toast } from "react-toastify";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import { SocketContext } from "../../context/Socket/SocketContext";
+import { Edit, Trash2 } from 'lucide-react';
+import { toast } from 'react-toastify';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import MainContainer from '../../components/MainContainer';
+import MainHeader from '../../components/MainHeader';
+import MainHeaderButtonsWrapper from '../../components/MainHeaderButtonsWrapper';
+import QueueModal from '../../components/QueueModal';
+import TableRowSkeleton from '../../components/TableRowSkeleton';
+import Title from '../../components/Title';
+import { SocketContext } from '../../context/Socket/SocketContext';
+import toastError from '../../errors/toastError';
+import api from '../../services/api';
+import { i18n } from '../../translate/i18n';
 
 const useStyles = makeStyles((theme) => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
-    overflowY: "scroll",
+    overflowY: 'scroll',
     ...theme.scrollbarStyles,
   },
   customTableCell: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }));
 
 const reducer = (state, action) => {
-  if (action.type === "LOAD_QUEUES") {
+  if (action.type === 'LOAD_QUEUES') {
     const queues = action.payload;
     const newQueues = [];
 
@@ -58,7 +58,7 @@ const reducer = (state, action) => {
     return [...state, ...newQueues];
   }
 
-  if (action.type === "UPDATE_QUEUES") {
+  if (action.type === 'UPDATE_QUEUES') {
     const queue = action.payload;
     const queueIndex = state.findIndex((u) => u.id === queue.id);
 
@@ -70,7 +70,7 @@ const reducer = (state, action) => {
     }
   }
 
-  if (action.type === "DELETE_QUEUE") {
+  if (action.type === 'DELETE_QUEUE') {
     const queueId = action.payload;
     const queueIndex = state.findIndex((q) => q.id === queueId);
     if (queueIndex !== -1) {
@@ -79,7 +79,7 @@ const reducer = (state, action) => {
     return [...state];
   }
 
-  if (action.type === "RESET") {
+  if (action.type === 'RESET') {
     return [];
   }
 };
@@ -100,8 +100,8 @@ const Queues = () => {
     (async () => {
       setLoading(true);
       try {
-        const { data } = await api.get("/queue");
-        dispatch({ type: "LOAD_QUEUES", payload: data });
+        const { data } = await api.get('/queue');
+        dispatch({ type: 'LOAD_QUEUES', payload: data });
 
         setLoading(false);
       } catch (err) {
@@ -112,18 +112,18 @@ const Queues = () => {
   }, []);
 
   useEffect(() => {
-    const companyId = localStorage.getItem("companyId");
+    const companyId = localStorage.getItem('companyId');
     const socket = socketManager.GetSocket(companyId);
 
     const onQueue = (data) => {
-      if (data.action === "update" || data.action === "create") {
-        dispatch({ type: "UPDATE_QUEUES", payload: data.queue });
+      if (data.action === 'update' || data.action === 'create') {
+        dispatch({ type: 'UPDATE_QUEUES', payload: data.queue });
       }
 
-      if (data.action === "delete") {
-        dispatch({ type: "DELETE_QUEUE", payload: data.queueId });
+      if (data.action === 'delete') {
+        dispatch({ type: 'DELETE_QUEUE', payload: data.queueId });
       }
-    }
+    };
 
     socket.on(`company-${companyId}-queue`, onQueue);
 
@@ -155,7 +155,7 @@ const Queues = () => {
   const handleDeleteQueue = async (queueId) => {
     try {
       await api.delete(`/queue/${queueId}`);
-      toast.success(i18n.t("Queue deleted successfully!"));
+      toast.success(i18n.t('Queue deleted successfully!'));
     } catch (err) {
       toastError(err);
     }
@@ -167,7 +167,7 @@ const Queues = () => {
       <ConfirmationModal
         title={
           selectedQueue &&
-          `${i18n.t("queues.confirmationModal.deleteTitle")} ${
+          `${i18n.t('queues.confirmationModal.deleteTitle')} ${
             selectedQueue.name
           }?`
         }
@@ -175,7 +175,7 @@ const Queues = () => {
         onClose={handleCloseConfirmationModal}
         onConfirm={() => handleDeleteQueue(selectedQueue.id)}
       >
-        {i18n.t("queues.confirmationModal.deleteMessage")}
+        {i18n.t('queues.confirmationModal.deleteMessage')}
       </ConfirmationModal>
       <QueueModal
         open={queueModalOpen}
@@ -183,32 +183,32 @@ const Queues = () => {
         queueId={selectedQueue?.id}
       />
       <MainHeader>
-        <Title>{i18n.t("queues.title")}</Title>
+        <Title>{i18n.t('queues.title')}</Title>
         <MainHeaderButtonsWrapper>
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={handleOpenQueueModal}
           >
-            {i18n.t("queues.buttons.add")}
+            {i18n.t('queues.buttons.add')}
           </Button>
         </MainHeaderButtonsWrapper>
       </MainHeader>
-      <Paper className={classes.mainPaper} variant="outlined">
-        <Table size="small">
+      <Paper className={classes.mainPaper} variant='outlined'>
+        <Table size='small'>
           <TableHead>
             <TableRow>
-              <TableCell align="center">
-                {i18n.t("queues.table.name")}
+              <TableCell align='center'>
+                {i18n.t('queues.table.name')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("queues.table.color")}
+              <TableCell align='center'>
+                {i18n.t('queues.table.color')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("queues.table.greeting")}
+              <TableCell align='center'>
+                {i18n.t('queues.table.greeting')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("queues.table.actions")}
+              <TableCell align='center'>
+                {i18n.t('queues.table.actions')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -216,46 +216,46 @@ const Queues = () => {
             <>
               {queues.map((queue) => (
                 <TableRow key={queue.id}>
-                  <TableCell align="center">{queue.name}</TableCell>
-                  <TableCell align="center">
+                  <TableCell align='center'>{queue.name}</TableCell>
+                  <TableCell align='center'>
                     <div className={classes.customTableCell}>
                       <span
                         style={{
                           backgroundColor: queue.color,
                           width: 60,
                           height: 20,
-                          alignSelf: "center",
+                          alignSelf: 'center',
                         }}
                       />
                     </div>
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align='center'>
                     <div className={classes.customTableCell}>
                       <Typography
-                        style={{ width: 300, align: "center" }}
+                        style={{ width: 300, align: 'center' }}
                         noWrap
-                        variant="body2"
+                        variant='body2'
                       >
                         {queue.greetingMessage}
                       </Typography>
                     </div>
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align='center'>
                     <IconButton
-                      size="small"
+                      size='small'
                       onClick={() => handleEditQueue(queue)}
                     >
-                      <Edit />
+                      <Edit size={20} />
                     </IconButton>
 
                     <IconButton
-                      size="small"
+                      size='small'
                       onClick={() => {
                         setSelectedQueue(queue);
                         setConfirmModalOpen(true);
                       }}
                     >
-                      <DeleteOutline />
+                      <Trash2 size={20} />
                     </IconButton>
                   </TableCell>
                 </TableRow>

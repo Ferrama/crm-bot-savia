@@ -1,43 +1,41 @@
 import React, {
-  useState,
-  useEffect,
-  useReducer,
   useCallback,
   useContext,
-} from "react";
-import { toast } from "react-toastify";
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
+import { toast } from 'react-toastify';
 
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
 
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
+import { Edit, RefreshCw, Search, Trash2 } from 'lucide-react';
 
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
-import Title from "../../components/Title";
+import MainContainer from '../../components/MainContainer';
+import MainHeader from '../../components/MainHeader';
+import MainHeaderButtonsWrapper from '../../components/MainHeaderButtonsWrapper';
+import Title from '../../components/Title';
 
-import api from "../../services/api";
-import { i18n } from "../../translate/i18n";
-import TableRowSkeleton from "../../components/TableRowSkeleton";
-import ScheduleModal from "../../components/ScheduleModal";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import toastError from "../../errors/toastError";
-import moment from "moment";
-import { capitalize } from "lodash";
-import { SocketContext } from "../../context/Socket/SocketContext";
-import { AuthContext } from "../../context/Auth/AuthContext";
+import { capitalize } from 'lodash';
+import moment from 'moment';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import ScheduleModal from '../../components/ScheduleModal';
+import TableRowSkeleton from '../../components/TableRowSkeleton';
+import { AuthContext } from '../../context/Auth/AuthContext';
+import { SocketContext } from '../../context/Socket/SocketContext';
+import toastError from '../../errors/toastError';
+import api from '../../services/api';
+import { i18n } from '../../translate/i18n';
 
 // A custom hook that builds on useLocation to parse
 // the query string for you.
@@ -46,7 +44,7 @@ const getUrlParam = (param) => {
 };
 
 const reducer = (state, action) => {
-  if (action.type === "LOAD_SCHEDULES") {
+  if (action.type === 'LOAD_SCHEDULES') {
     const schedules = action.payload;
     const newSchedules = [];
 
@@ -62,7 +60,7 @@ const reducer = (state, action) => {
     return [...state, ...newSchedules];
   }
 
-  if (action.type === "UPDATE_SCHEDULES") {
+  if (action.type === 'UPDATE_SCHEDULES') {
     const schedule = action.payload;
     const scheduleIndex = state.findIndex((s) => s.id === schedule.id);
 
@@ -74,7 +72,7 @@ const reducer = (state, action) => {
     }
   }
 
-  if (action.type === "DELETE_SCHEDULE") {
+  if (action.type === 'DELETE_SCHEDULE') {
     const scheduleId = action.payload;
 
     const scheduleIndex = state.findIndex((s) => s.id === scheduleId);
@@ -84,7 +82,7 @@ const reducer = (state, action) => {
     return [...state];
   }
 
-  if (action.type === "RESET") {
+  if (action.type === 'RESET') {
     return [];
   }
 };
@@ -93,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
-    overflowY: "scroll",
+    overflowY: 'scroll',
     ...theme.scrollbarStyles,
   },
 }));
@@ -109,17 +107,18 @@ const Schedules = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [deletingSchedule, setDeletingSchedule] = useState(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [searchParam, setSearchParam] = useState("");
+  const [searchParam, setSearchParam] = useState('');
   const [schedules, dispatch] = useReducer(reducer, []);
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
-  const [contactId, setContactId] = useState(+getUrlParam("contactId"));
+  const [contactId, setContactId] = useState(+getUrlParam('contactId'));
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchSchedules = useCallback(async () => {
     try {
-      const { data } = await api.get("/schedules/", {
+      const { data } = await api.get('/schedules/', {
         params: { searchParam, pageNumber },
       });
-      dispatch({ type: "LOAD_SCHEDULES", payload: data.schedules });
+      dispatch({ type: 'LOAD_SCHEDULES', payload: data.schedules });
       setHasMore(data.hasMore);
       setLoading(false);
     } catch (err) {
@@ -133,11 +132,10 @@ const Schedules = () => {
     }
   }, [contactId]);
 
-
   const socketManager = useContext(SocketContext);
 
   useEffect(() => {
-    dispatch({ type: "RESET" });
+    dispatch({ type: 'RESET' });
     setPageNumber(1);
   }, [searchParam]);
 
@@ -160,14 +158,17 @@ const Schedules = () => {
     const socket = socketManager.GetSocket(user.companyId);
 
     const onSchedule = (data) => {
-      if (data.action === "update" || data.action === "create") {
-        dispatch({ type: "UPDATE_SCHEDULES", payload: data?.schedules || data?.schedule });
+      if (data.action === 'update' || data.action === 'create') {
+        dispatch({
+          type: 'UPDATE_SCHEDULES',
+          payload: data?.schedules || data?.schedule,
+        });
       }
 
-      if (data.action === "delete") {
-        dispatch({ type: "DELETE_USER", payload: +data.scheduleId });
+      if (data.action === 'delete') {
+        dispatch({ type: 'DELETE_USER', payload: +data.scheduleId });
       }
-    }
+    };
 
     socket.on(`company-${user.companyId}-schedule`, onSchedule);
 
@@ -177,7 +178,7 @@ const Schedules = () => {
   }, [handleOpenScheduleModalFromContactId, user, socketManager]);
 
   const cleanContact = () => {
-    setContactId("");
+    setContactId('');
   };
 
   const handleOpenScheduleModal = () => {
@@ -202,15 +203,15 @@ const Schedules = () => {
   const handleDeleteSchedule = async (scheduleId) => {
     try {
       await api.delete(`/schedules/${scheduleId}`);
-      toast.success(i18n.t("schedules.toasts.deleted"));
+      toast.success(i18n.t('schedules.toasts.deleted'));
     } catch (err) {
       toastError(err);
     }
     setDeletingSchedule(null);
-    setSearchParam("");
+    setSearchParam('');
     setPageNumber(1);
 
-    dispatch({ type: "RESET" });
+    dispatch({ type: 'RESET' });
     setPageNumber(1);
     await fetchSchedules();
   };
@@ -229,9 +230,23 @@ const Schedules = () => {
 
   const truncate = (str, len) => {
     if (str.length > len) {
-      return str.substring(0, len) + "...";
+      return str.substring(0, len) + '...';
     }
     return str;
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setRefreshing(true);
+      dispatch({ type: 'RESET' });
+      setPageNumber(1);
+      await fetchSchedules();
+      toast.success(i18n.t('common.refreshed'));
+    } catch (err) {
+      toastError(err);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   return (
@@ -239,70 +254,80 @@ const Schedules = () => {
       <ConfirmationModal
         title={
           deletingSchedule &&
-          `${i18n.t("schedules.confirmationModal.deleteTitle")}`
+          `${i18n.t('schedules.confirmationModal.deleteTitle')}`
         }
         open={confirmModalOpen}
         onClose={setConfirmModalOpen}
         onConfirm={() => handleDeleteSchedule(deletingSchedule.id)}
       >
-        {i18n.t("schedules.confirmationModal.deleteMessage")}
+        {i18n.t('schedules.confirmationModal.deleteMessage')}
       </ConfirmationModal>
       <ScheduleModal
         open={scheduleModalOpen}
         onClose={handleCloseScheduleModal}
         reload={fetchSchedules}
-        aria-labelledby="form-dialog-title"
+        aria-labelledby='form-dialog-title'
         scheduleId={selectedSchedule && selectedSchedule.id}
         contactId={contactId}
         cleanContact={cleanContact}
       />
       <MainHeader>
-        <Title>{i18n.t("schedules.title")}</Title>
+        <Title>{i18n.t('schedules.title')}</Title>
         <MainHeaderButtonsWrapper>
           <TextField
-            placeholder={i18n.t("contacts.searchPlaceholder")}
-            type="search"
+            placeholder={i18n.t('contacts.searchPlaceholder')}
+            type='search'
             value={searchParam}
             onChange={handleSearch}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon style={{ color: "gray" }} />
+                <InputAdornment position='start'>
+                  <Search style={{ color: 'gray' }} />
                 </InputAdornment>
               ),
             }}
           />
+
+          <IconButton onClick={handleRefresh} disabled={refreshing}>
+            <RefreshCw
+              size={20}
+              style={{
+                animation: refreshing ? 'spin 1s linear infinite' : 'none',
+              }}
+            />
+          </IconButton>
+
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={handleOpenScheduleModal}
           >
-            {i18n.t("schedules.buttons.add")}
+            {i18n.t('schedules.buttons.add')}
           </Button>
         </MainHeaderButtonsWrapper>
       </MainHeader>
       <Paper
         className={classes.mainPaper}
-        variant="outlined"
+        variant='outlined'
         onScroll={handleScroll}
       >
-        <Table size="small">
+        <Table size='small'>
           <TableHead>
             <TableRow>
-              <TableCell align="center">
-                {i18n.t("schedules.table.contact")}
+              <TableCell align='center'>
+                {i18n.t('schedules.table.contact')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("schedules.table.body")}
+              <TableCell align='center'>
+                {i18n.t('schedules.table.body')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("schedules.table.sendAt")}
+              <TableCell align='center'>
+                {i18n.t('schedules.table.sendAt')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("schedules.table.status")}
+              <TableCell align='center'>
+                {i18n.t('schedules.table.status')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("schedules.table.actions")}
+              <TableCell align='center'>
+                {i18n.t('schedules.table.actions')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -310,32 +335,32 @@ const Schedules = () => {
             <>
               {schedules.map((schedule) => (
                 <TableRow key={schedule.id}>
-                  <TableCell align="center">{schedule.contact.name}</TableCell>
-                  <TableCell align="center" title={schedule.body}>
+                  <TableCell align='center'>{schedule.contact.name}</TableCell>
+                  <TableCell align='center' title={schedule.body}>
                     {truncate(schedule.body, 25)}
                   </TableCell>
-                  <TableCell align="center">
-                    {moment(schedule.sendAt).format("DD/MM/YYYY HH:mm:ss")}
+                  <TableCell align='center'>
+                    {moment(schedule.sendAt).format('DD/MM/YYYY HH:mm:ss')}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align='center'>
                     {capitalize(schedule.status)}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align='center'>
                     <IconButton
-                      size="small"
+                      size='small'
                       onClick={() => handleEditSchedule(schedule)}
                     >
-                      <EditIcon />
+                      <Edit size={20} />
                     </IconButton>
 
                     <IconButton
-                      size="small"
+                      size='small'
                       onClick={(e) => {
                         setConfirmModalOpen(true);
                         setDeletingSchedule(schedule);
                       }}
                     >
-                      <DeleteOutlineIcon />
+                      <Trash2 size={20} />
                     </IconButton>
                   </TableCell>
                 </TableRow>

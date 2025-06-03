@@ -12,12 +12,9 @@ import {
   TextField,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import SearchIcon from '@material-ui/icons/Search';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Edit, Search, Trash2, UserPlus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import MainContainer from '../../components/MainContainer';
@@ -152,13 +149,13 @@ const LeadList = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
-                  <SearchIcon style={{ color: 'gray' }} />
+                  <Search style={{ color: 'gray' }} />
                 </InputAdornment>
               ),
             }}
           />
           <Button variant='contained' color='primary' onClick={handleOpenModal}>
-            <PersonAddIcon style={{ marginRight: '5px' }} />
+            <UserPlus style={{ marginRight: '5px' }} />
             {i18n.t('leads.buttons.add')}
           </Button>
         </MainHeaderButtonsWrapper>
@@ -237,13 +234,13 @@ const LeadList = () => {
                 <TableCell>{lead.assignedTo?.name}</TableCell>
                 <TableCell align='center'>
                   <IconButton size='small' onClick={() => handleEdit(lead)}>
-                    <EditIcon />
+                    <Edit size={20} />
                   </IconButton>
                   <IconButton
                     size='small'
                     onClick={() => handleDelete(lead.id)}
                   >
-                    <DeleteIcon />
+                    <Trash2 size={20} />
                   </IconButton>
                 </TableCell>
               </TableRow>

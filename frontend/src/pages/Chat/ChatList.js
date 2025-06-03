@@ -1,4 +1,3 @@
-import React, { useContext, useState } from "react";
 import {
   Chip,
   IconButton,
@@ -7,39 +6,39 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   makeStyles,
-} from "@material-ui/core";
+} from '@material-ui/core';
+import React, { useContext, useState } from 'react';
 
-import { useHistory, useParams } from "react-router-dom";
-import { AuthContext } from "../../context/Auth/AuthContext";
-import { useDate } from "../../hooks/useDate";
+import { useHistory, useParams } from 'react-router-dom';
+import { AuthContext } from '../../context/Auth/AuthContext';
+import { useDate } from '../../hooks/useDate';
 
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
+import { Edit, Trash2 } from 'lucide-react';
 
-import ConfirmationModal from "../../components/ConfirmationModal";
-import api from "../../services/api";
+import ConfirmationModal from '../../components/ConfirmationModal';
+import api from '../../services/api';
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
     flex: 1,
-    height: "calc(100% - 58px)",
-    overflow: "hidden",
+    height: 'calc(100% - 58px)',
+    overflow: 'hidden',
     borderRadius: 0,
     //backgroundColor: "inherit",
   },
   chatList: {
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
     flex: 1,
-    overflowY: "scroll",
+    overflowY: 'scroll',
     ...theme.scrollbarStyles,
   },
   listItem: {
-    cursor: "pointer",
+    cursor: 'pointer',
   },
 }));
 
@@ -91,10 +90,10 @@ export default function ChatList({
         {mainText}
         {unreads > 0 && (
           <Chip
-            size="small"
+            size='small'
             style={{ marginLeft: 5 }}
             label={unreads}
-            color="secondary"
+            color='secondary'
           />
         )}
       </>
@@ -102,22 +101,22 @@ export default function ChatList({
   };
 
   const getSecondaryText = (chat) => {
-    return chat.lastMessage !== ""
+    return chat.lastMessage !== ''
       ? `${datetimeToClient(chat.updatedAt)}: ${chat.lastMessage}`
-      : "";
+      : '';
   };
 
   const getItemStyle = (chat) => {
     return {
-      borderLeft: chat.uuid === id ? "6px solid #002d6e" : null,
-     // backgroundColor: chat.uuid === id ? "#eee" : null,
+      borderLeft: chat.uuid === id ? '6px solid #002d6e' : null,
+      // backgroundColor: chat.uuid === id ? "#eee" : null,
     };
   };
 
   return (
     <>
       <ConfirmationModal
-        title={"Excluir Conversa"}
+        title={'Excluir Conversa'}
         open={confirmationModal}
         onClose={setConfirmModalOpen}
         onConfirm={handleDelete}
@@ -149,23 +148,23 @@ export default function ChatList({
                             handleEditChat(chat);
                           });
                         }}
-                        edge="end"
-                        aria-label="delete"
-                        size="small"
+                        edge='end'
+                        aria-label='delete'
+                        size='small'
                         style={{ marginRight: 5 }}
                       >
-                        <EditIcon />
+                        <Edit size={20} />
                       </IconButton>
                       <IconButton
                         onClick={() => {
                           setSelectedChat(chat);
                           setConfirmModalOpen(true);
                         }}
-                        edge="end"
-                        aria-label="delete"
-                        size="small"
+                        edge='end'
+                        aria-label='delete'
+                        size='small'
                       >
-                        <DeleteIcon />
+                        <Trash2 size={20} />
                       </IconButton>
                     </ListItemSecondaryAction>
                   )}

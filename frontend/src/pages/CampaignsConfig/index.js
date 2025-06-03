@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
 
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import { Trash2 } from 'lucide-react';
 import MainContainer from '../../components/MainContainer';
 import MainHeader from '../../components/MainHeader';
 import Title from '../../components/Title';
@@ -325,7 +325,7 @@ const CampaignsConfig = () => {
                                 setConfirmationOpen(true);
                               }}
                             >
-                              <DeleteOutlineIcon />
+                              <Trash2 size={20} />
                             </IconButton>
                           </TableCell>
                           <TableCell>{'{' + v.key + '}'}</TableCell>

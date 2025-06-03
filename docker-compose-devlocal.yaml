@@ -87,4 +87,17 @@ services:
     volumes:
       - redis_data:/data
     networks:
+      - ticketz
+
+  pgadmin4:
+    image: dpage/pgadmin4:8
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@ticketz.host
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    ports:
+      - 8081:80
+    volumes:
+      - ./confs/pgadmin4-servers.json:/pgadmin4/servers.json
+    networks:
       - ticketz 

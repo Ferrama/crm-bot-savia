@@ -1,49 +1,48 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useState, useEffect, useReducer, useContext } from "react";
-import { toast } from "react-toastify";
+import React, { useContext, useEffect, useReducer, useState } from 'react';
+import { toast } from 'react-toastify';
 
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
 
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
-import ZoomInIcon from "@material-ui/icons/ZoomIn";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import EditIcon from '@material-ui/icons/Edit';
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
 
-import DescriptionIcon from "@material-ui/icons/Description";
-import TimerOffIcon from "@material-ui/icons/TimerOff";
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
-import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
+import DescriptionIcon from '@material-ui/icons/Description';
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import Title from "../../components/Title";
+import MainContainer from '../../components/MainContainer';
+import MainHeader from '../../components/MainHeader';
+import Title from '../../components/Title';
 
-import api from "../../services/api";
-import { i18n } from "../../translate/i18n";
-import TableRowSkeleton from "../../components/TableRowSkeleton";
-import CampaignModal from "../../components/CampaignModal";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import toastError from "../../errors/toastError";
-import { Grid } from "@material-ui/core";
-import { isArray } from "lodash";
-import { useDate } from "../../hooks/useDate";
-import { SocketContext } from "../../context/Socket/SocketContext";
+import { Grid } from '@material-ui/core';
+import { isArray } from 'lodash';
+import CampaignModal from '../../components/CampaignModal';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import TableRowSkeleton from '../../components/TableRowSkeleton';
+import { SocketContext } from '../../context/Socket/SocketContext';
+import toastError from '../../errors/toastError';
+import { useDate } from '../../hooks/useDate';
+import api from '../../services/api';
+import { i18n } from '../../translate/i18n';
 
 const reducer = (state, action) => {
-  if (action.type === "LOAD_CAMPAIGNS") {
+  if (action.type === 'LOAD_CAMPAIGNS') {
     const campaigns = action.payload;
     const newCampaigns = [];
 
@@ -61,7 +60,7 @@ const reducer = (state, action) => {
     return [...state, ...newCampaigns];
   }
 
-  if (action.type === "UPDATE_CAMPAIGNS") {
+  if (action.type === 'UPDATE_CAMPAIGNS') {
     const campaign = action.payload;
     const campaignIndex = state.findIndex((u) => u.id === campaign.id);
 
@@ -73,7 +72,7 @@ const reducer = (state, action) => {
     }
   }
 
-  if (action.type === "DELETE_CAMPAIGN") {
+  if (action.type === 'DELETE_CAMPAIGN') {
     const campaignId = action.payload;
 
     const campaignIndex = state.findIndex((u) => u.id === campaignId);
@@ -83,7 +82,7 @@ const reducer = (state, action) => {
     return [...state];
   }
 
-  if (action.type === "RESET") {
+  if (action.type === 'RESET') {
     return [];
   }
 };
@@ -92,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
-    overflowY: "scroll",
+    overflowY: 'scroll',
     ...theme.scrollbarStyles,
   },
 }));
@@ -109,7 +108,7 @@ const Campaigns = () => {
   const [deletingCampaign, setDeletingCampaign] = useState(null);
   const [campaignModalOpen, setCampaignModalOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [searchParam, setSearchParam] = useState("");
+  const [searchParam, setSearchParam] = useState('');
   const [campaigns, dispatch] = useReducer(reducer, []);
 
   const { datetimeToClient } = useDate();
@@ -117,7 +116,7 @@ const Campaigns = () => {
   const socketManager = useContext(SocketContext);
 
   useEffect(() => {
-    dispatch({ type: "RESET" });
+    dispatch({ type: 'RESET' });
     setPageNumber(1);
   }, [searchParam]);
 
@@ -131,17 +130,17 @@ const Campaigns = () => {
   }, [searchParam, pageNumber]);
 
   useEffect(() => {
-    const companyId = localStorage.getItem("companyId");
+    const companyId = localStorage.getItem('companyId');
     const socket = socketManager.GetSocket(companyId);
 
     const onCompanyCampaign = (data) => {
-      if (data.action === "update" || data.action === "create") {
-        dispatch({ type: "UPDATE_CAMPAIGNS", payload: data.record });
+      if (data.action === 'update' || data.action === 'create') {
+        dispatch({ type: 'UPDATE_CAMPAIGNS', payload: data.record });
       }
-      if (data.action === "delete") {
-        dispatch({ type: "DELETE_CAMPAIGN", payload: +data.id });
+      if (data.action === 'delete') {
+        dispatch({ type: 'DELETE_CAMPAIGN', payload: +data.id });
       }
-    }
+    };
 
     socket.on(`company-${companyId}-campaign`, onCompanyCampaign);
     return () => {
@@ -151,10 +150,10 @@ const Campaigns = () => {
 
   const fetchCampaigns = async () => {
     try {
-      const { data } = await api.get("/campaigns/", {
+      const { data } = await api.get('/campaigns/', {
         params: { searchParam, pageNumber },
       });
-      dispatch({ type: "LOAD_CAMPAIGNS", payload: data.records });
+      dispatch({ type: 'LOAD_CAMPAIGNS', payload: data.records });
       setHasMore(data.hasMore);
       setLoading(false);
     } catch (err) {
@@ -184,12 +183,12 @@ const Campaigns = () => {
   const handleDeleteCampaign = async (campaignId) => {
     try {
       await api.delete(`/campaigns/${campaignId}`);
-      toast.success(i18n.t("campaigns.toasts.deleted"));
+      toast.success(i18n.t('campaigns.toasts.deleted'));
     } catch (err) {
       toastError(err);
     }
     setDeletingCampaign(null);
-    setSearchParam("");
+    setSearchParam('');
     setPageNumber(1);
   };
 
@@ -207,16 +206,16 @@ const Campaigns = () => {
 
   const formatStatus = (val) => {
     switch (val) {
-      case "INATIVA":
-        return "Inativa";
-      case "PROGRAMADA":
-        return "Programada";
-      case "EM_ANDAMENTO":
-        return "Em Andamento";
-      case "CANCELADA":
-        return "Cancelada";
-      case "FINALIZADA":
-        return "Finalizada";
+      case 'INATIVA':
+        return 'Inativa';
+      case 'PROGRAMADA':
+        return 'Programada';
+      case 'EM_ANDAMENTO':
+        return 'Em Andamento';
+      case 'CANCELADA':
+        return 'Cancelada';
+      case 'FINALIZADA':
+        return 'Finalizada';
       default:
         return val;
     }
@@ -225,7 +224,7 @@ const Campaigns = () => {
   const cancelCampaign = async (campaign) => {
     try {
       await api.post(`/campaigns/${campaign.id}/cancel`);
-      toast.success(i18n.t("campaigns.toasts.cancel"));
+      toast.success(i18n.t('campaigns.toasts.cancel'));
       setPageNumber(1);
       fetchCampaigns();
     } catch (err) {
@@ -236,7 +235,7 @@ const Campaigns = () => {
   const restartCampaign = async (campaign) => {
     try {
       await api.post(`/campaigns/${campaign.id}/restart`);
-      toast.success(i18n.t("campaigns.toasts.restart"));
+      toast.success(i18n.t('campaigns.toasts.restart'));
       setPageNumber(1);
       fetchCampaigns();
     } catch (err) {
@@ -249,7 +248,7 @@ const Campaigns = () => {
       <ConfirmationModal
         title={
           deletingCampaign &&
-          `${i18n.t("campaigns.confirmationModal.deleteTitle")} ${
+          `${i18n.t('campaigns.confirmationModal.deleteTitle')} ${
             deletingCampaign.name
           }?`
         }
@@ -257,7 +256,7 @@ const Campaigns = () => {
         onClose={setConfirmModalOpen}
         onConfirm={() => handleDeleteCampaign(deletingCampaign.id)}
       >
-        {i18n.t("campaigns.confirmationModal.deleteMessage")}
+        {i18n.t('campaigns.confirmationModal.deleteMessage')}
       </ConfirmationModal>
       <CampaignModal
         resetPagination={() => {
@@ -266,27 +265,27 @@ const Campaigns = () => {
         }}
         open={campaignModalOpen}
         onClose={handleCloseCampaignModal}
-        aria-labelledby="form-dialog-title"
+        aria-labelledby='form-dialog-title'
         campaignId={selectedCampaign && selectedCampaign.id}
       />
       <MainHeader>
-        <Grid style={{ width: "99.6%" }} container>
+        <Grid style={{ width: '99.6%' }} container>
           <Grid xs={12} sm={8} item>
-            <Title>{i18n.t("campaigns.title")}</Title>
+            <Title>{i18n.t('campaigns.title')}</Title>
           </Grid>
           <Grid xs={12} sm={4} item>
             <Grid spacing={2} container>
               <Grid xs={6} sm={6} item>
                 <TextField
                   fullWidth
-                  placeholder={i18n.t("campaigns.searchPlaceholder")}
-                  type="search"
+                  placeholder={i18n.t('campaigns.searchPlaceholder')}
+                  type='search'
                   value={searchParam}
                   onChange={handleSearch}
                   InputProps={{
                     startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon style={{ color: "gray" }} />
+                      <InputAdornment position='start'>
+                        <SearchIcon style={{ color: 'gray' }} />
                       </InputAdornment>
                     ),
                   }}
@@ -295,11 +294,11 @@ const Campaigns = () => {
               <Grid xs={6} sm={6} item>
                 <Button
                   fullWidth
-                  variant="contained"
+                  variant='contained'
                   onClick={handleOpenCampaignModal}
-                  color="primary"
+                  color='primary'
                 >
-                  {i18n.t("campaigns.buttons.add")}
+                  {i18n.t('campaigns.buttons.add')}
                 </Button>
               </Grid>
             </Grid>
@@ -308,35 +307,35 @@ const Campaigns = () => {
       </MainHeader>
       <Paper
         className={classes.mainPaper}
-        variant="outlined"
+        variant='outlined'
         onScroll={handleScroll}
       >
-        <Table size="small">
+        <Table size='small'>
           <TableHead>
             <TableRow>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.name")}
+              <TableCell align='center'>
+                {i18n.t('campaigns.table.name')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.status")}
+              <TableCell align='center'>
+                {i18n.t('campaigns.table.status')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.contactList")}
+              <TableCell align='center'>
+                {i18n.t('campaigns.table.contactList')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.whatsapp")}
+              <TableCell align='center'>
+                {i18n.t('campaigns.table.whatsapp')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.scheduledAt")}
+              <TableCell align='center'>
+                {i18n.t('campaigns.table.scheduledAt')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.completedAt")}
+              <TableCell align='center'>
+                {i18n.t('campaigns.table.completedAt')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.confirmation")}
+              <TableCell align='center'>
+                {i18n.t('campaigns.table.confirmation')}
               </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.actions")}
+              <TableCell align='center'>
+                {i18n.t('campaigns.table.actions')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -344,51 +343,50 @@ const Campaigns = () => {
             <>
               {campaigns.map((campaign) => {
                 const canEdit =
-                  campaign.status === "INATIVA"
-                  || (
-                    campaign.status === "PROGRAMADA"
-                    && new Date(campaign.scheduledAt) > new Date(Date.now() + 3600000)
-                  );
+                  campaign.status === 'INATIVA' ||
+                  (campaign.status === 'PROGRAMADA' &&
+                    new Date(campaign.scheduledAt) >
+                      new Date(Date.now() + 3600000));
                 return (
                   <TableRow key={campaign.id}>
-                    <TableCell align="center">{campaign.name}</TableCell>
-                    <TableCell align="center">
+                    <TableCell align='center'>{campaign.name}</TableCell>
+                    <TableCell align='center'>
                       {formatStatus(campaign.status)}
                     </TableCell>
-                    <TableCell align="center">
-                      {campaign.contactList?.name || "Não definida"}
+                    <TableCell align='center'>
+                      {campaign.contactList?.name || 'Não definida'}
                     </TableCell>
-                    <TableCell align="center">
-                      {campaign.whatsapp?.name || "Não definido"}
+                    <TableCell align='center'>
+                      {campaign.whatsapp?.name || 'Não definido'}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align='center'>
                       {campaign.scheduledAt
                         ? datetimeToClient(campaign.scheduledAt)
-                        : "Sem agendamento"}
+                        : 'Sem agendamento'}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align='center'>
                       {campaign.completedAt
                         ? datetimeToClient(campaign.completedAt)
-                        : "Não concluída"}
+                        : 'Não concluída'}
                     </TableCell>
-                    <TableCell align="center">
-                      {campaign.confirmation ? "Habilitada" : "Desabilitada"}
+                    <TableCell align='center'>
+                      {campaign.confirmation ? 'Habilitada' : 'Desabilitada'}
                     </TableCell>
-                    <TableCell align="center">
-                      {campaign.status === "EM_ANDAMENTO" && (
+                    <TableCell align='center'>
+                      {campaign.status === 'EM_ANDAMENTO' && (
                         <IconButton
                           onClick={() => cancelCampaign(campaign)}
-                          title="Parar Campanha"
-                          size="small"
+                          title='Parar Campanha'
+                          size='small'
                         >
                           <PauseCircleOutlineIcon />
                         </IconButton>
                       )}
-                      {campaign.status === "CANCELADA" && (
+                      {campaign.status === 'CANCELADA' && (
                         <IconButton
                           onClick={() => restartCampaign(campaign)}
-                          title="Parar Campanha"
-                          size="small"
+                          title='Parar Campanha'
+                          size='small'
                         >
                           <PlayCircleOutlineIcon />
                         </IconButton>
@@ -397,19 +395,19 @@ const Campaigns = () => {
                         onClick={() =>
                           history.push(`/campaign/${campaign.id}/report`)
                         }
-                        size="small"
+                        size='small'
                       >
                         <DescriptionIcon />
                       </IconButton>
                       <IconButton
-                        size="small"
+                        size='small'
                         onClick={() => handleEditCampaign(campaign)}
                       >
-                        { canEdit ? <EditIcon /> : <ZoomInIcon /> }
+                        {canEdit ? <EditIcon /> : <ZoomInIcon />}
                       </IconButton>
 
                       <IconButton
-                        size="small"
+                        size='small'
                         onClick={(e) => {
                           setConfirmModalOpen(true);
                           setDeletingCampaign(campaign);
@@ -419,9 +417,8 @@ const Campaigns = () => {
                       </IconButton>
                     </TableCell>
                   </TableRow>
-                )
-              }
-              )}
+                );
+              })}
               {loading && <TableRowSkeleton columns={8} />}
             </>
           </TableBody>

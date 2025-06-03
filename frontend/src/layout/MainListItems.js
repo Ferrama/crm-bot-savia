@@ -20,7 +20,6 @@ import api from '../services/api';
 import { i18n } from '../translate/i18n';
 
 import {
-  ArrowUp,
   Bell,
   Calendar,
   CheckSquare,
@@ -36,9 +35,9 @@ import {
   RefreshCw,
   Settings,
   Tag,
+  TrendingUp,
   User,
   Users,
-  Wallet,
   Zap,
 } from 'lucide-react';
 
@@ -313,7 +312,7 @@ const MainListItems = (props) => {
               <ListItemLink
                 to='/leads'
                 primary={i18n.t('mainDrawer.listItems.leads')}
-                icon={<ArrowUp />}
+                icon={<TrendingUp />}
               />
             </>
           </>
@@ -448,11 +447,11 @@ const MainListItems = (props) => {
               primary={i18n.t('mainDrawer.listItems.messagesAPI')}
               icon={<Code />}
             />
-            <ListItemLink
+            {/* <ListItemLink
               to='/financeiro'
               primary={i18n.t('mainDrawer.listItems.financeiro')}
               icon={<Wallet />}
-            />
+            /> */}
 
             <ListItemLink
               to='/settings'

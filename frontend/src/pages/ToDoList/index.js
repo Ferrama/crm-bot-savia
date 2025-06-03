@@ -6,8 +6,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { Edit, Trash2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { i18n } from '../../translate/i18n';
 
@@ -36,6 +35,12 @@ const useStyles = makeStyles({
   },
   list: {
     marginBottom: '5px',
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    width: 'auto',
+    alignItems: 'flex-end',
   },
 });
 
@@ -108,9 +113,11 @@ const ToDoList = () => {
           variant='outlined'
           placeholder={i18n.t('todoList.taskPlaceholder')}
         />
-        <Button variant='contained' color='primary' onClick={handleAddTask}>
-          {editIndex >= 0 ? i18n.t('todoList.save') : i18n.t('todoList.add')}
-        </Button>
+        <div className={classes.buttonContainer}>
+          <Button variant='contained' color='primary' onClick={handleAddTask}>
+            {editIndex >= 0 ? i18n.t('todoList.save') : i18n.t('todoList.add')}
+          </Button>
+        </div>
       </div>
       <div className={classes.listContainer}>
         <List>
@@ -132,13 +139,13 @@ const ToDoList = () => {
                     onClick={() => handleEditTask(index)}
                     title={i18n.t('todoList.edit')}
                   >
-                    <EditIcon />
+                    <Edit size={20} />
                   </IconButton>
                   <IconButton
                     onClick={() => handleDeleteTask(index)}
                     title={i18n.t('todoList.delete')}
                   >
-                    <DeleteIcon />
+                    <Trash2 size={20} />
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>

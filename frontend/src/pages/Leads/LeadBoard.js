@@ -13,9 +13,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { Edit, Plus, Trash2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
@@ -270,13 +268,13 @@ const LeadBoard = () => {
                       setShowColumnModal(true);
                     }}
                   >
-                    <EditIcon />
+                    <Edit size={20} />
                   </IconButton>
                   <IconButton
                     size='small'
                     onClick={() => handleDeleteColumn(column.id)}
                   >
-                    <DeleteIcon />
+                    <Trash2 size={20} />
                   </IconButton>
                 </div>
               </div>
@@ -340,7 +338,7 @@ const LeadBoard = () => {
                     {provided.placeholder}
                     <Button
                       fullWidth
-                      startIcon={<AddIcon />}
+                      startIcon={<Plus size={20} />}
                       onClick={() => handleAddLead(column.id)}
                       className={classes.addButton}
                     >
@@ -353,7 +351,7 @@ const LeadBoard = () => {
           ))}
           <Button
             variant='outlined'
-            startIcon={<AddIcon />}
+            startIcon={<Plus size={20} />}
             onClick={() => {
               setSelectedColumn(null);
               setShowColumnModal(true);
