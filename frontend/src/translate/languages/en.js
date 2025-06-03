@@ -31,6 +31,36 @@ const messages = {
         noqueue: 'No queue',
         rating: 'Rating',
         transferTo: 'Transfer to',
+        search: "Search",
+        filter: "Filter",
+        edit: "Edit",
+        delete: "Delete",
+        cancel: "Cancel",
+        save: "Save",
+        confirm: "Confirm",
+        close: "Close",
+        error: "Error",
+        success: "Success",
+        actions: "Actions",
+        add: "Add",
+        name: "Name",
+        email: "Email",
+        phone: "Phone",
+        company: "Company",
+        user: "User",
+        connection: "Connection",
+        queue: "Queue",
+        contact: "Contact",
+        whatsappNumber: "WhatsApp Number",
+        dueDate: "Due Date",
+        copy: "Copy",
+        paste: "Paste",
+        proceed: "Proceed",
+        enabled: "Enabled",
+        disabled: "Disabled",
+        noqueue: "No queue",
+        rating: "Rating",
+        transferTo: "Transfer to",
       },
       signup: {
         title: 'Sign Up',
@@ -894,6 +924,13 @@ const messages = {
             disabled: 'disabled',
           },
         },
+        ShowNumericEmoticons: {
+          title: "Display numeric emojis in the queue",
+          options: {
+            enabled: "enabled",
+            disabled: "disabled",
+          },
+        },
         QuickMessages: {
           title: 'Quick Messages',
           options: {
@@ -927,6 +964,20 @@ const messages = {
             enabled: 'Enabled',
             disabled: 'Disabled',
           },
+        },
+        GracePeriod: {
+          title: "Subscription Grace Period (days)",
+        },
+        "ticketAcceptedMessage": {
+          "title": "Ticket Accepted Message",
+          "placeholder": "Enter your ticket accepted message here"
+        },
+        "transferMessage": {
+          "title": "Transfer Message",
+          "placeholder": "Enter your transfer message here"
+        },
+        "mustacheVariables": {
+          "title": "Available variables:",
         },
         WelcomeGreeting: {
           greetings: 'Hello',

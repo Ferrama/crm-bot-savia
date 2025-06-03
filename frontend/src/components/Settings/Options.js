@@ -5,14 +5,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import useSettings from "../../hooks/useSettings";
 import { i18nToast } from "../../helpers/i18nToast";
 import { makeStyles } from "@material-ui/core/styles";
 import { grey, blue } from "@material-ui/core/colors";
 import OnlyForSuperUser from "../OnlyForSuperUser";
 import useAuth from "../../hooks/useAuth.js";
-import { Loop, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import {
   IconButton,
   TextField
@@ -106,6 +105,7 @@ export default function Options(props) {
   const [quickMessages, setQuickMessages] = useState("");
   const [allowSignup, setAllowSignup] = useState("disabled");
   const [chatbotAutoExit, setChatbotAutoExit] = useState("disabled");
+  const [showNumericIcons, setShowNumericIcons] = useState("disabled");
   const [CheckMsgIsGroup, setCheckMsgIsGroupType] = useState("enabled");
   const [soundGroupNotifications, setSoundGroupNotifications] = useState("disabled");
   const [groupsTab, setGroupsTab] = useState("disabled");
@@ -133,6 +133,8 @@ export default function Options(props) {
   const [autoReopenTimeout, setAutoReopenTimeout] = useState(false);
   const [gracePeriod, setGracePeriod] = useState(0);
   const [tagsMode, setTagsMode] = useState("ticket");
+  const [ticketAcceptedMessage, setTicketAcceptedMessage] = useState("");
+  const [transferMessage, setTransferMessage] = useState("");
 
   const { getCurrentUserInfo } = useAuth();
   const [currentUser, setCurrentUser] = useState({});
@@ -188,6 +190,10 @@ export default function Options(props) {
       if (chatbotAutoExit) {
         setChatbotAutoExit(chatbotAutoExit.value);
       }
+
+      const showNumericIcons = settings.find((s) => s.key === "showNumericIcons");
+      setShowNumericIcons(showNumericIcons?.value || "disabled");
+
       const allowSignup = settings.find((s) => s.key === "allowSignup");
       if (allowSignup) {
         setAllowSignup(allowSignup.value);
@@ -248,6 +254,12 @@ export default function Options(props) {
       
       const tagsMode = settings.find((s) => s.key === "tagsMode");
       setTagsMode(tagsMode?.value || "ticket");
+
+      const ticketAcceptedMessage = settings.find((s) => s.key === "ticketAcceptedMessage");
+      setTicketAcceptedMessage(ticketAcceptedMessage?.value || "");
+
+      const transferMessage = settings.find((s) => s.key === "transferMessage");
+      setTransferMessage(transferMessage?.value || "");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
@@ -487,6 +499,66 @@ export default function Options(props) {
               <MenuItem value={"contact"}>{i18n.t("settings.TagsMode.options.contact")}</MenuItem>
               <MenuItem value={"both"}>{i18n.t("settings.TagsMode.options.both")}</MenuItem>
             </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid xs={12} sm={6} md={4} item>
+          <FormControl className={classes.selectContainer}>
+            <InputLabel id="shownumericicons-label">
+            {i18n.t("settings.ShowNumericEmoticons.title")}
+            </InputLabel>
+            <Select
+              labelId="shownumericicons-label"
+              value={showNumericIcons}
+              onChange={async (e) => {
+                handleSetting("showNumericIcons", e.target.value, setShowNumericIcons);
+              }}
+            >
+              <MenuItem value={"disabled"}>{i18n.t("common.disabled")}</MenuItem>
+              <MenuItem value={"enabled"}>{i18n.t("common.enabled")}</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid xs={12} sm={12} md={6} item>
+          <FormControl className={classes.selectContainer}>
+            <TextField
+              id="ticket-accepted-message-field"
+              label={i18n.t("settings.ticketAcceptedMessage.title")}
+              placeholder={i18n.t("settings.ticketAcceptedMessage.placeholder")}
+              variant="standard"
+              multiline
+              rows={4}
+              value={ticketAcceptedMessage}
+              onChange={(e) => {
+                setTicketAcceptedMessage(e.target.value);
+              }}
+              onBlur={(e) => {
+                handleSetting("ticketAcceptedMessage", ticketAcceptedMessage);
+              }}
+            />
+            <span>{i18n.t("settings.mustacheVariables.title")} {'{{firstname}} {{name}} {{user}} {{queue}}'}</span>
+          </FormControl>
+        </Grid>
+
+        <Grid xs={12} sm={12} md={6} item>
+          <FormControl className={classes.selectContainer}>
+            <TextField
+              id="transfer-message-field"
+              label={i18n.t("settings.transferMessage.title")}
+              placeholder={i18n.t("settings.transferMessage.placeholder")}
+              variant="standard"
+              multiline
+              rows={4}
+              value={transferMessage}
+              onChange={(e) => {
+                setTransferMessage(e.target.value);
+              }}
+              onBlur={(e) => {
+                handleSetting("transferMessage", transferMessage);
+              }}
+            />
+            <span>{i18n.t("settings.mustacheVariables.title")} {'{{firstname}} {{name}} {{user}} {{queue}}'}</span>
           </FormControl>
         </Grid>
 
@@ -965,6 +1037,7 @@ export default function Options(props) {
                   />
                 </FormControl>
               </Grid>
+
               <Grid xs={12} sm={6} md={4} item>
                 <FormControl className={classes.selectContainer}>
                   <TextField

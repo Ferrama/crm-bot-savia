@@ -801,6 +801,13 @@ const messages = {
             disabled: 'Deaktiviert',
           },
         },
+        ShowNumericEmoticons: {
+          title: "Numerische Emojis in der Warteschlange anzeigen",
+          options: {
+            enabled: "Aktiviert",
+            disabled: "Deaktiviert",
+          },
+        },
         QuickMessages: {
           title: 'Schnellnachrichten',
           options: {

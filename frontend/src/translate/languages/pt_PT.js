@@ -26,6 +26,31 @@ const messages = {
         copy: 'Copiar',
         paste: 'Colar',
         proceed: 'Prosseguir',
+        search: "Pesquisar",
+        filter: "Filtrar",
+        edit: "Editar",
+        delete: "Eliminar",
+        cancel: "Cancelar",
+        save: "Guardar",
+        confirm: "Confirmar",
+        close: "Fechar",
+        error: "Erro",
+        success: "Sucesso",
+        actions: "Ações",
+        add: "Adicionar",
+        name: "Nome",
+        email: "Email",
+        phone: "Telefone",
+        company: "Empresa",
+        user: "Utilizador",
+        connection: "Conexão",
+        queue: "Fila",
+        contact: "Contacto",
+        whatsappNumber: "Número do Whatsapp",
+        dueDate: "Data de vencimento",
+        copy: "Copiar",
+        paste: "Colar",
+        proceed: "Prosseguir",        
       },
       signup: {
         title: 'Registar',
@@ -802,6 +827,13 @@ const messages = {
             disabled: 'Desativado',
           },
         },
+        ShowNumericEmoticons: {
+          title: "Exibir emojis numéricos na fila",
+          options: {
+            enabled: "Ativado",
+            disabled: "Desativado",
+          },
+        },
         QuickMessages: {
           title: 'Mensagens Rápidas',
           options: {
@@ -832,6 +864,20 @@ const messages = {
             enabled: 'Ativado',
             disabled: 'Desativado',
           },
+        },
+        GracePeriod: {
+          title: "Carência após vencimento (dias)",
+        },
+        "ticketAcceptedMessage": {
+          "title": "Mensagem de ticket aceito",
+          "placeholder": "Digite sua mensagem de ticket aceito aqui"
+        },
+        "transferMessage": {
+          "title": "Mensagem de transferência",
+          "placeholder": "Digite sua mensagem de transferência aqui"
+        },
+        "mustacheVariables": {
+          "title": "Variáveis disponíveis:"
         },
         WelcomeGreeting: {
           greetings: 'Olá',
