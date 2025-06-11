@@ -10,7 +10,7 @@ import {
 import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
 import { isArray } from 'lodash';
-import { MessageSquare } from 'lucide-react';
+import { MessagesSquare } from 'lucide-react';
 import React, {
   useContext,
   useEffect,
@@ -228,7 +228,7 @@ export default function ChatPopover() {
         onClick={handleClick}
       >
         <Badge color='secondary' variant='dot' invisible={invisible}>
-          <MessageSquare style={{ color: 'white' }} size={22} />
+          <MessagesSquare style={{ color: 'white' }} size={22} />
         </Badge>
       </IconButton>
       <Popover

@@ -103,6 +103,10 @@ const useStyles = makeStyles((theme) => ({
   selectContainer: {
     width: '100%',
     textAlign: 'left',
+    marginTop: 0,
+    '& .MuiInput-formControl': {
+      marginTop: 0,
+    },
   },
   cardSolid: {
     padding: theme.spacing(2),
