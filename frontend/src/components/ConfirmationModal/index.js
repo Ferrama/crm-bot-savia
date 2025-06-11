@@ -60,7 +60,7 @@ const ConfirmationModal = ({
         <Button
           variant='contained'
           onClick={() => onClose(false)}
-          color='default'
+          color='secondary'
         >
           {i18n.t('confirmationModal.buttons.cancel')}
         </Button>
@@ -71,7 +71,7 @@ const ConfirmationModal = ({
             onClose(false);
             onConfirm();
           }}
-          color='secondary'
+          color='primary'
         >
           {i18n.t('confirmationModal.buttons.confirm')}
         </Button>

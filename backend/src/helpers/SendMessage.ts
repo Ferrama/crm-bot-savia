@@ -1,15 +1,15 @@
 import { AnyMessageContent, proto } from "baileys";
 import fs from "fs";
-import mime from "mime-types";
 import iconv from "iconv-lite";
+import mime from "mime-types";
+import Message from "../models/Message";
+import OutOfTicketMessage from "../models/OutOfTicketMessages";
 import Whatsapp from "../models/Whatsapp";
-import GetWhatsappWbot from "./GetWhatsappWbot";
 import { getMessageFileOptions } from "../services/WbotServices/SendWhatsAppMedia";
 import { handleMessage } from "../services/WbotServices/wbotMessageListener";
-import Message from "../models/Message";
 import CheckSettings from "./CheckSettings";
+import GetWhatsappWbot from "./GetWhatsappWbot";
 import saveMediaToFile from "./saveMediaFile";
-import OutOfTicketMessage from "../models/OutOfTicketMessages";
 
 export type MessageData = {
   number: string;
@@ -84,13 +84,21 @@ export const SendMessage = async (
         });
       }
     } else {
+      // Check if message contains URL
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      urlRegex.test(body); // Just for logging purposes if needed
+
       message = await wbot.sendMessage(chatId, {
         text: body,
-        linkPreview:
-          messageData.linkPreview === true
-            ? undefined
-            : messageData.linkPreview || false
-      });
+        quoted: messageData.quotedMsg
+          ? {
+              key: {
+                remoteJid: chatId,
+                id: messageData.quotedMsg.id
+              }
+            }
+          : undefined
+      } as AnyMessageContent);
     }
 
     if (messageData.saveOnTicket) {

@@ -1,28 +1,32 @@
 import { Field, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 import * as Yup from 'yup';
-
-import { green } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/core/styles';
 
 import {
   Button,
   Checkbox,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControlLabel,
   Grid,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from '@material-ui/core';
+import { green } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { Copy } from 'lucide-react';
 
 import toastError from '../../errors/toastError';
 import api from '../../services/api';
 import { i18n } from '../../translate/i18n';
+import ButtonWithSpinner from '../ButtonWithSpinner';
 import QueueSelect from '../QueueSelect';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,7 +74,7 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
     ratingMessage: '',
     transferMessage: '',
     isDefault: false,
-    token: '',
+    token: uuidv4(),
     provider: 'beta',
   };
   const [whatsApp, setWhatsApp] = useState(initialState);
@@ -114,6 +118,11 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
   const handleClose = () => {
     onClose();
     setWhatsApp(initialState);
+  };
+
+  const handleCopyToken = () => {
+    navigator.clipboard.writeText(whatsApp.token);
+    toast.success(i18n.t('whatsappModal.token.copied'));
   };
 
   return (
@@ -288,11 +297,26 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
                   <Field
                     as={TextField}
                     label={i18n.t('queueModal.form.token')}
-                    type='token'
+                    type='text'
                     fullWidth
                     name='token'
                     variant='outlined'
                     margin='dense'
+                    disabled={true}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <IconButton
+                            onClick={handleCopyToken}
+                            edge='end'
+                            aria-label='copy token'
+                            size='small'
+                          >
+                            <Copy size={18} />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </div>
                 <QueueSelect
@@ -304,28 +328,22 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
                 <Button
                   onClick={handleClose}
                   color='secondary'
-                  disabled={isSubmitting}
-                  variant='outlined'
+                  variant='contained'
+                  autoFocus
                 >
                   {i18n.t('whatsappModal.buttons.cancel')}
                 </Button>
-                <Button
-                  type='submit'
+                <ButtonWithSpinner
+                  loading={isSubmitting}
                   color='primary'
-                  disabled={isSubmitting}
+                  type='submit'
                   variant='contained'
-                  className={classes.btnWrapper}
+                  autoFocus
                 >
                   {whatsAppId
                     ? i18n.t('whatsappModal.buttons.okEdit')
                     : i18n.t('whatsappModal.buttons.okAdd')}
-                  {isSubmitting && (
-                    <CircularProgress
-                      size={24}
-                      className={classes.buttonProgress}
-                    />
-                  )}
-                </Button>
+                </ButtonWithSpinner>
               </DialogActions>
             </Form>
           )}

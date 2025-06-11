@@ -7,21 +7,11 @@ Ticketz is a communicator with CRM and helpdesk features that utilizes WhatsApp 
 
 ## Original Authorship
 
-This project was initiated in [an Open Source project](https://github.com/canove/whaticket-community), published by the developer [Cassio Santos](https://github.com/canove) under the permissive MIT license. It later received various improvements by unidentified authors and was commercially distributed directly between developers and users with the provision of source code. According to information from [this video, it was leaked and publicly released at some point](https://www.youtube.com/watch?v=SX_cGD5RLkQ).
+This project was initiated in [an Open Source project](https://github.com/canove/whaticket-community), published by the developer [Cassio Santos](https://github.com/canove). It later received various improvements by unidentified authors and was commercially distributed directly between developers and users.
 
 After some research, it was further identified that the first SaaS version of Whaticket was created by the developer [Wender Teixeira](https://github.com/w3nder), including a version of [Whaticket Single](https://github.com/unkbot/whaticket-free) that uses the Baileys library for WhatsApp access.
 
-It is practically impossible to identify and credit the authors of the improvements. [The code published by the Vem Fazer channel](https://github.com/vemfazer/whaticket-versao-03-12-canal-vem-fazer) does not mention any license; therefore, I am assuming that all authors are comfortable with keeping these changes under the same license as the original project (MIT).
-
-## Relicensing
-
-As I am making these changes and providing them at no cost, I want them to be available to everyone. Therefore, I am choosing to relicense under the AGPL, which requires that every user who has access to the system can obtain the source code.
-
-Therefore, if you directly utilize this version, it is **very important to keep the link on the "About Ticketz" screen, which provides access to the repository**. If you wish, you can move the link to the source code elsewhere, but it must be easily accessible to any system user.
-
-If you make changes to the code, you must change the link to a repository or another way to obtain the code for your changes.
-
-If you wish to use parts of the code to fix any code **for your own use**, feel free to do so and you don't need to worry about the AGPL license. However, if you want to use any part added in this project in a system that you commercialize, you must either provide the code of your entire system to its users, or you must contact the author of the code to license it under different criteria.
+It is practically impossible to identify and credit the authors of the improvements. [The code published by the Vem Fazer channel](https://github.com/vemfazer/whaticket-versao-03-12-canal-vem-fazer) was used as a reference.
 
 ## Objective
 
@@ -33,8 +23,7 @@ The improvements developed by me will be placed here, and depending on the situa
 
 Whenever possible, I intend to backport some adjustments made here to the original projects.
 
-Very Quick Start on a public Server
------------------------------------
+## Very Quick Start on a public Server
 
 There are Docker images provided from the project, so you can get **ticketz** to work very easily on a public server (baremetal or VPS).
 
@@ -91,8 +80,7 @@ docker compose logs -t -f
 
 ```
 
-Running from Source code Using Docker
--------------------------------------
+## Running from Source code Using Docker
 
 For installation, you need to have Docker Community Edition and the Git client installed. It is ideal to find the best way to install these resources on your preferred operating system. [The official Docker installation guide can be found here](https://docs.docker.com/engine/install/).
 
@@ -129,9 +117,9 @@ docker compose -f docker-compose-local.yaml down
 
 Having a server accessible via the internet, it is necessary to adjust two DNS names of your choice, one for the backend and another for the frontend, and also an email address for certificate registration, for example:
 
-* **backend:** api.ticketz.example.com
-* **frontend:** ticketz.example.com
-* **email:** ticketz@example.com
+- **backend:** api.ticketz.example.com
+- **frontend:** ticketz.example.com
+- **email:** ticketz@example.com
 
 You need to edit the `.env-backend-acme` and `.env-frontend-acme` files, defining these values in them.
 
@@ -157,13 +145,11 @@ To terminate the service, use the following command:
 sudo docker compose -f docker-compose-acme.yaml down
 ```
 
-Important Notice
-----------------
+## Important Notice
 
 This project is not affiliated with Meta, WhatsApp, or any other company. The use of the provided code is the sole responsibility of the users and does not imply any liability for the author or project collaborators.
 
-Made Your Life Easier?
-----------------------
+## Made Your Life Easier?
 
 If this project has helped you with a complex task, consider making a donation to the author via PayPal or Brazilian PIX below.
 

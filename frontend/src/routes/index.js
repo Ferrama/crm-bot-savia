@@ -29,13 +29,14 @@ import Campaigns from '../pages/Campaigns';
 import CampaignsConfig from '../pages/CampaignsConfig';
 import Chat from '../pages/Chat';
 import QuickMessages from '../pages/QuickMessages/';
+import SaviaIframe from '../pages/SaviaIframe';
 import Schedules from '../pages/Schedules';
 import Subscription from '../pages/Subscription/';
 import ToDoList from '../pages/ToDoList/';
 import Route from './Route';
 
 const Routes = () => {
-  const [showCampaigns, setShowCampaigns] = useState(false);
+  const [showCampaigns, setShowCampaigns] = useState(true);
 
   useEffect(() => {
     const cshow = localStorage.getItem('cshow');
@@ -85,6 +86,7 @@ const Routes = () => {
                 <Route exact path='/leads' component={Leads} isPrivate />
                 <Route exact path='/helps' component={Helps} isPrivate />
                 <Route exact path='/users' component={Users} isPrivate />
+                <Route exact path='/savia' component={SaviaIframe} isPrivate />
                 <Route
                   exact
                   path='/messages-api'

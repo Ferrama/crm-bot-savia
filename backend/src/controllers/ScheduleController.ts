@@ -4,10 +4,10 @@ import { getIO } from "../libs/socket";
 import AppError from "../errors/AppError";
 
 import CreateService from "../services/ScheduleServices/CreateService";
-import ListService from "../services/ScheduleServices/ListService";
-import UpdateService from "../services/ScheduleServices/UpdateService";
-import ShowService from "../services/ScheduleServices/ShowService";
 import DeleteService from "../services/ScheduleServices/DeleteService";
+import ListService from "../services/ScheduleServices/ListService";
+import ShowService from "../services/ScheduleServices/ShowService";
+import UpdateService from "../services/ScheduleServices/UpdateService";
 
 type IndexQuery = {
   searchParam?: string;
@@ -33,7 +33,7 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
-  const { body, sendAt, contactId, saveMessage } = req.body;
+  const { body, sendAt, contactId, saveMessage, whatsappId } = req.body;
   const { companyId } = req.user;
   const userId = Number(req.user.id);
 
@@ -43,7 +43,8 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     contactId,
     companyId,
     userId,
-    saveMessage: !!saveMessage
+    saveMessage: !!saveMessage,
+    whatsappId
   });
 
   const io = getIO();

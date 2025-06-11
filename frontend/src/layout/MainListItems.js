@@ -7,8 +7,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-
 import { makeStyles } from '@material-ui/core/styles';
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import { isArray } from 'lodash';
 import { Can } from '../components/Can';
 import { AuthContext } from '../context/Auth/AuthContext';
@@ -20,6 +20,7 @@ import api from '../services/api';
 import { i18n } from '../translate/i18n';
 
 import {
+  Album,
   Bell,
   Calendar,
   CheckSquare,
@@ -32,7 +33,6 @@ import {
   LayoutDashboard,
   List as LucideList,
   MessageSquare,
-  RefreshCw,
   Settings,
   Tag,
   TrendingUp,
@@ -48,6 +48,20 @@ const useStyles = makeStyles((theme) => ({
     height: 26,
     marginTop: '-15px',
     marginBottom: '-10px',
+  },
+  whatsappIcon: {
+    fontSize: '24px',
+    width: '24px',
+    height: '24px',
+  },
+  smallBadge: {
+    '& .MuiBadge-badge': {
+      height: '12px',
+      minWidth: '12px',
+      padding: '0 4px',
+      fontSize: '0.65rem',
+      borderRadius: '6px',
+    },
   },
 }));
 
@@ -134,7 +148,7 @@ const MainListItems = (props) => {
   const { whatsApps } = useContext(WhatsAppsContext);
   const { user, handleLogout } = useContext(AuthContext);
   const [connectionWarning, setConnectionWarning] = useState(false);
-  const [openCampaignSubmenu, setOpenCampaignSubmenu] = useState(false);
+  const [openCampaignSubmenu, setOpenCampaignSubmenu] = useState(true);
   const [openKanbanSubmenu, setOpenKanbanSubmenu] = useState(false);
 
   const [showCampaigns, setShowCampaigns] = useState(false);
@@ -196,9 +210,10 @@ const MainListItems = (props) => {
       setInvisible(true);
     }
   }, [chats, user.id]);
-
+  console.log('cshow', localStorage.getItem('cshow'));
   useEffect(() => {
     if (localStorage.getItem('cshow')) {
+      console.log('cshow', localStorage.getItem('cshow'));
       setShowCampaigns(true);
     }
   }, []);
@@ -314,6 +329,7 @@ const MainListItems = (props) => {
                 primary={i18n.t('mainDrawer.listItems.leads')}
                 icon={<TrendingUp />}
               />
+              <ListItemLink to='/savia' primary={'Savia'} icon={<Album />} />
             </>
           </>
         )}
@@ -367,7 +383,7 @@ const MainListItems = (props) => {
               {i18n.t('mainDrawer.listItems.administration')}
             </ListSubheader>
 
-            {showCampaigns && (
+            {
               <>
                 <ListItem
                   button
@@ -415,7 +431,7 @@ const MainListItems = (props) => {
                   </List>
                 </Collapse>
               </>
-            )}
+            }
             {user.super && (
               <ListItemLink
                 to='/announcements'
@@ -427,8 +443,13 @@ const MainListItems = (props) => {
               to='/connections'
               primary={i18n.t('mainDrawer.listItems.connections')}
               icon={
-                <Badge badgeContent={connectionWarning ? '!' : 0} color='error'>
-                  <RefreshCw />
+                <Badge
+                  size='small'
+                  badgeContent={connectionWarning ? '!' : 0}
+                  color='error'
+                  className={classes.smallBadge}
+                >
+                  <WhatsAppIcon className={classes.whatsappIcon} />
                 </Badge>
               }
             />

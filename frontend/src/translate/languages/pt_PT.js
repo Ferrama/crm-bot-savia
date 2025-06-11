@@ -26,31 +26,31 @@ const messages = {
         copy: 'Copiar',
         paste: 'Colar',
         proceed: 'Prosseguir',
-        search: "Pesquisar",
-        filter: "Filtrar",
-        edit: "Editar",
-        delete: "Eliminar",
-        cancel: "Cancelar",
-        save: "Guardar",
-        confirm: "Confirmar",
-        close: "Fechar",
-        error: "Erro",
-        success: "Sucesso",
-        actions: "Ações",
-        add: "Adicionar",
-        name: "Nome",
-        email: "Email",
-        phone: "Telefone",
-        company: "Empresa",
-        user: "Utilizador",
-        connection: "Conexão",
-        queue: "Fila",
-        contact: "Contacto",
-        whatsappNumber: "Número do Whatsapp",
-        dueDate: "Data de vencimento",
-        copy: "Copiar",
-        paste: "Colar",
-        proceed: "Prosseguir",        
+        search: 'Pesquisar',
+        filter: 'Filtrar',
+        edit: 'Editar',
+        delete: 'Eliminar',
+        cancel: 'Cancelar',
+        save: 'Guardar',
+        confirm: 'Confirmar',
+        close: 'Fechar',
+        error: 'Erro',
+        success: 'Sucesso',
+        actions: 'Ações',
+        add: 'Adicionar',
+        name: 'Nome',
+        email: 'Email',
+        phone: 'Telefone',
+        company: 'Empresa',
+        user: 'Utilizador',
+        connection: 'Conexão',
+        queue: 'Fila',
+        contact: 'Contacto',
+        whatsappNumber: 'Número do Whatsapp',
+        dueDate: 'Data de vencimento',
+        copy: 'Copiar',
+        paste: 'Colar',
+        proceed: 'Prosseguir',
       },
       signup: {
         title: 'Registar',
@@ -160,14 +160,17 @@ const messages = {
         },
         form: {
           name: 'Nome',
-          default: 'Padrão',
+          default: 'Predefinido',
         },
         buttons: {
           okAdd: 'Adicionar',
-          okEdit: 'Salvar',
+          okEdit: 'Guardar',
           cancel: 'Cancelar',
         },
-        success: 'WhatsApp salvo com sucesso.',
+        success: 'WhatsApp guardado com sucesso.',
+        token: {
+          copied: 'Token copiado para a área de transferência',
+        },
       },
       qrCode: {
         message: 'Digitalizar QR',
@@ -274,22 +277,30 @@ const messages = {
       },
       scheduleModal: {
         title: {
-          add: 'Novo Agendamento',
-          edit: 'Editar Agendamento',
+          error: 'Erro de Envio',
+          message: 'Mensagem',
+        },
+        status: {
+          pending: 'Pendente',
+          sent: 'Enviado',
+          erro: 'Erro',
+        },
+        validation: {
+          bodyMin: 'Mensagem muito curta',
+          required: 'Obrigatório',
         },
         form: {
           body: 'Mensagem',
-          contact: 'Contacto',
-          sendAt: 'Data de Agendamento',
-          sentAt: 'Data de Envio',
-          saveMessage: 'Salvar Mensagem no Ticket',
+          sendAt: 'Enviar às',
+          saveMessage: 'Guardar como modelo',
+          contactPlaceholder: 'Contacto',
         },
         buttons: {
-          okAdd: 'Adicionar',
-          okEdit: 'Salvar',
           cancel: 'Cancelar',
+          okAdd: 'Adicionar',
+          okEdit: 'Guardar',
         },
-        success: 'Agendamento salvo com sucesso.',
+        success: 'Agendamento guardado com sucesso!',
       },
       tagModal: {
         title: {
@@ -442,8 +453,13 @@ const messages = {
           add: 'Nova Resposta',
         },
         dialog: {
+          title: 'Mensagem Rápida',
           shortcode: 'Atalho',
           message: 'Resposta',
+          buttons: {
+            cancel: 'Cancelar',
+            save: 'Guardar',
+          },
         },
       },
       kanban: {
@@ -701,11 +717,6 @@ const messages = {
         aboutauthorsite: 'Site do autor',
         aboutwhaticketsite: 'Site do Whaticket Community no Github',
         aboutvemfazersite: 'Site do canal Vem Fazer no Github',
-        licenseheading: 'Licença em Código Aberto',
-        licensedetail:
-          'O ticketz está licenciado sob a GNU Affero General Public License versão 3, isso significa que qualquer utilizador que tiver acesso a esta aplicação tem o direito de obter acesso ao código fonte. Mais informações nos links abaixo:',
-        licensefulltext: 'Texto completo da licença',
-        licensesourcecode: 'Código fonte do ticketz',
       },
       schedules: {
         title: 'Agendamentos',
@@ -828,10 +839,10 @@ const messages = {
           },
         },
         ShowNumericEmoticons: {
-          title: "Exibir emojis numéricos na fila",
+          title: 'Exibir emojis numéricos na fila',
           options: {
-            enabled: "Ativado",
-            disabled: "Desativado",
+            enabled: 'Ativado',
+            disabled: 'Desativado',
           },
         },
         QuickMessages: {
@@ -866,18 +877,18 @@ const messages = {
           },
         },
         GracePeriod: {
-          title: "Carência após vencimento (dias)",
+          title: 'Carência após vencimento (dias)',
         },
-        "ticketAcceptedMessage": {
-          "title": "Mensagem de ticket aceito",
-          "placeholder": "Digite sua mensagem de ticket aceito aqui"
+        ticketAcceptedMessage: {
+          title: 'Mensagem de ticket aceito',
+          placeholder: 'Digite sua mensagem de ticket aceito aqui',
         },
-        "transferMessage": {
-          "title": "Mensagem de transferência",
-          "placeholder": "Digite sua mensagem de transferência aqui"
+        transferMessage: {
+          title: 'Mensagem de transferência',
+          placeholder: 'Digite sua mensagem de transferência aqui',
         },
-        "mustacheVariables": {
-          "title": "Variáveis disponíveis:"
+        mustacheVariables: {
+          title: 'Variáveis disponíveis:',
         },
         WelcomeGreeting: {
           greetings: 'Olá',

@@ -259,22 +259,31 @@ const messages = {
       },
       scheduleModal: {
         title: {
-          add: 'Jadwal Baru',
-          edit: 'Edit Jadwal',
+          error: 'Kesalahan Pengiriman',
+          schedule: 'Jadwalkan pesan',
+        },
+        status: {
+          pending: 'Menunggu',
+          sent: 'Terkirim',
+          erro: 'Kesalahan',
+        },
+        validation: {
+          bodyMin: 'Pesan terlalu pendek',
+          required: 'Wajib diisi',
+          minTime: 'Waktu harus minimal 5 menit setelah sekarang',
         },
         form: {
           body: 'Pesan',
-          contact: 'Kontak',
-          sendAt: 'Tanggal Dijadwalkan',
-          sentAt: 'Tanggal Terkirim',
-          saveMessage: 'Simpan Pesan di Tiket',
+          sendAt: 'Kirim pada',
+          saveMessage: 'Simpan sebagai template',
+          contactPlaceholder: 'Kontak',
         },
         buttons: {
+          cancel: 'Batal',
           okAdd: 'Tambah',
           okEdit: 'Simpan',
-          cancel: 'Batal',
         },
-        success: 'Jadwal berhasil disimpan.',
+        success: 'Jadwal berhasil disimpan!',
       },
       tagModal: {
         title: {
@@ -315,24 +324,22 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: 'Tiket yang Anda kerjakan telah dihapus.',
+          deleted: 'Tiket yang sedang Anda kerjakan telah dihapus.',
         },
         notification: {
           message: 'Pesan dari',
         },
         tabs: {
-          open: {
-            title: 'Buka',
-          },
-          closed: {
-            title: 'Tutup',
-          },
-          groups: {
-            title: 'Grup',
-          },
-          search: {
-            title: 'Cari',
-          },
+          open: { title: 'Terbuka' },
+          closed: { title: 'Ditutup' },
+          groups: { title: 'Grup' },
+          search: { title: 'Cari' },
+        },
+        status: {
+          closed: 'DITUTUP',
+        },
+        tooltips: {
+          closeConversation: 'Tutup Percakapan',
         },
         search: {
           placeholder: 'Cari tiket dan pesan',
@@ -389,7 +396,7 @@ const messages = {
           schedules: 'Penjadwalan',
           campaigns: 'Kampanye',
           annoucements: 'Pengumuman',
-          chats: 'Chat Internal',
+          chats: 'Obrolan',
           financeiro: 'Finansial',
           logout: 'Logout',
           management: 'Management',
@@ -434,8 +441,13 @@ const messages = {
           add: 'Respon Baru',
         },
         dialog: {
+          title: 'Pesan Cepat',
           shortcode: 'Pintasan',
           message: 'Respon',
+          buttons: {
+            cancel: 'Batal',
+            save: 'Simpan',
+          },
         },
       },
       kanban: {
@@ -853,10 +865,10 @@ const messages = {
           },
         },
         ShowNumericEmoticons: {
-          title: "Menampilkan emoji numerik dalam antrean",
+          title: 'Menampilkan emoji numerik dalam antrean',
           options: {
-            enabled: "Diaktifkan",
-            disabled: "Dinonaktifkan",
+            enabled: 'Diaktifkan',
+            disabled: 'Dinonaktifkan',
           },
         },
         QuickMessages: {
@@ -891,18 +903,18 @@ const messages = {
           },
         },
         GracePeriod: {
-          title: "Periode penundaan langganan berakhir (hari)",
+          title: 'Periode penundaan langganan berakhir (hari)',
         },
-        "ticketAcceptedMessage": {
-          "title": "Pesan Tiket Diterima",
-          "placeholder": "Masukkan pesan tiket diterima di sini"
+        ticketAcceptedMessage: {
+          title: 'Pesan Tiket Diterima',
+          placeholder: 'Masukkan pesan tiket diterima di sini',
         },
-        "transferMessage": {
-          "title": "Pesan Transfer",
-          "placeholder": "Masukkan pesan transfer di sini"
+        transferMessage: {
+          title: 'Pesan Transfer',
+          placeholder: 'Masukkan pesan transfer di sini',
         },
-        "mustacheVariables": {
-          "title": "Variabel yang tersedia:"
+        mustacheVariables: {
+          title: 'Variabel yang tersedia:',
         },
         WelcomeGreeting: {
           greetings: 'halo',
@@ -1180,6 +1192,8 @@ const messages = {
           },
         },
       },
+      spyChat: 'Mata-matai Percakapan',
+      closeChat: 'Tutup Obrolan',
     },
   },
 };

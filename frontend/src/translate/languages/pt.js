@@ -204,7 +204,7 @@ const messages = {
         typeMessage: 'Digite uma mensagem',
         messages: 'Mensagens',
         chats: 'Chats',
-        spyChat: 'Espiar Chat',
+        spyChat: 'Espiar Conversa',
         closeChat: 'Fechar Chat',
         acceptChat: 'Aceitar Chat',
         chatbot: 'Chatbot',
@@ -251,6 +251,9 @@ const messages = {
           cancel: 'Cancelar',
         },
         success: 'WhatsApp salvo com sucesso.',
+        token: {
+          copied: 'Token copiado para a área de transferência',
+        },
       },
       qrCode: {
         message: 'Escanear QR',
@@ -358,22 +361,32 @@ const messages = {
       },
       scheduleModal: {
         title: {
-          add: 'Novo Agendamento',
-          edit: 'Editar Agendamento',
+          error: 'Erro de Envio',
+          schedule: 'Agendar mensagem',
+        },
+        status: {
+          pending: 'Pendente',
+          sent: 'Enviado',
+          erro: 'Erro',
+        },
+        validation: {
+          bodyMin: 'Mensagem muito curta',
+          required: 'Obrigatório',
+          minTime:
+            'O horário de agendamento deve ser pelo menos 5 minutos a partir de agora',
         },
         form: {
           body: 'Mensagem',
-          contact: 'Contato',
-          sendAt: 'Data de Agendamento',
-          sentAt: 'Data de Envio',
-          saveMessage: 'Salvar Mensagem no Ticket',
+          sendAt: 'Enviar às',
+          saveMessage: 'Salvar como modelo',
+          contactPlaceholder: 'Contato',
         },
         buttons: {
+          cancel: 'Cancelar',
           okAdd: 'Adicionar',
           okEdit: 'Salvar',
-          cancel: 'Cancelar',
         },
-        success: 'Agendamento salvo com sucesso.',
+        success: 'Agendamento salvo com sucesso!',
       },
       tagModal: {
         title: {
@@ -414,16 +427,22 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: 'O atendimento que você estava foi deletado.',
+          deleted: 'O ticket em que você estava trabalhando foi excluído.',
         },
         notification: {
           message: 'Mensagem de',
         },
         tabs: {
-          open: { title: 'Abertas' },
-          closed: { title: 'Resolvidos' },
+          open: { title: 'Abertos' },
+          closed: { title: 'Fechados' },
           groups: { title: 'Grupos' },
           search: { title: 'Busca' },
+        },
+        status: {
+          closed: 'FECHADO',
+        },
+        tooltips: {
+          closeConversation: 'Fechar Conversa',
         },
         search: {
           placeholder: 'Buscar atendimento e mensagens',
@@ -526,8 +545,13 @@ const messages = {
           add: 'Nova Resposta',
         },
         dialog: {
+          title: 'Mensagem Rápida',
           shortcode: 'Atalho',
           message: 'Resposta',
+          buttons: {
+            cancel: 'Cancelar',
+            save: 'Salvar',
+          },
         },
       },
       kanban: {
@@ -785,11 +809,6 @@ const messages = {
         aboutauthorsite: 'Site do autor',
         aboutwhaticketsite: 'Site do Whaticket Community no Github',
         aboutvemfazersite: 'Site do canal Vem Fazer no Github',
-        licenseheading: 'Licença em Código Aberto',
-        licensedetail:
-          'O ticketz está licenciado sob a GNU Affero General Public License versão 3, isso significa que qualquer usuário que tiver acesso a esta aplicação tem o direito de obter acesso ao código fonte. Mais informações nos links abaixo:',
-        licensefulltext: 'Texto completo da licença',
-        licensesourcecode: 'Código fonte do ticketz',
       },
       schedules: {
         title: 'Agendamentos',

@@ -33,36 +33,36 @@ const messages = {
         transferTo: 'Transferir a',
         refreshed: 'Actualizadas con éxito',
         refreshedError: 'Error al actualizar',
-        search: "Buscar",
-        filter: "Filtrar",
-        edit: "Editar",
-        delete: "Eliminar",
-        cancel: "Cancelar",
-        save: "Guardar",
-        confirm: "Confirmar",
-        close: "Cerrar",
-        error: "Error",
-        success: "Éxito",
-        actions: "Acciones",
-        add: "Añadir",
-        name: "Nombre",
-        email: "Correo electrónico",
-        phone: "Teléfono",
-        company: "Empresa",
-        user: "Usuario",
-        connection: "Conexión",
-        queue: "Cola",
-        contact: "Contacto",
-        whatsappNumber: "Número de WhatsApp",
-        dueDate: "Fecha de vencimiento",
-        copy: "Copiar",
-        paste: "Pegar",
-        proceed: "Proceder",
-        enabled: "Activado",
-        disabled: "Desactivado",
-        noqueue: "Sin cola",
-        rating: "Calificación",
-        transferTo: "Transferir a",
+        search: 'Buscar',
+        filter: 'Filtrar',
+        edit: 'Editar',
+        delete: 'Eliminar',
+        cancel: 'Cancelar',
+        save: 'Guardar',
+        confirm: 'Confirmar',
+        close: 'Cerrar',
+        error: 'Error',
+        success: 'Éxito',
+        actions: 'Acciones',
+        add: 'Añadir',
+        name: 'Nombre',
+        email: 'Correo electrónico',
+        phone: 'Teléfono',
+        company: 'Empresa',
+        user: 'Usuario',
+        connection: 'Conexión',
+        queue: 'Cola',
+        contact: 'Contacto',
+        whatsappNumber: 'Número de WhatsApp',
+        dueDate: 'Fecha de vencimiento',
+        copy: 'Copiar',
+        paste: 'Pegar',
+        proceed: 'Proceder',
+        enabled: 'Activado',
+        disabled: 'Desactivado',
+        noqueue: 'Sin cola',
+        rating: 'Calificación',
+        transferTo: 'Transferir a',
       },
       signup: {
         title: 'Registrarse',
@@ -205,7 +205,7 @@ const messages = {
         typeMessage: 'Escriba un mensaje',
         messages: 'Mensajes',
         chats: 'Chats',
-        spyChat: 'Espiar Chat',
+        spyChat: 'Espiar Conversación',
         closeChat: 'Cerrar Chat',
         acceptChat: 'Aceptar Chat',
         chatbot: 'Chatbot',
@@ -281,7 +281,7 @@ const messages = {
           email: 'Correo electrónico',
           extraName: 'Nombre del campo',
           extraValue: 'Valor',
-          disableBot: 'Desativar bot de conversa',
+          disableBot: 'Desactivar chatbot',
         },
         buttons: {
           addExtraInfo: 'Agregar información',
@@ -347,22 +347,31 @@ const messages = {
       },
       scheduleModal: {
         title: {
-          add: 'Nuevo Agendamiento',
-          edit: 'Editar Agendamiento',
+          error: 'Error de Envío',
+          schedule: 'Agendar mensaje',
+        },
+        status: {
+          pending: 'Pendiente',
+          sent: 'Enviado',
+          erro: 'Error',
+        },
+        validation: {
+          bodyMin: 'Mensaje demasiado corto',
+          required: 'Obligatorio',
+          minTime: 'El horario debe ser al menos 5 minutos posteriores a ahora',
         },
         form: {
           body: 'Mensaje',
-          contact: 'Contacto',
-          sendAt: 'Fecha de Agendamiento',
-          sentAt: 'Fecha de Envío',
-          saveMessage: 'Guardar mensaje en el ticket',
+          sendAt: 'Enviar a las',
+          saveMessage: 'Guardar como plantilla',
+          contactPlaceholder: 'Contacto',
         },
         buttons: {
+          cancel: 'Cancelar',
           okAdd: 'Agregar',
           okEdit: 'Guardar',
-          cancel: 'Cancelar',
         },
-        success: 'Agendamiento guardado con éxito.',
+        success: '¡Programación guardada exitosamente!',
       },
       tagModal: {
         title: {
@@ -404,16 +413,22 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: 'La atención que estabas siguiendo fue eliminada.',
+          deleted: 'El ticket en el que estabas trabajando ha sido eliminado.',
         },
         notification: {
           message: 'Mensaje de',
         },
         tabs: {
-          open: { title: 'Abiertas' },
-          closed: { title: 'Resueltos' },
+          open: { title: 'Abiertos' },
+          closed: { title: 'Cerrados' },
           groups: { title: 'Grupos' },
-          search: { title: 'Búsqueda' },
+          search: { title: 'Buscar' },
+        },
+        status: {
+          closed: 'CERRADO',
+        },
+        tooltips: {
+          closeConversation: 'Cerrar Conversación',
         },
         search: {
           placeholder: 'Buscar atención y mensajes',
@@ -515,8 +530,13 @@ const messages = {
           add: 'Nueva Respuesta',
         },
         dialog: {
+          title: 'Mensaje Rápido',
           shortcode: 'Atajo',
           message: 'Respuesta',
+          buttons: {
+            cancel: 'Cancelar',
+            save: 'Guardar',
+          },
         },
       },
       kanban: {
@@ -929,10 +949,10 @@ const messages = {
           },
         },
         ShowNumericEmoticons: {
-          title: "Mostrar emojis numéricos en la cola",
+          title: 'Mostrar emojis numéricos en la cola',
           options: {
-            enabled: "Activado",
-            disabled: "Desactivado",
+            enabled: 'Activado',
+            disabled: 'Desactivado',
           },
         },
         QuickMessages: {
@@ -970,18 +990,18 @@ const messages = {
           },
         },
         GracePeriod: {
-          title: "Período de gracia después del vencimiento (días)",
+          title: 'Período de gracia después del vencimiento (días)',
         },
-        "ticketAcceptedMessage": {
-          "title": "Mensaje de ticket aceptado",
-          "placeholder": "Ingrese su mensaje de ticket aceptado aquí"
+        ticketAcceptedMessage: {
+          title: 'Mensaje de ticket aceptado',
+          placeholder: 'Ingrese su mensaje de ticket aceptado aquí',
         },
-        "transferMessage": {
-          "title": "Mensaje de transferencia",
-          "placeholder": "Ingrese su mensaje de transferencia aquí"
+        transferMessage: {
+          title: 'Mensaje de transferencia',
+          placeholder: 'Ingrese su mensaje de transferencia aquí',
         },
-        "mustacheVariables": {
-          "title": "Variables disponibles:",
+        mustacheVariables: {
+          title: 'Variables disponibles:',
         },
         WelcomeGreeting: {
           greetings: 'hola',
@@ -1076,7 +1096,7 @@ const messages = {
       },
       confirmationModal: {
         buttons: {
-          confirm: 'Ok',
+          confirm: 'Confirmar',
           cancel: 'Cancelar',
         },
       },

@@ -21,6 +21,10 @@ const messages = {
         connection: 'Connessione',
         queue: 'Coda',
         contact: 'Contatto',
+        messages: 'Messaggi',
+        chats: 'Chat',
+        spyChat: 'Spia Conversazione',
+        closeChat: 'Chiudi Chat',
       },
       signup: {
         title: 'Registrati',
@@ -139,6 +143,9 @@ const messages = {
           cancel: 'Annulla',
         },
         success: 'WhatsApp salvato con successo.',
+        token: {
+          copied: 'Token copiato negli appunti',
+        },
       },
       qrCode: {
         message: 'Scansiona QR',
@@ -246,22 +253,31 @@ const messages = {
       },
       scheduleModal: {
         title: {
-          add: 'Nuova Pianificazione',
-          edit: 'Modifica Pianificazione',
+          error: 'Errore di Invio',
+          schedule: 'Programma messaggio',
+        },
+        status: {
+          pending: 'In attesa',
+          sent: 'Inviato',
+          erro: 'Errore',
+        },
+        validation: {
+          bodyMin: 'Messaggio troppo corto',
+          required: 'Obbligatorio',
+          minTime: "L'orario deve essere di almeno 5 minuti dopo ora",
         },
         form: {
           body: 'Messaggio',
-          contact: 'Contatto',
-          sendAt: 'Data di Pianificazione',
-          sentAt: 'Data di Invio',
-          saveMessage: 'Salva Messaggio nel Ticket',
+          sendAt: 'Invia alle',
+          saveMessage: 'Salva come modello',
+          contactPlaceholder: 'Contatto',
         },
         buttons: {
+          cancel: 'Annulla',
           okAdd: 'Aggiungi',
           okEdit: 'Salva',
-          cancel: 'Annulla',
         },
-        success: 'Pianificazione salvata con successo.',
+        success: 'Programmazione salvata con successo!',
       },
       tagModal: {
         title: {
@@ -302,16 +318,22 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: 'Il ticket che stavi gestendo è stato eliminato.',
+          deleted: 'Il ticket su cui stavi lavorando è stato eliminato.',
         },
         notification: {
           message: 'Messaggio da',
         },
         tabs: {
           open: { title: 'Aperti' },
-          closed: { title: 'Risolti' },
+          closed: { title: 'Risoltos' },
           groups: { title: 'Gruppi' },
-          search: { title: 'Cerca' },
+          search: { title: 'Ricerca' },
+        },
+        status: {
+          closed: 'CHIUSO',
+        },
+        tooltips: {
+          closeConversation: 'Chiudi Conversazione',
         },
         search: {
           placeholder: 'Cerca ticket e messaggi',
@@ -414,8 +436,13 @@ const messages = {
           add: 'Nuova Risposta',
         },
         dialog: {
+          title: 'Messaggio Rapido',
           shortcode: 'Scorciatoia',
           message: 'Risposta',
+          buttons: {
+            cancel: 'Annulla',
+            save: 'Salva',
+          },
         },
       },
       kanban: {
@@ -673,175 +700,6 @@ const messages = {
         aboutauthorsite: "Sito dell'autore",
         aboutwhaticketsite: 'Sito della comunità Whaticket su Github',
         aboutvemfazersite: 'Sito del canale Vem Fazer su Github',
-        licenseheading: 'Licenza Open Source',
-        licensedetail:
-          "Il ticketz è concesso in licenza sotto la GNU Affero General Public License versione 3, il che significa che qualsiasi utente che ha accesso a questa applicazione ha il diritto di ottenere l'accesso al codice sorgente. Maggiori informazioni nei link sottostanti:",
-        licensefulltext: 'Testo completo della licenza',
-        licensesourcecode: 'Codice sorgente di ticketz',
-      },
-      schedules: {
-        title: 'Pianificazioni',
-        confirmationModal: {
-          deleteTitle: 'Sei sicuro di voler eliminare questa Pianificazione?',
-          deleteMessage: 'Questa azione non può essere annullata.',
-        },
-        table: {
-          contact: 'Contatto',
-          body: 'Messaggio',
-          sendAt: 'Data di Pianificazione',
-          sentAt: 'Data di Invio',
-          status: 'Stato',
-          actions: 'Azioni',
-        },
-        buttons: {
-          add: 'Nuova Pianificazione',
-        },
-        toasts: {
-          deleted: 'Pianificazione eliminata con successo.',
-        },
-      },
-      tags: {
-        title: 'Tag',
-        confirmationModal: {
-          deleteTitle: 'Sei sicuro di voler eliminare questa Tag?',
-          deleteMessage: 'Questa azione non può essere annullata.',
-        },
-        table: {
-          name: 'Nome',
-          color: 'Colore',
-          tickets: 'Registrazioni',
-          actions: 'Azioni',
-          id: 'Id',
-          kanban: 'Kanban',
-        },
-        buttons: {
-          add: 'Nuova Tag',
-        },
-        toasts: {
-          deleted: 'Tag eliminata con successo.',
-        },
-      },
-      settings: {
-        group: {
-          general: 'Generale',
-          timeouts: 'Tempi di attesa',
-          officeHours: 'Orario di lavoro',
-          groups: 'Gruppi',
-          confidenciality: 'Riservatezza',
-          api: 'API',
-          serveradmin: 'Amministrazione del server',
-        },
-        success: 'Impostazioni salvate con successo.',
-        title: 'Impostazioni',
-        settings: {
-          userCreation: {
-            name: 'Creazione utente',
-            options: {
-              enabled: 'Attivato',
-              disabled: 'Disattivato',
-            },
-          },
-        },
-        validations: {
-          title: 'Valutazioni',
-          options: {
-            enabled: 'Abilitato',
-            disabled: 'Disabilitato',
-          },
-        },
-        OfficeManagement: {
-          title: "Gestione dell'orario di lavoro",
-          options: {
-            disabled: 'Disabilitato',
-            ManagementByDepartment: 'Gestione per coda',
-            ManagementByCompany: 'Gestione per azienda',
-          },
-        },
-        outOfHoursAction: {
-          title: 'Azione fuori orario',
-          options: {
-            pending: 'Lascia come pendente',
-            closed: 'Chiudi ticket',
-          },
-        },
-        IgnoreGroupMessages: {
-          title: 'Ignora messaggi di gruppo',
-          options: {
-            enabled: 'Attivato',
-            disabled: 'Disattivato',
-          },
-        },
-        soundGroupNotifications: {
-          title: 'Notifiche sonore di gruppo',
-          options: {
-            enabled: 'Attivato',
-            disabled: 'Disattivato',
-          },
-        },
-        groupsTab: {
-          title: 'Scheda Gruppi',
-          options: {
-            enabled: 'Attivato',
-            disabled: 'Disattivato',
-          },
-        },
-        VoiceAndVideoCalls: {
-          title: 'Chiamate vocali e video',
-          options: {
-            enabled: 'Ignora',
-            disabled: 'informa indisponibilità',
-          },
-        },
-        AutomaticChatbotOutput: {
-          title: 'Uscita automatica del chatbot',
-          options: {
-            enabled: 'Attivato',
-            disabled: 'Disattivato',
-          },
-        },
-        ShowNumericEmoticons: {
-          title: "Visualizza emoji numerici nella coda",
-          options: {
-            enabled: "Attivato",
-            disabled: "Disattivato",
-          },
-        },
-        QuickMessages: {
-          title: 'Messaggi Rapidi',
-          options: {
-            enabled: 'Per azienda',
-            disabled: 'Per utente',
-          },
-        },
-        AllowRegistration: {
-          title: 'Permetti registrazione',
-          options: {
-            enabled: 'Attivato',
-            disabled: 'Disattivato',
-          },
-        },
-        FileDownloadLimit: {
-          title: 'Limite di download dei file (MB)',
-        },
-        messageVisibility: {
-          title: 'Visibilità del messaggio',
-          options: {
-            respectMessageQueue: 'Rispetta coda del messaggio',
-            respectTicketQueue: 'Rispetta coda del ticket',
-          },
-        },
-        keepQueueAndUser: {
-          title: 'Mantieni coda e utente nel ticket chiuso',
-          options: {
-            enabled: 'Attivato',
-            disabled: 'Disattivato',
-          },
-        },
-        WelcomeGreeting: {
-          greetings: 'Ciao',
-          welcome: 'Benvenuto a',
-          expirationTime: 'Attivo fino a',
-        },
         Options: {
           title: 'Opzioni',
         },

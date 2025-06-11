@@ -1,33 +1,33 @@
 import * as Sentry from "@sentry/node";
 import Queue from "bull";
-import moment from "moment";
-import { Op, QueryTypes, WhereOptions } from "sequelize";
 import { CronJob } from "cron";
 import { subDays, subMinutes } from "date-fns";
-import { MessageData, SendMessage } from "./helpers/SendMessage";
-import Whatsapp from "./models/Whatsapp";
-import { logger } from "./utils/logger";
-import Schedule from "./models/Schedule";
-import Contact from "./models/Contact";
+import moment from "moment";
+import { Op, QueryTypes, WhereOptions } from "sequelize";
+import sequelize from "./database";
+import { GetCompanySetting } from "./helpers/CheckSettings";
 import GetDefaultWhatsApp from "./helpers/GetDefaultWhatsApp";
 import GetWhatsappWbot from "./helpers/GetWhatsappWbot";
-import sequelize from "./database";
-import User from "./models/User";
-import Company from "./models/Company";
-import Plan from "./models/Plan";
-import TicketTraking from "./models/TicketTraking";
-import { GetCompanySetting } from "./helpers/CheckSettings";
+import formatBody, { mustacheFormat } from "./helpers/Mustache";
+import { parseToMilliseconds } from "./helpers/parseToMilliseconds";
+import { MessageData, SendMessage } from "./helpers/SendMessage";
 import { getWbot } from "./libs/wbot";
-import Ticket from "./models/Ticket";
+import Company from "./models/Company";
+import Contact from "./models/Contact";
+import Invoices from "./models/Invoices";
+import OutOfTicketMessage from "./models/OutOfTicketMessages";
+import Plan from "./models/Plan";
 import QueueModel from "./models/Queue";
+import Schedule from "./models/Schedule";
+import Setting from "./models/Setting";
+import Ticket from "./models/Ticket";
+import TicketTraking from "./models/TicketTraking";
+import User from "./models/User";
+import Whatsapp from "./models/Whatsapp";
+import { startCampaignQueues } from "./queues/campaign";
 import UpdateTicketService from "./services/TicketServices/UpdateTicketService";
 import { handleMessage } from "./services/WbotServices/wbotMessageListener";
-import Invoices from "./models/Invoices";
-import formatBody, { mustacheFormat } from "./helpers/Mustache";
-import Setting from "./models/Setting";
-import { parseToMilliseconds } from "./helpers/parseToMilliseconds";
-import { startCampaignQueues } from "./queues/campaign";
-import OutOfTicketMessage from "./models/OutOfTicketMessages";
+import { logger } from "./utils/logger";
 
 const connection = process.env.REDIS_URI || "";
 const limiterMax = process.env.REDIS_OPT_LIMITER_MAX || 1;
@@ -72,7 +72,7 @@ async function handleVerifySchedules() {
   try {
     const { count, rows: schedules } = await Schedule.findAndCountAll({
       where: {
-        status: "PENDENTE",
+        status: "PENDING",
         sentAt: null,
         sendAt: {
           [Op.gte]: moment().format("YYYY-MM-DD HH:mm:ss"),
@@ -84,14 +84,14 @@ async function handleVerifySchedules() {
     if (count > 0) {
       schedules.map(async schedule => {
         await schedule.update({
-          status: "AGENDADA"
+          status: "SCHEDULED"
         });
         sendScheduledMessages.add(
           "SendMessage",
           { schedule },
           { delay: 40000 }
         );
-        logger.info(`Disparo agendado para: ${schedule.contact.name}`);
+        logger.info(`Scheduled trigger for: ${schedule.contact.name}`);
       });
     }
   } catch (e: unknown) {
@@ -122,16 +122,26 @@ async function handleSendScheduledMessage(job) {
     scheduleRecord = await Schedule.findByPk(schedule.id, {
       include: [
         { model: Contact, as: "contact" },
-        { model: User, as: "user" }
+        { model: User, as: "user" },
+        { model: Whatsapp, as: "whatsapp" }
       ]
     });
   } catch (e) {
     Sentry.captureException(e);
-    logger.info(`Erro ao tentar consultar agendamento: ${schedule.id}`);
+    logger.error(`Error when trying to consult schedule: ${schedule.id}`);
   }
 
   try {
-    const whatsapp = await GetDefaultWhatsApp(schedule.companyId);
+    let whatsapp;
+    if (scheduleRecord?.whatsappId) {
+      whatsapp = await Whatsapp.findByPk(scheduleRecord.whatsappId);
+    } else {
+      whatsapp = await GetDefaultWhatsApp(schedule.companyId);
+    }
+
+    if (!whatsapp) {
+      throw new Error("Whatsapp não encontrado");
+    }
 
     const message = await SendMessage(whatsapp, {
       number: schedule.contact.number,
@@ -152,15 +162,15 @@ async function handleSendScheduledMessage(job) {
 
     await scheduleRecord?.update({
       sentAt: new Date(),
-      status: "ENVIADA"
+      status: "SENT"
     });
 
-    logger.info(`Mensagem agendada enviada para: ${schedule.contact.name}`);
+    logger.info(`Scheduled message sent to: ${schedule.contact.name}`);
     sendScheduledMessages.clean(15000, "completed");
   } catch (e: unknown) {
     Sentry.captureException(e);
     await scheduleRecord?.update({
-      status: "ERRO"
+      status: "FAILED"
     });
     logger.error(
       "SendScheduledMessage -> SendMessage: error",
@@ -172,14 +182,12 @@ async function handleSendScheduledMessage(job) {
 
 export async function sleep(seconds: number) {
   logger.info(
-    `Sleep de ${seconds} segundos iniciado: ${moment().format("HH:mm:ss")}`
+    `Sleep of ${seconds} seconds started: ${moment().format("HH:mm:ss")}`
   );
   return new Promise(resolve => {
     setTimeout(() => {
       logger.info(
-        `Sleep de ${seconds} segundos finalizado: ${moment().format(
-          "HH:mm:ss"
-        )}`
+        `Sleep of ${seconds} seconds finished: ${moment().format("HH:mm:ss")}`
       );
       resolve(true);
     }, parseToMilliseconds(seconds));
@@ -195,7 +203,7 @@ async function handleLoginStatus() {
     try {
       const user = await User.findByPk(item.id);
       await user.update({ online: false });
-      logger.info(`Usuário passado para offline: ${item.id}`);
+      logger.info(`User passed to offline: ${item.id}`);
     } catch (e: unknown) {
       Sentry.captureException(e);
     }
@@ -637,7 +645,7 @@ const createInvoices = new CronJob("0 * * * * *", async () => {
 createInvoices.start();
 
 export async function startQueueProcess() {
-  logger.info("Iniciando processamento de filas");
+  logger.info("Starting queue processing");
 
   startCampaignQueues().then(() => {
     logger.info("Campaign processing functions started");

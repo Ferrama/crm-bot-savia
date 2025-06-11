@@ -246,22 +246,31 @@ const messages = {
       },
       scheduleModal: {
         title: {
-          add: 'Neue Planung',
-          edit: 'Planung bearbeiten',
+          error: 'Sendefehler',
+          schedule: 'Nachricht planen',
+        },
+        status: {
+          pending: 'Ausstehend',
+          sent: 'Gesendet',
+          erro: 'Fehler',
+        },
+        validation: {
+          bodyMin: 'Nachricht zu kurz',
+          required: 'Erforderlich',
+          minTime: 'Die Zeit muss mindestens 5 Minuten nach jetzt sein',
         },
         form: {
           body: 'Nachricht',
-          contact: 'Kontakt',
-          sendAt: 'Planungsdatum',
-          sentAt: 'Sendedatum',
-          saveMessage: 'Nachricht im Ticket speichern',
+          sendAt: 'Senden um',
+          saveMessage: 'Als Vorlage speichern',
+          contactPlaceholder: 'Kontakt',
         },
         buttons: {
+          cancel: 'Abbrechen',
           okAdd: 'Hinzufügen',
           okEdit: 'Speichern',
-          cancel: 'Abbrechen',
         },
-        success: 'Planung erfolgreich gespeichert.',
+        success: 'Planung erfolgreich gespeichert!',
       },
       tagModal: {
         title: {
@@ -302,19 +311,25 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: 'Das von Ihnen verwaltete Ticket wurde gelöscht.',
+          deleted: 'Das Ticket, an dem Sie gearbeitet haben, wurde gelöscht.',
         },
         notification: {
           message: 'Nachricht von',
         },
         tabs: {
           open: { title: 'Offen' },
-          closed: { title: 'Gelöst' },
+          closed: { title: 'Geschlossen' },
           groups: { title: 'Gruppen' },
           search: { title: 'Suche' },
         },
+        status: {
+          closed: 'GESCHLOSSEN',
+        },
+        tooltips: {
+          closeConversation: 'Konversation Schließen',
+        },
         search: {
-          placeholder: 'Tickets und Nachrichten suchen',
+          placeholder: 'Nach Tickets und Nachrichten suchen',
         },
         buttons: {
           showAll: 'Alle',
@@ -368,13 +383,15 @@ const messages = {
           schedules: 'Planungen',
           campaigns: 'Kampagnen',
           annoucements: 'Ankündigungen',
-          chats: 'Interner Chat',
+          chats: 'Nachrichten',
           financeiro: 'Finanzen',
           logout: 'Abmelden',
           management: 'Management',
           kanban: 'Kanban',
           leads: 'Leads',
           todoList: 'Aufgabenliste',
+          spyChat: 'Konversation überwachen',
+          closeChat: 'Chat schließen',
         },
         appBar: {
           i18n: {
@@ -802,10 +819,10 @@ const messages = {
           },
         },
         ShowNumericEmoticons: {
-          title: "Numerische Emojis in der Warteschlange anzeigen",
+          title: 'Numerische Emojis in der Warteschlange anzeigen',
           options: {
-            enabled: "Aktiviert",
-            disabled: "Deaktiviert",
+            enabled: 'Aktiviert',
+            disabled: 'Deaktiviert',
           },
         },
         QuickMessages: {

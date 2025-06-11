@@ -159,6 +159,12 @@ const App = () => {
             primary: {
               main: mode === 'light' ? primaryColorLight : primaryColorDark,
             },
+            secondary: {
+              main: '#94c9de',
+              light: '#7ab8d0',
+              dark: '#7ab8d0',
+              contrastText: '#000',
+            },
             textPrimary:
               mode === 'light' ? primaryColorLight : primaryColorDark,
             textCommon: mode === 'light' ? '#000' : '#fff',
@@ -246,14 +252,29 @@ const App = () => {
                 },
               },
               outlined: {
-                border: `1px solid ${mode === 'light' ? '#E5E7EB' : '#696E7B'}`,
+                border: `1px solid ${
+                  mode === 'light' ? primaryColorLight : primaryColorDark
+                }`,
                 backgroundColor: mode === 'light' ? '#fff' : '#3A4249',
-                color: mode === 'light' ? '#111827' : '#F3F4F6',
+                color: mode === 'light' ? primaryColorLight : primaryColorDark,
                 '&:hover': {
-                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#42484E',
+                  backgroundColor:
+                    mode === 'light'
+                      ? `${primaryColorLight}0A`
+                      : `${primaryColorDark}0A`,
+                  border: `1px solid ${
+                    mode === 'light' ? primaryColorLight : primaryColorDark
+                  }`,
                 },
                 '&.Mui-disabled': {
-                  borderColor: mode === 'light' ? '#E5E7EB' : '#696E7B',
+                  borderColor:
+                    mode === 'light'
+                      ? `${primaryColorLight}80`
+                      : `${primaryColorDark}80`,
+                  color:
+                    mode === 'light'
+                      ? `${primaryColorLight}80`
+                      : `${primaryColorDark}80`,
                 },
               },
               text: {
@@ -302,10 +323,24 @@ const App = () => {
                   },
                 },
                 '&.MuiButton-contained.MuiButton-colorSecondary': {
-                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
-                  color: mode === 'light' ? '#111827' : '#F3F4F6',
+                  backgroundColor: '#94c9de',
+                  color: '#000',
                   '&:hover': {
-                    backgroundColor: mode === 'light' ? '#E5E7EB' : '#42484E',
+                    backgroundColor: '#7ab8d0',
+                  },
+                },
+                '&.MuiButton-outlined.MuiButton-colorSecondary': {
+                  border: '1px solid #94c9de',
+                  color: '#94c9de',
+                  '&:hover': {
+                    backgroundColor: '#94c9de1A',
+                    border: '1px solid #94c9de',
+                  },
+                },
+                '&.MuiButton-text.MuiButton-colorSecondary': {
+                  color: '#94c9de',
+                  '&:hover': {
+                    backgroundColor: '#94c9de1A',
                   },
                 },
                 '&.MuiButton-contained.MuiButton-colorError': {
@@ -313,6 +348,20 @@ const App = () => {
                   color: '#fff',
                   '&:hover': {
                     backgroundColor: mode === 'light' ? '#B91C1C' : '#DC2626',
+                  },
+                },
+                '&.MuiButton-outlined.MuiButton-colorError': {
+                  border: '1px solid #DC2626',
+                  color: '#DC2626',
+                  '&:hover': {
+                    backgroundColor: '#DC26260A',
+                    border: '1px solid #DC2626',
+                  },
+                },
+                '&.MuiButton-text.MuiButton-colorError': {
+                  color: '#DC2626',
+                  '&:hover': {
+                    backgroundColor: '#DC26260A',
                   },
                 },
               },
@@ -328,10 +377,12 @@ const App = () => {
                   fontSize: '0.875rem',
                   fontWeight: 500,
                   padding: '0.5rem 0.75rem',
-                  maxHeight: '40px',
                   transition: 'all 0.2s ease-in-out',
                   boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
                   width: '100%',
+                  '&:not(.MuiInputBase-multiline)': {
+                    maxHeight: '40px',
+                  },
                   '& .MuiInputLabel-root': {
                     transform: 'none !important',
                   },
@@ -370,6 +421,9 @@ const App = () => {
                 '&.Mui-disabled': {
                   WebkitTextFillColor: mode === 'light' ? '#9ca3af' : '#6b7280',
                 },
+                '&:not(.MuiInputBase-inputMultiline)': {
+                  maxHeight: '40px',
+                },
               },
             },
             MuiOutlinedInput: {
@@ -390,7 +444,9 @@ const App = () => {
                   display: 'none !important',
                 },
                 padding: '0.5rem 0.75rem',
-                maxHeight: '40px',
+                '&:not(.MuiInputBase-multiline)': {
+                  maxHeight: '40px',
+                },
                 marginTop: '0',
                 '& .MuiInputLabel-root': {
                   transform: 'none !important',
@@ -398,7 +454,9 @@ const App = () => {
               },
               input: {
                 padding: '0',
-                maxHeight: '40px',
+                '&:not(.MuiInputBase-inputMultiline)': {
+                  maxHeight: '40px',
+                },
               },
             },
             MuiInputLabel: {
@@ -556,7 +614,7 @@ const App = () => {
                 borderRadius: '6px',
                 transition: 'all 0.2s ease-in-out',
                 '&:hover': {
-                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
+                  backgroundColor: 'transparent',
                 },
                 '&:focus-visible': {
                   outline: 'none',
@@ -998,8 +1056,21 @@ const App = () => {
                 height: 32,
                 padding: 0,
                 margin: 8,
+                border: '2px solid transparent',
+                borderRadius: 16,
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                },
+                '&:focus-within': {
+                  border: `2px solid ${
+                    mode === 'light' ? primaryColorLight : primaryColorDark
+                  }`,
+                },
                 '& .MuiSwitch-switchBase': {
                   padding: 3,
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                  },
                   '&.Mui-checked': {
                     transform: 'translateX(20px)',
                     color: '#fff',
@@ -1035,8 +1106,8 @@ const App = () => {
                 },
                 '& .MuiSwitch-track': {
                   borderRadius: 16,
-                  backgroundColor: mode === 'light' ? '#E5E7EB' : '#42484E',
-                  opacity: 1,
+                  backgroundColor: mode === 'light' ? '#E5E7EB' : '#E8F4FD',
+                  opacity: mode === 'light' ? 1 : 0.3,
                   transition:
                     'background-color 150ms cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:before, &:after': {
@@ -1048,26 +1119,21 @@ const App = () => {
                     height: 20,
                   },
                 },
-                '&.Mui-focusVisible .MuiSwitch-thumb': {
-                  boxShadow: `0 0 0 2px ${
-                    mode === 'light' ? primaryColorLight : primaryColorDark
-                  }`,
-                },
               },
               sizeSmall: {
-                width: 42,
-                height: 30,
-                padding: 7,
+                width: 40,
+                height: 26,
+                padding: 3,
                 '& .MuiSwitch-switchBase': {
                   padding: 0,
                   '&.Mui-checked': {
-                    transform: 'translateX(12px) !important',
+                    transform: 'translateX(14px) !important',
                   },
                 },
                 '& .MuiSwitch-thumb': {
-                  width: 12,
-                  height: 12,
-                  margin: 9,
+                  width: 14,
+                  height: 14,
+                  margin: 4.2,
                   boxShadow: '0 1px 2px 0 rgba(0,0,0,0.2)',
                 },
                 '& .MuiSwitch-track': {
@@ -1251,12 +1317,16 @@ const App = () => {
             },
             MuiPickersInputBase: {
               root: {
-                maxHeight: '40px',
+                '&:not(.MuiInputBase-multiline)': {
+                  maxHeight: '40px',
+                },
                 padding: '0.5rem 0.75rem',
               },
               input: {
                 padding: '0.5rem 0.75rem',
-                maxHeight: '40px',
+                '&:not(.MuiInputBase-inputMultiline)': {
+                  maxHeight: '40px',
+                },
               },
             },
             MuiSelect: {
@@ -1388,14 +1458,14 @@ const App = () => {
   useEffect(() => {
     getPublicSetting('primaryColorLight')
       .then((color) => {
-        setPrimaryColorLight(color || '#0000FF');
+        setPrimaryColorLight(color || '#0e6180');
       })
       .catch((error) => {
         console.log('Error reading setting', error);
       });
     getPublicSetting('primaryColorDark')
       .then((color) => {
-        setPrimaryColorDark(color || '#39ACE7');
+        setPrimaryColorDark(color || '#0e6180');
       })
       .catch((error) => {
         console.log('Error reading setting', error);

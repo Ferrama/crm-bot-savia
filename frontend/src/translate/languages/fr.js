@@ -21,6 +21,10 @@ const messages = {
         connection: 'Connexion',
         queue: "File d'attente",
         contact: 'Contact',
+        messages: 'Messages',
+        chats: 'Chats',
+        spyChat: 'Espionner la Conversation',
+        closeChat: 'Fermer le Chat',
       },
       signup: {
         title: "S'inscrire",
@@ -247,22 +251,31 @@ const messages = {
       },
       scheduleModal: {
         title: {
-          add: 'Nouveau Planification',
-          edit: 'Modifier Planification',
+          error: "Erreur d'envoi",
+          schedule: 'Planifier le message',
+        },
+        status: {
+          pending: 'En attente',
+          sent: 'Envoyé',
+          erro: 'Erreur',
+        },
+        validation: {
+          bodyMin: 'Message trop court',
+          required: 'Obligatoire',
+          minTime: "L'heure doit être d'au moins 5 minutes après maintenant",
         },
         form: {
           body: 'Message',
-          contact: 'Contact',
-          sendAt: 'Date de Planification',
-          sentAt: "Date d'Envoi",
-          saveMessage: 'Enregistrer le Message dans le Ticket',
+          sendAt: 'Envoyer à',
+          saveMessage: 'Enregistrer comme modèle',
+          contactPlaceholder: 'Contact',
         },
         buttons: {
+          cancel: 'Annuler',
           okAdd: 'Ajouter',
           okEdit: 'Enregistrer',
-          cancel: 'Annuler',
         },
-        success: 'Planification enregistrée avec succès.',
+        success: 'Programmation enregistrée avec succès !',
       },
       tagModal: {
         title: {
@@ -304,7 +317,7 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: "L'intervention que vous gérez a été supprimée.",
+          deleted: 'Le ticket sur lequel vous travailliez a été supprimé.',
         },
         notification: {
           message: 'Message de',
@@ -315,8 +328,14 @@ const messages = {
           groups: { title: 'Groupes' },
           search: { title: 'Recherche' },
         },
+        status: {
+          closed: 'FERMÉ',
+        },
+        tooltips: {
+          closeConversation: 'Fermer la Conversation',
+        },
         search: {
-          placeholder: 'Rechercher des interventions et des messages',
+          placeholder: 'Rechercher des tickets et des messages',
         },
         buttons: {
           showAll: 'Tous',
@@ -415,8 +434,13 @@ const messages = {
           add: 'Nouvelle Réponse',
         },
         dialog: {
+          title: 'Message Rapide',
           shortcode: 'Raccourci',
           message: 'Réponse',
+          buttons: {
+            cancel: 'Annuler',
+            save: 'Enregistrer',
+          },
         },
       },
       kanban: {
@@ -804,8 +828,8 @@ const messages = {
         ShowNumericEmoticons: {
           title: "Afficher les émojis numériques dans la file d'attente",
           options: {
-            enabled: "Activé",
-            disabled: "Désactivé",
+            enabled: 'Activé',
+            disabled: 'Désactivé',
           },
         },
         QuickMessages: {

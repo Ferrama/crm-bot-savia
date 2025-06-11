@@ -1,22 +1,22 @@
-import Queue from "bull";
 import * as Sentry from "@sentry/node";
-import { QueryTypes } from "sequelize";
+import Queue from "bull";
 import { isNil } from "lodash";
+import { QueryTypes } from "sequelize";
 
-
-import { logger } from "./utils/logger";
 import sequelize from "./database";
 import User from "./models/User";
+import { logger } from "./utils/logger";
+
 const connection = process.env.REDIS_URI || "";
 
 export const userMonitor = new Queue("UserMonitor", connection);
 
 async function handleLoginStatus(job) {
   const users: { id: number }[] = await sequelize.query(
-    `select id from "Users" where "updatedAt" < now() - '5 minutes'::interval and online = true`,
+    'select id from "Users" where "updatedAt" < now() - \'5 minutes\'::interval and online = true',
     { type: QueryTypes.SELECT }
   );
-  for (let item of users) {
+  for (const item of users) {
     try {
       const user = await User.findByPk(item.id);
       await user.update({ online: false });
@@ -48,7 +48,7 @@ userMonitor.process("VerifyLoginStatus", handleLoginStatus);
 
 export async function initUserMonitorQueues() {
   const repeatableJobs = await userMonitor.getRepeatableJobs();
-  for (let job of repeatableJobs) {
+  for (const job of repeatableJobs) {
     await userMonitor.removeRepeatableByKey(job.key);
   }
 
