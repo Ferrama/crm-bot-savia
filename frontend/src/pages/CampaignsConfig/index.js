@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
 
 import { Trash2 } from 'lucide-react';
@@ -54,6 +54,7 @@ const initialSettings = {
 
 const CampaignsConfig = () => {
   const classes = useStyles();
+  const theme = useTheme();
 
   const [settings, setSettings] = useState(initialSettings);
   const [showVariablesForm, setShowVariablesForm] = useState(false);
@@ -248,14 +249,15 @@ const CampaignsConfig = () => {
             <Grid xs={12} className={classes.textRight} item>
               <Button
                 onClick={() => setShowVariablesForm(!showVariablesForm)}
-                color='primary'
+                color={theme.palette.type === 'light' ? 'primary' : 'secondary'}
+                variant='outlined'
                 style={{ marginRight: 10 }}
               >
                 {i18n.t('campaignsConfig.addVariable')}
               </Button>
               <Button
                 onClick={saveSettings}
-                color='primary'
+                color={'primary'}
                 variant='contained'
               >
                 {i18n.t('campaignsConfig.saveSettings')}
@@ -286,10 +288,11 @@ const CampaignsConfig = () => {
                 <Grid xs={12} className={classes.textRight} item>
                   <Button
                     onClick={() => setShowVariablesForm(!showVariablesForm)}
-                    color='primary'
+                    color='secondary'
+                    variant='contained'
                     style={{ marginRight: 10 }}
                   >
-                    {i18n.t('common.close')}
+                    {i18n.t('common.remove')}
                   </Button>
                   <Button
                     onClick={addVariable}

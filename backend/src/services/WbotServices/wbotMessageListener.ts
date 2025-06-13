@@ -1,11 +1,11 @@
+import * as Sentry from "@sentry/node";
+import fs, { writeFile } from "fs";
+import { head, isNil } from "lodash";
 import path, { join } from "path";
 import { promisify } from "util";
-import fs, { writeFile } from "fs";
-import * as Sentry from "@sentry/node";
-import { isNil, head } from "lodash";
 
+import { Mutex } from "async-mutex";
 import {
-  WASocket,
   downloadContentFromMessage,
   extractMessageContent,
   getContentType,
@@ -13,56 +13,56 @@ import {
   MessageUpsertType,
   proto,
   WAMessage,
+  WAMessageStubType,
   WAMessageUpdate,
-  WAMessageStubType
+  WASocket
 } from "baileys";
-import { Mutex } from "async-mutex";
-import { Op } from "sequelize";
 import moment from "moment";
+import { Op } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
 import { Transform } from "stream";
 import { Throttle } from "stream-throttle";
-import { Sequelize } from "sequelize-typescript";
 import Contact from "../../models/Contact";
-import Ticket from "../../models/Ticket";
 import Message from "../../models/Message";
 import OldMessage from "../../models/OldMessage";
+import Ticket from "../../models/Ticket";
 
-import { getIO } from "../../libs/socket";
-import CreateMessageService from "../MessageServices/CreateMessageService";
-import { logger } from "../../utils/logger";
-import CreateOrUpdateContactService from "../ContactServices/CreateOrUpdateContactService";
-import FindOrCreateTicketService from "../TicketServices/FindOrCreateTicketService";
-import ShowWhatsAppService from "../WhatsappService/ShowWhatsAppService";
-import UpdateTicketService, {
-  UpdateTicketData
-} from "../TicketServices/UpdateTicketService";
+import { checkCompanyCompliant } from "../../helpers/CheckCompanyCompliant";
+import CheckSettings, { GetCompanySetting } from "../../helpers/CheckSettings";
+import { debounce } from "../../helpers/Debounce";
+import { getPublicPath } from "../../helpers/GetPublicPath";
+import { makeRandomId } from "../../helpers/MakeRandomId";
 import formatBody from "../../helpers/Mustache";
-import TicketTraking from "../../models/TicketTraking";
-import UserRating from "../../models/UserRating";
-import SendWhatsAppMessage from "./SendWhatsAppMessage";
+import { parseToMilliseconds } from "../../helpers/parseToMilliseconds";
+import { randomValue } from "../../helpers/randomValue";
+import { SimpleObjectCache } from "../../helpers/simpleObjectCache";
+import { transcriber } from "../../helpers/transcriber";
+import { cacheLayer } from "../../libs/cache";
+import { getIO } from "../../libs/socket";
+import { Session } from "../../libs/wbot";
+import Campaign from "../../models/Campaign";
+import CampaignShipping from "../../models/CampaignShipping";
 import Queue from "../../models/Queue";
 import QueueOption from "../../models/QueueOption";
+import Setting from "../../models/Setting";
+import TicketTraking from "../../models/TicketTraking";
+import User from "../../models/User";
+import UserRating from "../../models/UserRating";
+import Whatsapp from "../../models/Whatsapp";
+import { campaignQueue } from "../../queues/campaign";
+import { logger } from "../../utils/logger";
 import VerifyCurrentSchedule, {
   ScheduleResult
 } from "../CompanyService/VerifyCurrentSchedule";
-import Campaign from "../../models/Campaign";
-import CampaignShipping from "../../models/CampaignShipping";
-import { campaignQueue } from "../../queues/campaign";
-import User from "../../models/User";
-import Setting from "../../models/Setting";
-import { cacheLayer } from "../../libs/cache";
-import { debounce } from "../../helpers/Debounce";
+import CreateOrUpdateContactService from "../ContactServices/CreateOrUpdateContactService";
+import CreateMessageService from "../MessageServices/CreateMessageService";
+import FindOrCreateTicketService from "../TicketServices/FindOrCreateTicketService";
+import UpdateTicketService, {
+  UpdateTicketData
+} from "../TicketServices/UpdateTicketService";
+import ShowWhatsAppService from "../WhatsappService/ShowWhatsAppService";
 import { getMessageFileOptions } from "./SendWhatsAppMedia";
-import { makeRandomId } from "../../helpers/MakeRandomId";
-import CheckSettings, { GetCompanySetting } from "../../helpers/CheckSettings";
-import Whatsapp from "../../models/Whatsapp";
-import { SimpleObjectCache } from "../../helpers/simpleObjectCache";
-import { getPublicPath } from "../../helpers/GetPublicPath";
-import { Session } from "../../libs/wbot";
-import { checkCompanyCompliant } from "../../helpers/CheckCompanyCompliant";
-import { transcriber } from "../../helpers/transcriber";
-import { parseToMilliseconds } from "../../helpers/parseToMilliseconds";
-import { randomValue } from "../../helpers/randomValue";
+import SendWhatsAppMessage from "./SendWhatsAppMessage";
 
 export interface ImessageUpsert {
   messages: proto.IWebMessageInfo[];
@@ -1987,7 +1987,7 @@ const verifyRecentCampaign = async (
   if (!message.key.fromMe) {
     const number = message.key.remoteJid.replace(/\D/g, "");
     const campaigns = await Campaign.findAll({
-      where: { companyId, status: "EM_ANDAMENTO", confirmation: true }
+      where: { companyId, status: "IN_PROGRESS", confirmation: true }
     });
     if (campaigns) {
       const ids = campaigns.map(c => c.id);
@@ -2144,4 +2144,4 @@ const wbotMessageListener = async (
   }
 };
 
-export { wbotMessageListener, handleMessage };
+export { handleMessage, wbotMessageListener };

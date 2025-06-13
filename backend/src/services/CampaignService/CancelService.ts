@@ -5,7 +5,7 @@ import { campaignQueue } from "../../queues/campaign";
 
 export async function CancelService(id: number) {
   const campaign = await Campaign.findByPk(id);
-  await campaign.update({ status: "CANCELADA" });
+  await campaign.update({ status: "CANCELLED" });
 
   const recordsToCancel = await CampaignShipping.findAll({
     where: {

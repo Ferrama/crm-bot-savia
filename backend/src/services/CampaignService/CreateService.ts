@@ -39,7 +39,7 @@ const CreateService = async (data: Data): Promise<Campaign> => {
   }
 
   if (data.scheduledAt != null) {
-    data.status = "PROGRAMADA";
+    data.status = "SCHEDULED";
   }
 
   const record = await Campaign.create(data);

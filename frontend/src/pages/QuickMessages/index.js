@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useContext } from "react";
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import Title from "../../components/Title";
-import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
-import { makeStyles, Button, Paper } from "@material-ui/core";
+import { Button, makeStyles, Paper } from '@material-ui/core';
+import React, { useContext, useEffect, useState } from 'react';
+import MainContainer from '../../components/MainContainer';
+import MainHeader from '../../components/MainHeader';
+import MainHeaderButtonsWrapper from '../../components/MainHeaderButtonsWrapper';
+import Title from '../../components/Title';
 
-import QuickMessagesTable from "../../components/QuickMessagesTable";
-import QuickMessageDialog from "../../components/QuickMessageDialog";
-import ConfirmationModal from "../../components/ConfirmationModal";
+import ConfirmationModal from '../../components/ConfirmationModal';
+import QuickMessageDialog from '../../components/QuickMessageDialog';
+import QuickMessagesTable from '../../components/QuickMessagesTable';
 
-import { i18n } from "../../translate/i18n";
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
+import { i18n } from '../../translate/i18n';
 
-import useQuickMessages from "../../hooks/useQuickMessages";
-import { AuthContext } from "../../context/Auth/AuthContext";
+import { AuthContext } from '../../context/Auth/AuthContext';
+import useQuickMessages from '../../hooks/useQuickMessages';
 
 const useStyles = makeStyles((theme) => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
-    overflowY: "scroll",
+    overflowY: 'scroll',
     ...theme.scrollbarStyles,
   },
 }));
@@ -52,7 +52,7 @@ function QuickMessages(props) {
   const loadingQuickMessages = async () => {
     setLoading(true);
     try {
-      const companyId = localStorage.getItem("companyId");
+      const companyId = localStorage.getItem('companyId');
       const messages = await listMessages({ companyId, userId: user.id });
       setMessages(messages);
     } catch (e) {
@@ -72,7 +72,7 @@ function QuickMessages(props) {
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    setMessageSelected({ id: null, message: "", shortcode: "" });
+    setMessageSelected({ id: null, message: '', shortcode: '' });
   };
 
   const handleSave = async (message) => {
@@ -80,7 +80,7 @@ function QuickMessages(props) {
     try {
       await saveMessage(message);
       await loadingQuickMessages();
-      toast.success("Messagem adicionada com sucesso.");
+      toast.success('Messagem adicionada com sucesso.');
     } catch (e) {
       toast.error(e);
     }
@@ -91,7 +91,7 @@ function QuickMessages(props) {
     try {
       await updateMessage(message);
       await loadingQuickMessages();
-      toast.success("Messagem atualizada com sucesso.");
+      toast.success('Messagem atualizada com sucesso.');
     } catch (e) {
       toast.error(e);
     }
@@ -102,7 +102,7 @@ function QuickMessages(props) {
     try {
       await deleteMessage(message.id);
       await loadingQuickMessages();
-      toast.success("Messagem excluída com sucesso.");
+      toast.success('Messagem excluída com sucesso.');
     } catch (e) {
       toast.error(e);
     }
@@ -111,14 +111,14 @@ function QuickMessages(props) {
   return (
     <MainContainer>
       <MainHeader>
-        <Title>{i18n.t("quickMessages.title")}</Title>
+        <Title>{i18n.t('quickMessages.title')}</Title>
         <MainHeaderButtonsWrapper>
-          <Button variant="contained" color="primary" onClick={handleOpenToAdd}>
-            {i18n.t("quickMessages.buttons.add")}
+          <Button variant='contained' color='primary' onClick={handleOpenToAdd}>
+            {i18n.t('quickMessages.buttons.add')}
           </Button>
         </MainHeaderButtonsWrapper>
       </MainHeader>
-      <Paper className={classes.mainPaper} variant="outlined">
+      <Paper className={classes.mainPaper} variant='outlined'>
         <QuickMessagesTable
           readOnly={false}
           messages={messages}
@@ -138,14 +138,14 @@ function QuickMessages(props) {
         saveMessage={handleSave}
       />
       <ConfirmationModal
-        title="Excluir Registro"
+        title={i18n.t('quickMessages.confirmationModal.title')}
         open={showOnDeleteDialog}
         onClose={setShowOnDeleteDialog}
         onConfirm={async () => {
           await handleDelete(messageSelected);
         }}
       >
-        Deseja realmente excluir este registro?
+        {i18n.t('quickMessages.confirmationModal.message')}
       </ConfirmationModal>
     </MainContainer>
   );

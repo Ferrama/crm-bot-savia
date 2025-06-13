@@ -1,25 +1,25 @@
-import Queue from "bull";
-import moment from "moment";
-import { QueryTypes } from "sequelize";
-import { isEmpty, isNil, isArray } from "lodash";
-import path from "path";
 import { AnyMessageContent } from "baileys";
+import Queue from "bull";
+import { isArray, isEmpty, isNil } from "lodash";
+import moment from "moment";
+import path from "path";
+import { QueryTypes } from "sequelize";
+import sequelize from "../database";
+import GetWhatsappWbot from "../helpers/GetWhatsappWbot";
+import { parseToMilliseconds } from "../helpers/parseToMilliseconds";
+import { randomValue } from "../helpers/randomValue";
+import { getIO } from "../libs/socket";
+import { Session } from "../libs/wbot";
 import Campaign from "../models/Campaign";
-import ContactList from "../models/ContactList";
-import ContactListItem from "../models/ContactListItem";
 import CampaignSetting from "../models/CampaignSetting";
 import CampaignShipping from "../models/CampaignShipping";
-import Whatsapp from "../models/Whatsapp";
-import { getMessageFileOptions } from "../services/WbotServices/SendWhatsAppMedia";
-import { getIO } from "../libs/socket";
-import ShowService from "../services/CampaignService/ShowService";
-import sequelize from "../database";
-import { logger } from "../utils/logger";
-import { randomValue } from "../helpers/randomValue";
-import { parseToMilliseconds } from "../helpers/parseToMilliseconds";
-import GetWhatsappWbot from "../helpers/GetWhatsappWbot";
+import ContactList from "../models/ContactList";
+import ContactListItem from "../models/ContactListItem";
 import OutOfTicketMessage from "../models/OutOfTicketMessages";
-import { Session } from "../libs/wbot";
+import Whatsapp from "../models/Whatsapp";
+import ShowService from "../services/CampaignService/ShowService";
+import { getMessageFileOptions } from "../services/WbotServices/SendWhatsAppMedia";
+import { logger } from "../utils/logger";
 
 const connection = process.env.REDIS_URI || "";
 export const campaignQueue = new Queue("CampaignQueue", connection);
@@ -43,7 +43,7 @@ async function handleVerifyCampaigns() {
   const campaigns: { id: number; scheduledAt: string }[] =
     await sequelize.query(
       `select id, "scheduledAt" from "Campaigns" c
-    where "scheduledAt" between now() and now() + '1 hour'::interval and status = 'PROGRAMADA'`,
+    where "scheduledAt" between now() and now() + '1 hour'::interval and status = 'SCHEDULED'`,
       { type: QueryTypes.SELECT }
     );
 
@@ -234,7 +234,7 @@ async function verifyAndFinalizeCampaign(campaign: Campaign) {
   const data = await ShowService(campaign.id);
 
   if (data.valids === data.delivered) {
-    await campaign.update({ status: "FINALIZADA", completedAt: moment() });
+    await campaign.update({ status: "FINISHED", completedAt: moment() });
   }
 
   const io = getIO();
@@ -348,7 +348,7 @@ async function handleProcessCampaign(job) {
             );
           }
         });
-        await campaign.update({ status: "EM_ANDAMENTO" });
+        await campaign.update({ status: "IN_PROGRESS" });
       }
     }
   } catch (err) {

@@ -1,14 +1,14 @@
 import {
-  Table,
+  AutoIncrement,
+  BelongsTo,
   Column,
   CreatedAt,
-  UpdatedAt,
+  ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
-  AutoIncrement,
-  ForeignKey,
-  BelongsTo,
-  HasMany
+  Table,
+  UpdatedAt
 } from "sequelize-typescript";
 import CampaignShipping from "./CampaignShipping";
 import Company from "./Company";
@@ -55,8 +55,8 @@ class Campaign extends Model<Campaign> {
   @Column({ defaultValue: "" })
   confirmationMessage5: string;
 
-  @Column({ defaultValue: "INATIVA" })
-  status: string; // INATIVA, PROGRAMADA, EM_ANDAMENTO, CANCELADA, FINALIZADA
+  @Column({ defaultValue: "INACTIVE" })
+  status: string; // INACTIVE, SCHEDULED, IN_PROGRESS, CANCELLED, FINISHED
 
   @Column
   confirmation: boolean;

@@ -14,7 +14,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/Search';
+import { Search } from 'lucide-react';
 
 import MainContainer from '../../components/MainContainer';
 import MainHeader from '../../components/MainHeader';
@@ -232,7 +232,7 @@ const ContactLists = () => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
-                        <SearchIcon style={{ color: 'gray' }} />
+                        <Search style={{ color: 'gray' }} />
                       </InputAdornment>
                     ),
                   }}

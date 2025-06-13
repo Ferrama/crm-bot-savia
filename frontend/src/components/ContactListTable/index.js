@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import {
+  IconButton,
   Table,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
   TableRow,
-  IconButton,
-} from "@material-ui/core";
-import {
-  Edit as EditIcon,
-  DeleteOutline as DeleteOutlineIcon,
-  People as PeopleIcon,
-} from "@material-ui/icons";
+} from '@material-ui/core';
+import { Edit3, Trash2, Users } from 'lucide-react';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 
-import TableRowSkeleton from "../../components/TableRowSkeleton";
+import TableRowSkeleton from '../../components/TableRowSkeleton';
 
 function ContactListsTable(props) {
   const {
@@ -48,23 +44,23 @@ function ContactListsTable(props) {
     return rows.map((contactList) => {
       return (
         <TableRow key={contactList.id}>
-          <TableCell align="left">{contactList.name}</TableCell>
-          <TableCell align="center"></TableCell>
+          <TableCell align='left'>{contactList.name}</TableCell>
+          <TableCell align='center'></TableCell>
           {!readOnly ? (
-            <TableCell align="center">
-              <IconButton size="small">
-                <PeopleIcon />
+            <TableCell align='center'>
+              <IconButton size='small'>
+                <Users />
               </IconButton>
 
-              <IconButton size="small" onClick={() => handleEdit(contactList)}>
-                <EditIcon />
+              <IconButton size='small' onClick={() => handleEdit(contactList)}>
+                <Edit3 />
               </IconButton>
 
               <IconButton
-                size="small"
+                size='small'
                 onClick={() => handleDelete(contactList)}
               >
-                <DeleteOutlineIcon />
+                <Trash2 />
               </IconButton>
             </TableCell>
           ) : null}
@@ -74,12 +70,12 @@ function ContactListsTable(props) {
   };
 
   return (
-    <Table size="small">
+    <Table size='small'>
       <TableHead>
         <TableRow>
-          <TableCell align="left">Nome</TableCell>
-          <TableCell align="center">Contatos</TableCell>
-          {!readOnly ? <TableCell align="center">Ações</TableCell> : null}
+          <TableCell align='left'>Nome</TableCell>
+          <TableCell align='center'>Contatos</TableCell>
+          {!readOnly ? <TableCell align='center'>Ações</TableCell> : null}
         </TableRow>
       </TableHead>
       <TableBody>

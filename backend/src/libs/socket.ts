@@ -1,57 +1,16 @@
-/*
-
-   DO NOT REMOVE / NÃO REMOVER
-
-   VERSÃO EM PORTUGUÊS MAIS ABAIXO
-
-   
-   BASIC LICENSE INFORMATION:
-
-   Author: Claudemir Todo Bom
-   Email: claudemir@todobom.com
-   
-   Licensed under the AGPLv3 as stated on LICENSE.md file
-   
-   Any work that uses code from this file is obligated to 
-   give access to its source code to all of its users (not only
-   the system's owner running it)
-   
-   EXCLUSIVE LICENSE to use on closed source derived work can be
-   purchased from the author and put at the root of the source
-   code tree as proof-of-purchase.
-
-
-
-   INFORMAÇÕES BÁSICAS DE LICENÇA
-
-   Autor: Claudemir Todo Bom
-   Email: claudemir@todobom.com
-
-   Licenciado sob a licença AGPLv3 conforme arquivo LICENSE.md
-    
-   Qualquer sistema que inclua este código deve ter o seu código
-   fonte fornecido a todos os usuários do sistema (não apenas ao
-   proprietário da infraestrutura que o executa)
-   
-   LICENÇA EXCLUSIVA para uso em produto derivado em código fechado
-   pode ser adquirida com o autor e colocada na raiz do projeto
-   como prova de compra. 
-   
- */
-
-import { Server as SocketIO } from "socket.io";
 import { instrument } from "@socket.io/admin-ui";
 import { Server } from "http";
 import { verify } from "jsonwebtoken";
+import { Server as SocketIO } from "socket.io";
+import authConfig from "../config/auth";
 import AppError from "../errors/AppError";
-import { logger, socketSendBuffer } from "../utils/logger";
-import User from "../models/User";
+import { GetCompanySetting } from "../helpers/CheckSettings";
 import Queue from "../models/Queue";
 import Ticket from "../models/Ticket";
-import authConfig from "../config/auth";
-import { CounterManager } from "./counter";
+import User from "../models/User";
 import UserSocketSession from "../models/UserSocketSession";
-import { GetCompanySetting } from "../helpers/CheckSettings";
+import { logger, socketSendBuffer } from "../utils/logger";
+import { CounterManager } from "./counter";
 
 let io: SocketIO;
 

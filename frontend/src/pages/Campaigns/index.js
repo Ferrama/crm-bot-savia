@@ -16,15 +16,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/Search';
-
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import EditIcon from '@material-ui/icons/Edit';
-import ZoomInIcon from '@material-ui/icons/ZoomIn';
-
-import DescriptionIcon from '@material-ui/icons/Description';
-import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import {
+  Edit3,
+  FileText,
+  PauseCircle,
+  PlayCircle,
+  Search,
+  Trash2,
+  ZoomIn,
+} from 'lucide-react';
 
 import MainContainer from '../../components/MainContainer';
 import MainHeader from '../../components/MainHeader';
@@ -206,16 +206,16 @@ const Campaigns = () => {
 
   const formatStatus = (val) => {
     switch (val) {
-      case 'INATIVA':
-        return 'Inativa';
-      case 'PROGRAMADA':
-        return 'Programada';
-      case 'EM_ANDAMENTO':
-        return 'Em Andamento';
-      case 'CANCELADA':
-        return 'Cancelada';
-      case 'FINALIZADA':
-        return 'Finalizada';
+      case 'INACTIVE':
+        return i18n.t('campaigns.status.inactive');
+      case 'SCHEDULED':
+        return i18n.t('campaigns.status.scheduled');
+      case 'IN_PROGRESS':
+        return i18n.t('campaigns.status.inProgress');
+      case 'CANCELLED':
+        return i18n.t('campaigns.status.cancelled');
+      case 'FINISHED':
+        return i18n.t('campaigns.status.finished');
       default:
         return val;
     }
@@ -285,7 +285,7 @@ const Campaigns = () => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
-                        <SearchIcon style={{ color: 'gray' }} />
+                        <Search style={{ color: 'gray' }} />
                       </InputAdornment>
                     ),
                   }}
@@ -343,8 +343,8 @@ const Campaigns = () => {
             <>
               {campaigns.map((campaign) => {
                 const canEdit =
-                  campaign.status === 'INATIVA' ||
-                  (campaign.status === 'PROGRAMADA' &&
+                  campaign.status === 'INACTIVE' ||
+                  (campaign.status === 'SCHEDULED' &&
                     new Date(campaign.scheduledAt) >
                       new Date(Date.now() + 3600000));
                 return (
@@ -354,41 +354,45 @@ const Campaigns = () => {
                       {formatStatus(campaign.status)}
                     </TableCell>
                     <TableCell align='center'>
-                      {campaign.contactList?.name || 'Não definida'}
+                      {campaign.contactList?.name ||
+                        i18n.t('campaigns.tableData.notDefined')}
                     </TableCell>
                     <TableCell align='center'>
-                      {campaign.whatsapp?.name || 'Não definido'}
+                      {campaign.whatsapp?.name ||
+                        i18n.t('campaigns.tableData.notDefinedMale')}
                     </TableCell>
                     <TableCell align='center'>
                       {campaign.scheduledAt
                         ? datetimeToClient(campaign.scheduledAt)
-                        : 'Sem agendamento'}
+                        : i18n.t('campaigns.tableData.noSchedule')}
                     </TableCell>
                     <TableCell align='center'>
                       {campaign.completedAt
                         ? datetimeToClient(campaign.completedAt)
-                        : 'Não concluída'}
+                        : i18n.t('campaigns.tableData.notCompleted')}
                     </TableCell>
                     <TableCell align='center'>
-                      {campaign.confirmation ? 'Habilitada' : 'Desabilitada'}
+                      {campaign.confirmation
+                        ? i18n.t('campaigns.tableData.enabled')
+                        : i18n.t('campaigns.tableData.disabled')}
                     </TableCell>
                     <TableCell align='center'>
-                      {campaign.status === 'EM_ANDAMENTO' && (
+                      {campaign.status === 'IN_PROGRESS' && (
                         <IconButton
                           onClick={() => cancelCampaign(campaign)}
-                          title='Parar Campanha'
+                          title={i18n.t('campaigns.tooltips.stopCampaign')}
                           size='small'
                         >
-                          <PauseCircleOutlineIcon />
+                          <PauseCircle />
                         </IconButton>
                       )}
-                      {campaign.status === 'CANCELADA' && (
+                      {campaign.status === 'CANCELLED' && (
                         <IconButton
                           onClick={() => restartCampaign(campaign)}
-                          title='Parar Campanha'
+                          title={i18n.t('campaigns.tooltips.restartCampaign')}
                           size='small'
                         >
-                          <PlayCircleOutlineIcon />
+                          <PlayCircle />
                         </IconButton>
                       )}
                       <IconButton
@@ -397,13 +401,13 @@ const Campaigns = () => {
                         }
                         size='small'
                       >
-                        <DescriptionIcon />
+                        <FileText />
                       </IconButton>
                       <IconButton
                         size='small'
                         onClick={() => handleEditCampaign(campaign)}
                       >
-                        {canEdit ? <EditIcon /> : <ZoomInIcon />}
+                        {canEdit ? <Edit3 /> : <ZoomIn />}
                       </IconButton>
 
                       <IconButton
@@ -413,7 +417,7 @@ const Campaigns = () => {
                           setDeletingCampaign(campaign);
                         }}
                       >
-                        <DeleteOutlineIcon />
+                        <Trash2 />
                       </IconButton>
                     </TableCell>
                   </TableRow>

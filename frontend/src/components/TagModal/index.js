@@ -12,7 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Colorize } from '@material-ui/icons';
+import { Palette } from 'lucide-react';
 import { ColorBox } from 'material-ui-color';
 
 import { i18n } from '../../translate/i18n';
@@ -198,7 +198,7 @@ const TagModal = ({ open, onClose, tagId, reload, kanban }) => {
                             setColorPickerModalOpen(!colorPickerModalOpen)
                           }
                         >
-                          <Colorize />
+                          <Palette />
                         </IconButton>
                       ),
                     }}

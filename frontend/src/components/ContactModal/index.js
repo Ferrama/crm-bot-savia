@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import { Trash2 } from 'lucide-react';
 
 import { i18n } from '../../translate/i18n';
 
@@ -244,7 +244,7 @@ const ContactModal = ({ open, onClose, contactId, initialValues, onSave }) => {
                               size='small'
                               onClick={() => remove(index)}
                             >
-                              <DeleteOutlineIcon />
+                              <Trash2 />
                             </IconButton>
                           </div>
                         ))}

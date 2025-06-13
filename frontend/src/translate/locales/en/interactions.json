@@ -1,0 +1,60 @@
+{
+    "title": "Interactions",
+    "timeline": {
+        "title": "Timeline",
+        "empty": "No activities recorded yet"
+    },
+    "buttons": {
+        "add": "Add Interaction",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel"
+    },
+    "dialog": {
+        "add": "Add Interaction",
+        "edit": "Edit Interaction"
+    },
+    "form": {
+        "type": "Type",
+        "category": "Category",
+        "priority": "Priority",
+        "notes": "Notes",
+        "isPrivate": "Private"
+    },
+    "types": {
+        "status_change": "Status Change",
+        "pipeline_change": "Pipeline Change",
+        "email": "Email",
+        "note": "Note",
+        "file": "File",
+        "message": "Message"
+    },
+    "categories": {
+        "internal_note": "Internal Note",
+        "customer_communication": "Customer Communication",
+        "system": "System"
+    },
+    "priorities": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "urgent": "Urgent"
+    },
+    "toasts": {
+        "created": "Interaction created successfully!",
+        "updated": "Interaction updated successfully!",
+        "deleted": "Interaction deleted successfully!"
+    },
+    "validation": {
+        "type": {
+            "required": "Type is required"
+        },
+        "category": {
+            "required": "Category is required"
+        },
+        "notes": {
+            "required": "Notes are required"
+        }
+    }
+}

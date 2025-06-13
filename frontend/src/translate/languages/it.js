@@ -25,6 +25,7 @@ const messages = {
         chats: 'Chat',
         spyChat: 'Spia Conversazione',
         closeChat: 'Chiudi Chat',
+        remove: 'Rimuovi',
       },
       signup: {
         title: 'Registrati',
@@ -271,6 +272,7 @@ const messages = {
           sendAt: 'Invia alle',
           saveMessage: 'Salva come modello',
           contactPlaceholder: 'Contatto',
+          whatsappPlaceholder: 'WhatsApp',
         },
         buttons: {
           cancel: 'Annulla',
@@ -397,6 +399,10 @@ const messages = {
           kanban: 'Kanban',
           leads: 'Lead',
           todoList: 'Lista delle Attività',
+          savia: 'Savia',
+          listing: 'Elenco',
+          contactLists: 'Liste di Contatti',
+          configurations: 'Configurazioni',
         },
         appBar: {
           i18n: {
@@ -645,6 +651,19 @@ const messages = {
       },
       campaignsConfig: {
         title: 'Configurazioni Campagne',
+        intervals: 'Intervalli',
+        messageInterval: 'Intervallo tra messaggi',
+        longerIntervalAfter: 'Intervallo più lungo dopo',
+        greaterInterval: 'Intervallo maggiore',
+        noInterval: 'Nessun intervallo',
+        notDefined: 'Non definito',
+        seconds: 'secondi',
+        messages: 'messaggi',
+        addVariable: 'Aggiungi Variabile',
+        saveSettings: 'Salva Impostazioni',
+        shortcode: 'Codice',
+        content: 'Contenuto',
+        variables: 'Variabili',
       },
       queues: {
         title: 'Code & Chatbot',
@@ -885,13 +904,52 @@ const messages = {
           international: 'Internazionale in US$',
         },
       },
+      interactions: {
+        toasts: {
+          created: 'Interazione creata con successo',
+        },
+        buttons: {
+          add: 'Aggiungi Interazione',
+        },
+        types: {
+          note: 'Nota',
+          email: 'E-mail',
+          message: 'Messaggio',
+          file: 'File',
+        },
+        categories: {
+          internal_note: 'Nota Interna',
+          customer_communication: 'Comunicazione Cliente',
+          system: 'Sistema',
+        },
+        dialog: {
+          add: 'Aggiungi Interazione',
+        },
+        form: {
+          type: 'Tipo',
+          category: 'Categoria',
+          notes: 'Note',
+        },
+      },
       leads: {
         title: 'Lead',
         searchPlaceholder: 'Cerca lead',
+        notFound: 'Lead non trovato',
         buttons: {
           add: 'Nuovo Lead',
           save: 'Salva',
           cancel: 'Annulla',
+        },
+        views: {
+          board: 'Bacheca',
+          list: 'Lista',
+        },
+        tabs: {
+          basic: 'Base',
+          contact: 'Contatto',
+          financial: 'Finanziario',
+          tags: 'Tag',
+          notes: 'Note',
         },
         modal: {
           add: {
@@ -913,42 +971,145 @@ const messages = {
             selectUser: 'Seleziona utente',
           },
         },
-        table: {
+        dialog: {
+          new: 'Nuovo Lead',
+          edit: 'Modifica Lead',
+          addTag: 'Aggiungi Tag',
+        },
+        form: {
           name: 'Nome',
-          contact: 'Contatto',
-          stage: 'Fase',
+          title: 'Titolo',
+          titleHelper: 'Breve descrizione del lead',
+          description: 'Descrizione',
           temperature: 'Temperatura',
+          status: 'Stato',
+          pipeline: 'Pipeline',
+          contact: 'Contatto',
+          column: 'Colonna',
+          assignedTo: 'Assegnato a',
+          unassigned: 'Non assegnato',
           source: 'Fonte',
           expectedValue: 'Valore Atteso',
-          probability: 'Probabilità',
-          expectedClosingDate: 'Data di Chiusura',
+          currency: 'Valuta',
+          probability: 'Probabilità (%)',
+          probabilityHelper: "Probabilità di chiusura dell'affare (0-100%)",
+          expectedClosingDate: 'Data di Chiusura Prevista',
+          tags: 'Tag',
+          addTag: 'Aggiungi Tag',
+          tag: 'Tag',
+          customFields: 'Campi Personalizzati',
+          customFieldName: 'Inserisci il nome del campo personalizzato',
+          addCustomField: 'Aggiungi Campo Personalizzato',
+          notes: 'Note',
+        },
+        table: {
+          lead: 'Lead',
+          contact: 'Contatto',
+          status: 'Stato',
+          pipeline: 'Pipeline',
+          column: 'Colonna',
+          temperature: 'Temperatura',
+          tags: 'Tag',
+          financial: 'Finanziario',
           assignedTo: 'Assegnato a',
           actions: 'Azioni',
+          unassigned: 'Non assegnato',
         },
-        stages: {
+        sections: {
+          contact: 'Informazioni di Contatto',
+          financial: 'Informazioni Finanziarie',
+          tags: 'Tag',
+          customFields: 'Campi Personalizzati',
+          notes: 'Note',
+        },
+        fields: {
+          contact: 'Contatto',
+          phone: 'Telefono',
+          email: 'E-mail',
+          source: 'Fonte',
+          assignedTo: 'Assegnato a',
+          expectedValue: 'Valore Atteso',
+          probability: 'Probabilità',
+          expectedClosingDate: 'Data di Chiusura Prevista',
+        },
+        status: {
           new: 'Nuovo',
           contacted: 'Contattato',
-          qualified: 'Qualificato',
+          follow_up: 'Follow-up',
           proposal: 'Proposta',
           negotiation: 'Negoziazione',
-          closed_won: 'Vinto',
-          closed_lost: 'Perso',
+          qualified: 'Qualificato',
+          unqualified: 'Non qualificato',
+          converted: 'Convertito',
+          lost: 'Perso',
+          closed_won: 'Chiuso Vinto',
+          closed_lost: 'Chiuso Perso',
         },
-        temperatures: {
+        pipeline: {
+          default: 'Predefinito',
+          sales: 'Vendite',
+          support: 'Supporto',
+          onboarding: 'Onboarding',
+        },
+        temperature: {
           hot: 'Caldo',
           warm: 'Tiepido',
           cold: 'Freddo',
         },
+        timeline: {
+          title: 'Cronologia',
+          empty: 'Nessuna interazione trovata',
+        },
         toasts: {
           created: 'Lead creato con successo',
           updated: 'Lead aggiornato con successo',
+          deleted: 'Lead eliminato con successo',
           contactRequired: 'Il contatto è obbligatorio',
+          tagAdded: 'Tag aggiunto con successo',
+          tagRemoved: 'Tag rimosso con successo',
+        },
+        validation: {
+          name: {
+            required: 'Il nome è obbligatorio',
+          },
+          title: {
+            max: 'Il titolo deve avere al massimo 255 caratteri',
+          },
+          contact: {
+            required: 'Il contatto è obbligatorio',
+          },
+          column: {
+            required: 'La colonna è obbligatoria',
+          },
+          temperature: {
+            required: 'La temperatura è obbligatoria',
+          },
+          status: {
+            required: 'Lo stato è obbligatorio',
+          },
+          pipeline: {
+            required: 'Il pipeline è obbligatorio',
+          },
+          source: {
+            required: 'La fonte è obbligatoria',
+          },
+          currency: {
+            required: 'La valuta è obbligatoria',
+          },
+          probability: {
+            min: 'La probabilità deve essere almeno 0',
+            max: 'La probabilità deve essere al massimo 100',
+          },
         },
         leadColumns: {
           buttons: {
             add: 'Nuova Colonna',
             save: 'Salva',
             cancel: 'Annulla',
+          },
+          dialog: {
+            new: 'Nuova Colonna',
+            edit: 'Modifica Colonna',
           },
           modal: {
             add: {
@@ -980,6 +1141,290 @@ const messages = {
         taskPlaceholder: 'Inserisci una nuova attività',
         lastUpdate: 'Ultimo aggiornamento',
         taskRequired: "Il testo dell'attività è obbligatorio",
+      },
+      settings: {
+        group: {
+          general: 'Generale',
+          timeouts: 'Timeout',
+          officeHours: 'Orari di ufficio',
+          groups: 'Gruppi',
+          confidenciality: 'Riservatezza',
+          api: 'API',
+          externalServices: 'Servizi esterni',
+          serveradmin: 'Amministrazione del server',
+        },
+        success: 'Impostazioni salvate con successo.',
+        copiedToClipboard: 'Copiato negli appunti',
+        title: 'Impostazioni',
+        chatbotTicketTimeout: 'Timeout del chatbot (minuti)',
+        chatbotTicketTimeoutAction: 'Azione del timeout del chatbot',
+        settings: {
+          userCreation: {
+            name: 'Creazione utente',
+            options: {
+              enabled: 'Abilitato',
+              disabled: 'Disabilitato',
+            },
+          },
+        },
+        validations: {
+          title: 'Valutazioni',
+          options: {
+            enabled: 'Abilitato',
+            disabled: 'Disabilitato',
+          },
+        },
+        OfficeManagement: {
+          title: 'Gestione ufficio',
+          options: {
+            disabled: 'Disabilitato',
+            ManagementByDepartment: 'Gestione per coda',
+            ManagementByCompany: 'Gestione per azienda',
+          },
+        },
+        outOfHoursAction: {
+          title: 'Azione fuori orario',
+          options: {
+            pending: 'Lasciare in attesa',
+            closed: 'Chiudere il ticket',
+          },
+        },
+        IgnoreGroupMessages: {
+          title: 'Ignora messaggi di gruppo',
+          options: {
+            enabled: 'Abilitato',
+            disabled: 'Disabilitato',
+          },
+        },
+        soundGroupNotifications: {
+          title: 'Notifiche sonore di gruppo',
+          options: {
+            enabled: 'Abilitato',
+            disabled: 'Disabilitato',
+          },
+        },
+        groupsTab: {
+          title: 'Scheda Gruppi',
+          options: {
+            enabled: 'Abilitato',
+            disabled: 'Disabilitato',
+          },
+        },
+        VoiceAndVideoCalls: {
+          title: 'Chiamate vocali e video',
+          options: {
+            enabled: 'Ignora',
+            disabled: 'Informa indisponibilità',
+          },
+        },
+        AutomaticChatbotOutput: {
+          title: 'Uscita automatica del chatbot',
+          options: {
+            enabled: 'Abilitato',
+            disabled: 'Disabilitato',
+          },
+        },
+        ShowNumericEmoticons: {
+          title: 'Mostra emoticon numeriche nella coda',
+          options: {
+            enabled: 'Abilitato',
+            disabled: 'Disabilitato',
+          },
+        },
+        QuickMessages: {
+          title: 'Messaggi rapidi',
+          options: {
+            enabled: 'Per azienda',
+            disabled: 'Per utente',
+          },
+        },
+        AllowRegistration: {
+          title: 'Consenti registrazione',
+          options: {
+            enabled: 'Abilitato',
+            disabled: 'Disabilitato',
+          },
+        },
+        FileUploadLimit: {
+          title: 'Limite di caricamento file (MB)',
+        },
+        FileDownloadLimit: {
+          title: 'Limite di download file (MB)',
+        },
+        messageVisibility: {
+          title: 'Visibilità del messaggio',
+          options: {
+            respectMessageQueue: 'Rispetta la coda del messaggio',
+            respectTicketQueue: 'Rispetta la coda del ticket',
+          },
+        },
+        keepQueueAndUser: {
+          title: 'Mantieni coda e utente nel ticket chiuso',
+          options: {
+            enabled: 'Abilitato',
+            disabled: 'Disabilitato',
+          },
+        },
+        GracePeriod: {
+          title: 'Periodo di grazia dopo la scadenza (giorni)',
+        },
+        ticketAcceptedMessage: {
+          title: 'Messaggio di ticket accettato',
+          placeholder: 'Inserisci qui il tuo messaggio di ticket accettato',
+        },
+        transferMessage: {
+          title: 'Messaggio di trasferimento',
+          placeholder: 'Inserisci qui il tuo messaggio di trasferimento',
+        },
+        mustacheVariables: {
+          title: 'Variabili disponibili:',
+        },
+        WelcomeGreeting: {
+          greetings: 'Ciao',
+          welcome: 'Benvenuto a',
+          expirationTime: 'Attivo fino a',
+        },
+        Options: {
+          title: 'Opzioni',
+        },
+        Companies: {
+          title: 'Aziende',
+        },
+        schedules: {
+          title: 'Programmi',
+        },
+        Plans: {
+          title: 'Piani',
+        },
+        Help: {
+          title: 'Aiuto',
+        },
+        Whitelabel: {
+          title: 'Whitelabel',
+        },
+        PaymentGateways: {
+          title: 'Gateway di pagamento',
+        },
+        AIProvider: {
+          title: 'Servizio IA',
+        },
+        AudioTranscriptions: {
+          title: 'Trascrizione audio',
+        },
+        TagsMode: {
+          title: 'Modalità tag',
+          options: {
+            ticket: 'Ticket',
+            contact: 'Contatto',
+            both: 'Ticket e Contatto',
+          },
+        },
+        schedulesUpdated: 'Programmi aggiornati con successo.',
+        operationUpdated: 'Operazione aggiornata con successo.',
+        paymentGateway: 'Gateway di pagamento',
+        none: 'Nessuno',
+        owenPayments: 'Owen Payments 💎',
+        efi: 'Efí',
+        apiToken: 'Token API',
+        aiKey: 'Chiave IA',
+        defaultAppName: 'Ticketz',
+        ratingsTimeout: 'Timeout per valutazione (minuti)',
+        noQueueTimeout: 'Timeout per ticket senza coda (minuti)',
+        noQueueTimeoutAction: 'Azione per timeout di ticket senza coda',
+        openTicketTimeout: 'Timeout per ticket in corso (minuti)',
+        openTicketTimeoutAction: 'Azione per timeout di ticket aperto',
+        autoReopenTimeout: 'Timeout per riapertura automatica (minuti)',
+        close: 'Chiudere',
+        returnToQueue: 'Ritornare alla coda',
+        officeHours: 'Orari di ufficio',
+        officeManagement: 'Gestione ufficio',
+        managementByQueue: 'Gestione per coda',
+        managementByCompany: 'Gestione per azienda',
+        groups: 'Gruppi',
+        ignoreGroupMessages: 'Ignora messaggi di gruppo',
+        groupSoundNotifications: 'Notifiche sonore di gruppo',
+        groupsTab: 'Scheda Gruppi',
+        confidentiality: 'Riservatezza',
+        messageVisibility: 'Visibilità del messaggio',
+        respectMessageQueue: 'Rispetta la coda del messaggio',
+        respectTicketQueue: 'Rispetta la coda del ticket',
+        keepQueueAndUser: 'Mantieni coda e utente',
+        api: 'API',
+        outOfHoursAction: 'Azione fuori orario',
+        leaveAsPending: 'Lasciare in attesa',
+        enabled: 'Abilitato',
+        disabled: 'Disabilitato',
+        // Form fields
+        name: 'Nome',
+        email: 'Email',
+        phone: 'Telefono',
+        company: 'Azienda',
+        plan: 'Piano',
+        campaigns: 'Campagne',
+        status: 'Stato',
+        createdAt: 'Creato il',
+        dueDate: 'Data di scadenza',
+        value: 'Valore',
+        users: 'Utenti',
+        connections: 'Connessioni',
+        queues: 'Code',
+        public: 'Pubblico',
+        yes: 'Sì',
+        no: 'No',
+        active: 'Attivo',
+        inactive: 'Inattivo',
+        // Plan management
+        planName: 'Nome Piano',
+        planValue: 'Valore Piano',
+        planUsers: 'Utenti Piano',
+        planConnections: 'Connessioni Piano',
+        planQueues: 'Code Piano',
+        planPublic: 'Piano Pubblico',
+        // Campaign management
+        campaignTitle: 'Titolo Campagna',
+        campaignCode: 'Codice Campagna',
+        campaignDescription: 'Descrizione Campagna',
+        campaignEnabled: 'Campagna Abilitata',
+        campaignDisabled: 'Campagna Disabilitata',
+        // User management
+        userName: 'Nome Utente',
+        userEmail: 'Email Utente',
+        userPhone: 'Telefono Utente',
+        userCompany: 'Azienda Utente',
+        userPlan: 'Piano Utente',
+        // Whitelabel
+        primaryColorLight: 'Colore primario chiaro',
+        primaryColorDark: 'Colore primario scuro',
+        appLogoLight: 'Logo app chiaro',
+        appLogoDark: 'Logo app scuro',
+        appName: 'Nome app',
+        appFavicon: 'Favicon app',
+        logoSvgHint: 'Preferire SVG e rapporto 28:10',
+        faviconSvgHint: 'Preferire immagine SVG quadrata o PNG 512x512',
+        // Buttons
+        clear: 'Cancella',
+        save: 'Salva',
+        cancel: 'Annulla',
+        edit: 'Modifica',
+        delete: 'Elimina',
+        add: 'Aggiungi',
+        // Date format
+        dateFormat: 'dd/mm/yyyy',
+        // Recurrence
+        recurrence: 'Ricorrenza',
+        // Contact lists
+        contactLists: 'Liste Contatti',
+        // Settings
+        settings: 'Impostazioni',
+        // Navigation
+        listing: 'Elenco',
+        // System description
+        systemDescription: 'ticketz chat based ticket system',
+      },
+      ticketMessagesDialog: {
+        buttons: {
+          close: 'Chiudi',
+        },
       },
     },
   },

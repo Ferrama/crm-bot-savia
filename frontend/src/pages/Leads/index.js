@@ -1,6 +1,7 @@
 import { Paper, Tab, Tabs } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
+import { i18n } from '../../translate/i18n';
 import LeadBoard from './LeadBoard';
 import LeadList from './LeadList';
 
@@ -37,8 +38,8 @@ const Leads = () => {
           textColor='primary'
           centered
         >
-          <Tab value='board' label='Board' />
-          <Tab value='list' label='List' />
+          <Tab value='board' label={i18n.t('leads.views.board')} />
+          <Tab value='list' label={i18n.t('leads.views.list')} />
         </Tabs>
       </Paper>
       <div className={classes.tabContent}>

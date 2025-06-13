@@ -24,6 +24,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AuthContext } from '../../context/Auth/AuthContext';
 import { useDate } from '../../hooks/useDate';
 import api from '../../services/api';
+import { i18n } from '../../translate/i18n';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { green } from '@material-ui/core/colors';
@@ -236,7 +237,7 @@ export default function ChatMessages({
               target='_blank'
               href={message.mediaPath}
             >
-              Download
+              {i18n.t('internalChat.download')}
             </Button>
           </div>
           {/* <Divider /> */}

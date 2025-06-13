@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  Box,
   Button,
   Chip,
   IconButton,
@@ -10,11 +12,18 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { Edit, Search, Trash2, UserPlus } from 'lucide-react';
+import {
+  Calendar,
+  DollarSign,
+  Edit,
+  Percent,
+  Search,
+  Trash2,
+  UserPlus,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import MainContainer from '../../components/MainContainer';
@@ -56,6 +65,72 @@ const useStyles = makeStyles((theme) => ({
   coldChip: {
     backgroundColor: '#6c5ce7',
     color: 'white',
+  },
+  statusChip: {
+    margin: theme.spacing(0.5),
+  },
+  leadInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(0.5),
+  },
+  leadName: {
+    fontWeight: 'bold',
+  },
+  leadTitle: {
+    fontSize: '0.875rem',
+    color: theme.palette.text.secondary,
+    fontStyle: 'italic',
+  },
+  leadDescription: {
+    fontSize: '0.75rem',
+    color: theme.palette.text.secondary,
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+  },
+  contactInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(0.25),
+  },
+  contactName: {
+    fontWeight: 'bold',
+  },
+  contactDetails: {
+    fontSize: '0.75rem',
+    color: theme.palette.text.secondary,
+  },
+  assignedUser: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
+  },
+  userAvatar: {
+    width: 24,
+    height: 24,
+    fontSize: '0.75rem',
+  },
+  tagChip: {
+    margin: theme.spacing(0.25),
+    height: 20,
+    fontSize: '0.7rem',
+  },
+  financialInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(0.25),
+    fontSize: '0.875rem',
+  },
+  financialItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
+  },
+  financialIcon: {
+    width: 14,
+    height: 14,
   },
 }));
 
@@ -125,15 +200,46 @@ const LeadList = () => {
     return colors[temperature] || classes.coldChip;
   };
 
+  const getStatusColor = (status) => {
+    const colors = {
+      new: '#2196f3',
+      contacted: '#ff9800',
+      follow_up: '#9c27b0',
+      proposal: '#4caf50',
+      negotiation: '#ff5722',
+      qualified: '#00bcd4',
+      unqualified: '#f44336',
+      converted: '#4caf50',
+      lost: '#f44336',
+      closed_won: '#4caf50',
+      closed_lost: '#f44336',
+    };
+    return colors[status] || '#757575';
+  };
+
   const formatExpectedValue = (lead) => {
     if (!lead.expectedValue) return '';
     const currency = lead.currency;
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency.code,
+      currency: currency?.code || 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(lead.expectedValue);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const getInitials = (name) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
@@ -164,15 +270,14 @@ const LeadList = () => {
         <Table size='small'>
           <TableHead>
             <TableRow>
-              <TableCell>{i18n.t('leads.table.name')}</TableCell>
+              <TableCell>{i18n.t('leads.table.lead')}</TableCell>
               <TableCell>{i18n.t('leads.table.contact')}</TableCell>
+              <TableCell>{i18n.t('leads.table.status')}</TableCell>
+              <TableCell>{i18n.t('leads.table.pipeline')}</TableCell>
               <TableCell>{i18n.t('leads.table.column')}</TableCell>
               <TableCell>{i18n.t('leads.table.temperature')}</TableCell>
-              <TableCell>{i18n.t('leads.table.source')}</TableCell>
               <TableCell>{i18n.t('leads.table.tags')}</TableCell>
-              <TableCell>{i18n.t('leads.table.expectedValue')}</TableCell>
-              <TableCell>{i18n.t('leads.table.probability')}</TableCell>
-              <TableCell>{i18n.t('leads.table.expectedClosingDate')}</TableCell>
+              <TableCell>{i18n.t('leads.table.financial')}</TableCell>
               <TableCell>{i18n.t('leads.table.assignedTo')}</TableCell>
               <TableCell align='center'>
                 {i18n.t('leads.table.actions')}
@@ -182,17 +287,57 @@ const LeadList = () => {
           <TableBody>
             {leads.map((lead) => (
               <TableRow key={lead.id}>
-                <TableCell>{lead.contact.name}</TableCell>
                 <TableCell>
-                  {lead.contact.number}
-                  <br />
-                  {lead.contact.email}
+                  <div className={classes.leadInfo}>
+                    <div className={classes.leadName}>{lead.name}</div>
+                    {lead.title && (
+                      <div className={classes.leadTitle}>{lead.title}</div>
+                    )}
+                    {lead.description && (
+                      <div className={classes.leadDescription}>
+                        {lead.description}
+                      </div>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className={classes.contactInfo}>
+                    <div className={classes.contactName}>
+                      {lead.contact?.name}
+                    </div>
+                    <div className={classes.contactDetails}>
+                      {lead.contact?.number}
+                    </div>
+                    {lead.contact?.email && (
+                      <div className={classes.contactDetails}>
+                        {lead.contact.email}
+                      </div>
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell>
                   <Chip
-                    label={lead.column.name}
+                    label={i18n.t(`leads.status.${lead.status}`)}
+                    className={classes.statusChip}
                     style={{
-                      backgroundColor: lead.column.color,
+                      backgroundColor: getStatusColor(lead.status),
+                      color: 'white',
+                    }}
+                    size='small'
+                  />
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    label={i18n.t(`leads.pipeline.${lead.pipeline}`)}
+                    className={classes.stageChip}
+                    size='small'
+                  />
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    label={lead.column?.name}
+                    style={{
+                      backgroundColor: lead.column?.color,
                       color: 'white',
                     }}
                     size='small'
@@ -201,46 +346,79 @@ const LeadList = () => {
                 </TableCell>
                 <TableCell>
                   <Chip
-                    label={i18n.t(`leads.temperatures.${lead.temperature}`)}
+                    label={i18n.t(`leads.temperature.${lead.temperature}`)}
                     className={`${
                       classes.temperatureChip
                     } ${getTemperatureColor(lead.temperature)}`}
                     size='small'
                   />
                 </TableCell>
-                <TableCell>{lead.source}</TableCell>
                 <TableCell>
-                  {lead.tags?.map((tag) => (
-                    <Chip
-                      key={tag.id}
-                      label={tag.name}
-                      size='small'
-                      style={{
-                        backgroundColor: tag.color || '#ccc',
-                        color: 'white',
-                        margin: '2px',
-                      }}
-                    />
-                  ))}
+                  <Box display='flex' flexWrap='wrap' maxWidth={150}>
+                    {lead.tags?.slice(0, 3).map((tag) => (
+                      <Chip
+                        key={tag}
+                        label={tag}
+                        className={classes.tagChip}
+                        size='small'
+                      />
+                    ))}
+                    {lead.tags?.length > 3 && (
+                      <Chip
+                        label={`+${lead.tags.length - 3}`}
+                        className={classes.tagChip}
+                        size='small'
+                      />
+                    )}
+                  </Box>
                 </TableCell>
-                <TableCell>{formatExpectedValue(lead)}</TableCell>
-                <TableCell>{lead.probability}%</TableCell>
                 <TableCell>
-                  {lead.expectedClosingDate &&
-                    format(new Date(lead.expectedClosingDate), 'dd/MM/yyyy', {
-                      locale: ptBR,
-                    })}
+                  <div className={classes.financialInfo}>
+                    {lead.expectedValue && (
+                      <div className={classes.financialItem}>
+                        <DollarSign className={classes.financialIcon} />
+                        <span>{formatExpectedValue(lead)}</span>
+                      </div>
+                    )}
+                    {lead.probability && (
+                      <div className={classes.financialItem}>
+                        <Percent className={classes.financialIcon} />
+                        <span>{lead.probability}%</span>
+                      </div>
+                    )}
+                    {lead.expectedClosingDate && (
+                      <div className={classes.financialItem}>
+                        <Calendar className={classes.financialIcon} />
+                        <span>{formatDate(lead.expectedClosingDate)}</span>
+                      </div>
+                    )}
+                  </div>
                 </TableCell>
-                <TableCell>{lead.assignedTo?.name}</TableCell>
+                <TableCell>
+                  {lead.assignedTo ? (
+                    <div className={classes.assignedUser}>
+                      <Avatar className={classes.userAvatar}>
+                        {getInitials(lead.assignedTo.name)}
+                      </Avatar>
+                      <Typography variant='caption'>
+                        {lead.assignedTo.name}
+                      </Typography>
+                    </div>
+                  ) : (
+                    <Typography variant='caption' color='textSecondary'>
+                      {i18n.t('leads.table.unassigned')}
+                    </Typography>
+                  )}
+                </TableCell>
                 <TableCell align='center'>
                   <IconButton size='small' onClick={() => handleEdit(lead)}>
-                    <Edit size={20} />
+                    <Edit />
                   </IconButton>
                   <IconButton
                     size='small'
                     onClick={() => handleDelete(lead.id)}
                   >
-                    <Trash2 size={20} />
+                    <Trash2 />
                   </IconButton>
                 </TableCell>
               </TableRow>

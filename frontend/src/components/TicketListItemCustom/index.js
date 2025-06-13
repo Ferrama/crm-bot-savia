@@ -26,11 +26,8 @@ import { TicketsContext } from '../../context/Tickets/TicketsContext';
 import toastError from '../../errors/toastError';
 import api from '../../services/api';
 
-import AndroidIcon from '@material-ui/icons/Android';
-import DoneIcon from '@material-ui/icons/Done';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import { MessageSquare, X } from 'lucide-react';
+import { Check, Eye, MessageSquare, Smartphone, X } from 'lucide-react';
 import { generateColor } from '../../helpers/colorGenerator';
 import { getInitials } from '../../helpers/getInitials';
 import TagsLine from '../TagsLine';
@@ -275,8 +272,9 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
                 top: -6,
                 marginRight: 3,
               }}
-              badgeContent={ticket.queue?.name || 'Sem fila'}
-              //color="primary"
+              badgeContent={
+                ticket.queue?.name || i18n.t('internalChat.noQueue')
+              }
             />
           )}
           {ticket.status === 'open' && (
@@ -289,8 +287,8 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
             </Tooltip>
           )}
           {profile === 'admin' && (
-            <Tooltip title='Espiar Conversa'>
-              <VisibilityIcon
+            <Tooltip title={i18n.t('internalChat.spyChat')}>
+              <Eye
                 onClick={(e) => {
                   e.stopPropagation();
                   setOpenTicketMessageDialog(true);
@@ -314,7 +312,7 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
           )}
           {ticket.chatbot && (
             <Tooltip title='Chatbot'>
-              <AndroidIcon
+              <Smartphone
                 fontSize='small'
                 style={{ color: grey[700], marginRight: 5 }}
               />
@@ -356,8 +354,9 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
                 top: -6,
                 marginRight: 2,
               }}
-              badgeContent={ticket.queue?.name || 'Sem fila'}
-              //color=
+              badgeContent={
+                ticket.queue?.name || i18n.t('internalChat.noQueue')
+              }
             />
           )}
           {ticket.status === 'pending' &&
@@ -372,7 +371,7 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
             )}
           {ticket.chatbot && (
             <Tooltip title='Chatbot'>
-              <AndroidIcon
+              <Smartphone
                 fontSize='small'
                 style={{ color: grey[700], marginRight: 5 }}
               />
@@ -390,8 +389,8 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
             )}
           {ticket.status === 'pending' &&
             (groupActionButtons || !ticket.isGroup) && (
-              <Tooltip title='Aceitar Conversa'>
-                <DoneIcon
+              <Tooltip title={i18n.t('internalChat.acceptChat')}>
+                <Check
                   onClick={() => handleAcceptTicket(ticket.id)}
                   fontSize='small'
                   style={{
@@ -413,8 +412,8 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
             )}
 
           {profile === 'admin' && (groupActionButtons || !ticket.isGroup) && (
-            <Tooltip title='Espiar Conversa'>
-              <VisibilityIcon
+            <Tooltip title={i18n.t('internalChat.spyChat')}>
+              <Eye
                 onClick={(e) => {
                   e.stopPropagation();
                   setOpenTicketMessageDialog(true);
@@ -467,7 +466,7 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
         <Tooltip
           arrow
           placement='right'
-          title={ticket.queue?.name || 'Sem fila'}
+          title={ticket.queue?.name || i18n.t('internalChat.noQueue')}
         >
           <span
             style={{ backgroundColor: ticket.queue?.color || '#7C7C7C' }}
@@ -498,7 +497,9 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
                 color='textPrimary'
               >
                 {ticket.channel === 'whatsapp' && (
-                  <Tooltip title={`Atribuido à ${ticketUser}`}>
+                  <Tooltip
+                    title={`${i18n.t('internalChat.assignedTo')} ${ticketUser}`}
+                  >
                     <WhatsAppIcon
                       fontSize='inherit'
                       style={{ color: grey[700] }}
@@ -525,7 +526,7 @@ const TicketListItemCustom = ({ ticket, setTabOpen, groupActionButtons }) => {
                 ) : (
                   <>
                     {ticket.lastMessage?.includes('data:image/png;base64') ? (
-                      <div>Localização</div>
+                      <div>{i18n.t('internalChat.location')}</div>
                     ) : (
                       <WhatsMarked oneline>
                         {ticket.lastMessage.startsWith('{"ticketzvCard"')

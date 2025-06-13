@@ -1,0 +1,60 @@
+{
+    "title": "Interações",
+    "timeline": {
+        "title": "Linha do Tempo",
+        "empty": "Nenhuma atividade registrada ainda"
+    },
+    "buttons": {
+        "add": "Adicionar Interação",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "save": "Salvar",
+        "cancel": "Cancelar"
+    },
+    "dialog": {
+        "add": "Adicionar Interação",
+        "edit": "Editar Interação"
+    },
+    "form": {
+        "type": "Tipo",
+        "category": "Categoria",
+        "priority": "Prioridade",
+        "notes": "Notas",
+        "isPrivate": "Privado"
+    },
+    "types": {
+        "status_change": "Mudança de Status",
+        "pipeline_change": "Mudança de Pipeline",
+        "email": "E-mail",
+        "note": "Nota",
+        "file": "Arquivo",
+        "message": "Mensagem"
+    },
+    "categories": {
+        "internal_note": "Nota Interna",
+        "customer_communication": "Comunicação com Cliente",
+        "system": "Sistema"
+    },
+    "priorities": {
+        "low": "Baixa",
+        "medium": "Média",
+        "high": "Alta",
+        "urgent": "Urgente"
+    },
+    "toasts": {
+        "created": "Interação criada com sucesso!",
+        "updated": "Interação atualizada com sucesso!",
+        "deleted": "Interação excluída com sucesso!"
+    },
+    "validation": {
+        "type": {
+            "required": "Tipo é obrigatório"
+        },
+        "category": {
+            "required": "Categoria é obrigatória"
+        },
+        "notes": {
+            "required": "Notas são obrigatórias"
+        }
+    }
+}

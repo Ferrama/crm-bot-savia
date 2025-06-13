@@ -1,57 +1,56 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
-import * as Yup from "yup";
-import { Formik, Form, Field } from "formik";
-import { toast } from "react-toastify";
+import { Field, Form, Formik } from 'formik';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
-import { makeStyles } from "@material-ui/core/styles";
-import { green } from "@material-ui/core/colors";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import IconButton from "@material-ui/core/IconButton";
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { green } from '@material-ui/core/colors';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import { Paperclip, Trash2 } from 'lucide-react';
 
-import { i18n } from "../../translate/i18n";
-import { head } from "lodash";
+import { head } from 'lodash';
+import { i18n } from '../../translate/i18n';
 
-import api from "../../services/api";
-import toastError from "../../errors/toastError";
 import {
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
   Select,
-} from "@material-ui/core";
-import ConfirmationModal from "../ConfirmationModal";
+} from '@material-ui/core';
+import toastError from '../../errors/toastError';
+import api from '../../services/api';
+import ConfirmationModal from '../ConfirmationModal';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   multFieldLine: {
-    display: "flex",
-    "& > *:not(:last-child)": {
+    display: 'flex',
+    '& > *:not(:last-child)': {
       marginRight: theme.spacing(1),
     },
   },
 
   btnWrapper: {
-    position: "relative",
+    position: 'relative',
   },
 
   buttonProgress: {
     color: green[500],
-    position: "absolute",
-    top: "50%",
-    left: "50%",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
     marginTop: -12,
     marginLeft: -12,
   },
@@ -66,16 +65,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AnnouncementSchema = Yup.object().shape({
-  title: Yup.string().required("Obrigatório"),
-  text: Yup.string().required("Obrigatório"),
+  title: Yup.string().required('Obrigatório'),
+  text: Yup.string().required('Obrigatório'),
 });
 
 const AnnouncementModal = ({ open, onClose, announcementId, reload }) => {
   const classes = useStyles();
 
   const initialState = {
-    title: "",
-    text: "",
+    title: '',
+    text: '',
     priority: 3,
     status: true,
   };
@@ -120,22 +119,22 @@ const AnnouncementModal = ({ open, onClose, announcementId, reload }) => {
         await api.put(`/announcements/${announcementId}`, announcementData);
         if (attachment != null) {
           const formData = new FormData();
-          formData.append("file", attachment);
+          formData.append('file', attachment);
           await api.post(
             `/announcements/${announcementId}/media-upload`,
             formData
           );
         }
       } else {
-        const { data } = await api.post("/announcements", announcementData);
+        const { data } = await api.post('/announcements', announcementData);
         if (attachment != null) {
           const formData = new FormData();
-          formData.append("file", attachment);
+          formData.append('file', attachment);
           await api.post(`/announcements/${data.id}/media-upload`, formData);
         }
       }
-      toast.success(i18n.t("announcements.toasts.success"));
-      if (typeof reload == "function") {
+      toast.success(i18n.t('announcements.toasts.success'));
+      if (typeof reload == 'function') {
         reload();
       }
     } catch (err) {
@@ -156,8 +155,8 @@ const AnnouncementModal = ({ open, onClose, announcementId, reload }) => {
         ...prev,
         mediaPath: null,
       }));
-      toast.success(i18n.t("announcements.toasts.deleted"));
-      if (typeof reload == "function") {
+      toast.success(i18n.t('announcements.toasts.deleted'));
+      if (typeof reload == 'function') {
         reload();
       }
     }
@@ -166,29 +165,29 @@ const AnnouncementModal = ({ open, onClose, announcementId, reload }) => {
   return (
     <div className={classes.root}>
       <ConfirmationModal
-        title={i18n.t("announcements.confirmationModal.deleteTitle")}
+        title={i18n.t('announcements.confirmationModal.deleteTitle')}
         open={confirmationOpen}
         onClose={() => setConfirmationOpen(false)}
         onConfirm={deleteMedia}
       >
-        {i18n.t("announcements.confirmationModal.deleteMessage")}
+        {i18n.t('announcements.confirmationModal.deleteMessage')}
       </ConfirmationModal>
       <Dialog
         open={open}
         onClose={handleClose}
-        maxWidth="xs"
+        maxWidth='xs'
         fullWidth
-        scroll="paper"
+        scroll='paper'
       >
-        <DialogTitle id="form-dialog-title">
+        <DialogTitle id='form-dialog-title'>
           {announcementId
-            ? `${i18n.t("announcements.dialog.edit")}`
-            : `${i18n.t("announcements.dialog.add")}`}
+            ? `${i18n.t('announcements.dialog.edit')}`
+            : `${i18n.t('announcements.dialog.add')}`}
         </DialogTitle>
-        <div style={{ display: "none" }}>
+        <div style={{ display: 'none' }}>
           <input
-            type="file"
-            accept=".png,.jpg,.jpeg"
+            type='file'
+            accept='.png,.jpg,.jpeg'
             ref={attachmentFile}
             onChange={(e) => handleAttachmentFile(e)}
           />
@@ -211,41 +210,41 @@ const AnnouncementModal = ({ open, onClose, announcementId, reload }) => {
                   <Grid xs={12} item>
                     <Field
                       as={TextField}
-                      label={i18n.t("announcements.dialog.form.title")}
-                      name="title"
+                      label={i18n.t('announcements.dialog.form.title')}
+                      name='title'
                       error={touched.title && Boolean(errors.title)}
                       helperText={touched.title && errors.title}
-                      variant="outlined"
-                      margin="dense"
+                      variant='outlined'
+                      margin='dense'
                       fullWidth
                     />
                   </Grid>
                   <Grid xs={12} item>
                     <Field
                       as={TextField}
-                      label={i18n.t("announcements.dialog.form.text")}
-                      name="text"
+                      label={i18n.t('announcements.dialog.form.text')}
+                      name='text'
                       error={touched.text && Boolean(errors.text)}
                       helperText={touched.text && errors.text}
-                      variant="outlined"
-                      margin="dense"
+                      variant='outlined'
+                      margin='dense'
                       multiline={true}
                       rows={7}
                       fullWidth
                     />
                   </Grid>
                   <Grid xs={12} item>
-                    <FormControl variant="outlined" margin="dense" fullWidth>
-                      <InputLabel id="status-selection-label">
-                        {i18n.t("announcements.dialog.form.status")}
+                    <FormControl variant='outlined' margin='dense' fullWidth>
+                      <InputLabel id='status-selection-label'>
+                        {i18n.t('announcements.dialog.form.status')}
                       </InputLabel>
                       <Field
                         as={Select}
-                        label={i18n.t("announcements.dialog.form.status")}
-                        placeholder={i18n.t("announcements.dialog.form.status")}
-                        labelId="status-selection-label"
-                        id="status"
-                        name="status"
+                        label={i18n.t('announcements.dialog.form.status')}
+                        placeholder={i18n.t('announcements.dialog.form.status')}
+                        labelId='status-selection-label'
+                        id='status'
+                        name='status'
                         error={touched.status && Boolean(errors.status)}
                       >
                         <MenuItem value={true}>Ativo</MenuItem>
@@ -254,19 +253,19 @@ const AnnouncementModal = ({ open, onClose, announcementId, reload }) => {
                     </FormControl>
                   </Grid>
                   <Grid xs={12} item>
-                    <FormControl variant="outlined" margin="dense" fullWidth>
-                      <InputLabel id="priority-selection-label">
-                        {i18n.t("announcements.dialog.form.priority")}
+                    <FormControl variant='outlined' margin='dense' fullWidth>
+                      <InputLabel id='priority-selection-label'>
+                        {i18n.t('announcements.dialog.form.priority')}
                       </InputLabel>
                       <Field
                         as={Select}
-                        label={i18n.t("announcements.dialog.form.priority")}
+                        label={i18n.t('announcements.dialog.form.priority')}
                         placeholder={i18n.t(
-                          "announcements.dialog.form.priority"
+                          'announcements.dialog.form.priority'
                         )}
-                        labelId="priority-selection-label"
-                        id="priority"
-                        name="priority"
+                        labelId='priority-selection-label'
+                        id='priority'
+                        name='priority'
                         error={touched.priority && Boolean(errors.priority)}
                       >
                         <MenuItem value={1}>Alta</MenuItem>
@@ -277,14 +276,14 @@ const AnnouncementModal = ({ open, onClose, announcementId, reload }) => {
                   </Grid>
                   {(announcement.mediaPath || attachment) && (
                     <Grid xs={12} item>
-                      <Button startIcon={<AttachFileIcon />}>
+                      <Button startIcon={<Paperclip />}>
                         {attachment ? attachment.name : announcement.mediaName}
                       </Button>
                       <IconButton
                         onClick={() => setConfirmationOpen(true)}
-                        color="secondary"
+                        color='secondary'
                       >
-                        <DeleteOutlineIcon />
+                        <Trash2 />
                       </IconButton>
                     </Grid>
                   )}
@@ -293,32 +292,32 @@ const AnnouncementModal = ({ open, onClose, announcementId, reload }) => {
               <DialogActions>
                 {!attachment && !announcement.mediaPath && (
                   <Button
-                    color="primary"
+                    color='primary'
                     onClick={() => attachmentFile.current.click()}
                     disabled={isSubmitting}
-                    variant="outlined"
+                    variant='outlined'
                   >
-                    {i18n.t("announcements.dialog.buttons.attach")}
+                    {i18n.t('announcements.dialog.buttons.attach')}
                   </Button>
                 )}
                 <Button
                   onClick={handleClose}
-                  color="secondary"
+                  color='secondary'
                   disabled={isSubmitting}
-                  variant="outlined"
+                  variant='contained'
                 >
-                  {i18n.t("announcements.dialog.buttons.cancel")}
+                  {i18n.t('announcements.dialog.buttons.cancel')}
                 </Button>
                 <Button
-                  type="submit"
-                  color="primary"
+                  type='submit'
+                  color='primary'
                   disabled={isSubmitting}
-                  variant="contained"
+                  variant='contained'
                   className={classes.btnWrapper}
                 >
                   {announcementId
-                    ? `${i18n.t("announcements.dialog.buttons.add")}`
-                    : `${i18n.t("announcements.dialog.buttons.edit")}`}
+                    ? `${i18n.t('announcements.dialog.buttons.add')}`
+                    : `${i18n.t('announcements.dialog.buttons.edit')}`}
                   {isSubmitting && (
                     <CircularProgress
                       size={24}

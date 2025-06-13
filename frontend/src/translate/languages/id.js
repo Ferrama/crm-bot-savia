@@ -20,6 +20,7 @@ const messages = {
         connection: 'Koneksi',
         queue: 'Antrian',
         contact: 'Kontak',
+        remove: 'Hapus',
       },
       signup: {
         title: 'Daftar',
@@ -128,6 +129,57 @@ const messages = {
       },
       internalChat: {
         title: 'Obrolan Internal',
+        new: 'Baru',
+        edit: 'Edit',
+        delete: 'Hapus',
+        close: 'Tutup',
+        save: 'Simpan',
+        chat: 'Obrolan',
+        titlePlaceholder: 'Judul',
+        confirmDelete: 'Apakah Anda yakin ingin menghapus obrolan ini?',
+        confirmDeleteMessage: 'Tindakan ini tidak dapat dibatalkan.',
+        noChats: 'Tidak ada obrolan ditemukan',
+        noMessages: 'Tidak ada pesan ditemukan',
+        typeMessage: 'Ketik pesan',
+        messages: 'Pesan',
+        chats: 'Obrolan',
+        spyChat: 'Mata-matai Percakapan',
+        closeChat: 'Tutup Obrolan',
+        acceptChat: 'Terima Obrolan',
+        chatbot: 'Chatbot',
+        queue: 'Antrian',
+        noQueue: 'Tidak ada antrian',
+        assignedTo: 'Ditugaskan ke',
+        lastMessage: 'Pesan terakhir',
+        newMessage: 'Pesan baru',
+        unreadMessages: 'Pesan belum dibaca',
+        closed: 'DITUTUP',
+        pending: 'MENUNGGU',
+        open: 'TERBUKA',
+        conversation: 'Percakapan',
+        location: 'Lokasi',
+        clickToViewLocation: 'Klik untuk melihat lokasi',
+        download: 'Unduh',
+        noRecords: 'Tidak ada catatan',
+        dialog: {
+          title: 'Percakapan',
+          titleLabel: 'Judul',
+          titlePlaceholder: 'Judul',
+          close: 'Tutup',
+          save: 'Simpan',
+          fillTitle: 'Silakan isi judul percakapan.',
+          selectUser: 'Silakan pilih setidaknya satu pengguna.',
+        },
+        tabs: {
+          chats: 'Obrolan',
+          messages: 'Pesan',
+        },
+        presence: {
+          composing: 'Mengetik...',
+          recording: 'Merekam...',
+          available: 'Tersedia',
+          unavailable: 'Tidak tersedia',
+        },
       },
       whatsappModal: {
         title: {
@@ -277,6 +329,7 @@ const messages = {
           sendAt: 'Kirim pada',
           saveMessage: 'Simpan sebagai template',
           contactPlaceholder: 'Kontak',
+          whatsappPlaceholder: 'WhatsApp',
         },
         buttons: {
           cancel: 'Batal',
@@ -402,6 +455,11 @@ const messages = {
           management: 'Management',
           kanban: 'Kanban',
           leads: 'Lead',
+          todoList: 'Daftar Tugas',
+          savia: 'Savia',
+          listing: 'Daftar',
+          contactLists: 'Daftar Kontak',
+          configurations: 'Konfigurasi',
         },
         appBar: {
           i18n: {
@@ -678,6 +736,19 @@ const messages = {
       },
       campaignsConfig: {
         title: 'Konfigurasi Kampanye',
+        intervals: 'Interval',
+        messageInterval: 'Interval pesan',
+        longerIntervalAfter: 'Interval lebih lama setelah',
+        greaterInterval: 'Interval lebih besar',
+        noInterval: 'Tidak ada interval',
+        notDefined: 'Tidak didefinisikan',
+        seconds: 'detik',
+        messages: 'pesan',
+        addVariable: 'Tambah Variabel',
+        saveSettings: 'Simpan Pengaturan',
+        shortcode: 'Kode',
+        content: 'Konten',
+        variables: 'Variabel',
       },
       queues: {
         title: 'Antrian & Chatbot',
@@ -795,16 +866,19 @@ const messages = {
       settings: {
         group: {
           general: 'Umum',
-          timeouts: 'Waktu habis',
+          timeouts: 'Batas waktu',
           officeHours: 'Jam kantor',
           groups: 'Grup',
           confidenciality: 'Kerahasiaan',
           api: 'API',
-          serveradmin: 'Administrasi Server',
+          externalServices: 'Layanan eksternal',
+          serveradmin: 'Administrasi server',
         },
         success: 'Pengaturan berhasil disimpan.',
         copiedToClipboard: 'Disalin ke clipboard',
         title: 'Pengaturan',
+        chatbotTicketTimeout: 'Timeout chatbot (menit)',
+        chatbotTicketTimeoutAction: 'Aksi timeout chatbot',
         settings: {
           userCreation: {
             name: 'Pembuatan pengguna',
@@ -815,7 +889,7 @@ const messages = {
           },
         },
         validations: {
-          title: 'validasi',
+          title: 'Penilaian',
           options: {
             enabled: 'Diaktifkan',
             disabled: 'Dinonaktifkan',
@@ -825,8 +899,15 @@ const messages = {
           title: 'Manajemen kantor',
           options: {
             disabled: 'Dinonaktifkan',
-            ManagementByDepartment: 'Manajemen berdasarkan departemen',
-            ManagementByCompany: 'Manajemen oleh perusahaan',
+            ManagementByDepartment: 'Manajemen per antrian',
+            ManagementByCompany: 'Manajemen per perusahaan',
+          },
+        },
+        outOfHoursAction: {
+          title: 'Aksi di luar jam kerja',
+          options: {
+            pending: 'Biarkan sebagai tertunda',
+            closed: 'Tutup tiket',
           },
         },
         IgnoreGroupMessages: {
@@ -837,14 +918,14 @@ const messages = {
           },
         },
         soundGroupNotifications: {
-          title: 'Notifikasi grup suara',
+          title: 'Notifikasi suara grup',
           options: {
             enabled: 'Diaktifkan',
             disabled: 'Dinonaktifkan',
           },
         },
         groupsTab: {
-          title: 'Tab grup',
+          title: 'Tab Grup',
           options: {
             enabled: 'Diaktifkan',
             disabled: 'Dinonaktifkan',
@@ -853,19 +934,19 @@ const messages = {
         VoiceAndVideoCalls: {
           title: 'Panggilan suara dan video',
           options: {
-            enabled: 'Abaikan.',
-            disabled: 'laporan ketidaktersediaan',
+            enabled: 'Abaikan',
+            disabled: 'Informasikan ketidaktersediaan',
           },
         },
         AutomaticChatbotOutput: {
-          title: 'Output chatbot otomatis',
+          title: 'Keluar chatbot otomatis',
           options: {
             enabled: 'Diaktifkan',
             disabled: 'Dinonaktifkan',
           },
         },
         ShowNumericEmoticons: {
-          title: 'Menampilkan emoji numerik dalam antrean',
+          title: 'Tampilkan emotikon numerik di antrian',
           options: {
             enabled: 'Diaktifkan',
             disabled: 'Dinonaktifkan',
@@ -874,8 +955,8 @@ const messages = {
         QuickMessages: {
           title: 'Pesan cepat',
           options: {
-            enabled: 'Berdasarkan perusahaan',
-            disabled: 'Oleh Pengguna',
+            enabled: 'Per perusahaan',
+            disabled: 'Per pengguna',
           },
         },
         AllowRegistration: {
@@ -885,44 +966,47 @@ const messages = {
             disabled: 'Dinonaktifkan',
           },
         },
+        FileUploadLimit: {
+          title: 'Batas unggah file (MB)',
+        },
         FileDownloadLimit: {
-          title: 'Batas unduhan file (MB)',
+          title: 'Batas unduh file (MB)',
         },
         messageVisibility: {
-          title: 'Visibilitas Pesan',
+          title: 'Visibilitas pesan',
           options: {
-            respectMessageQueue: 'Hormati Antrian Pesan',
-            respectTicketQueue: 'Hormati Antrian Tiket',
+            respectMessageQueue: 'Hormati antrian pesan',
+            respectTicketQueue: 'Hormati antrian tiket',
           },
         },
         keepQueueAndUser: {
-          title_id: 'Simpan antrian dan pengguna pada tiket tertutup',
+          title: 'Pertahankan antrian dan pengguna di tiket tertutup',
           options: {
             enabled: 'Diaktifkan',
             disabled: 'Dinonaktifkan',
           },
         },
         GracePeriod: {
-          title: 'Periode penundaan langganan berakhir (hari)',
+          title: 'Masa tenggang setelah kedaluwarsa (hari)',
         },
         ticketAcceptedMessage: {
-          title: 'Pesan Tiket Diterima',
-          placeholder: 'Masukkan pesan tiket diterima di sini',
+          title: 'Pesan tiket diterima',
+          placeholder: 'Masukkan pesan tiket diterima Anda di sini',
         },
         transferMessage: {
-          title: 'Pesan Transfer',
-          placeholder: 'Masukkan pesan transfer di sini',
+          title: 'Pesan transfer',
+          placeholder: 'Masukkan pesan transfer Anda di sini',
         },
         mustacheVariables: {
           title: 'Variabel yang tersedia:',
         },
         WelcomeGreeting: {
-          greetings: 'halo',
-          welcome: 'selamat datang di',
-          expirationTime: 'Aktif sampai',
+          greetings: 'Halo',
+          welcome: 'Selamat datang di',
+          expirationTime: 'Aktif hingga',
         },
         Options: {
-          title: 'Pilihan',
+          title: 'Opsi',
         },
         Companies: {
           title: 'Perusahaan',
@@ -931,7 +1015,7 @@ const messages = {
           title: 'Jadwal',
         },
         Plans: {
-          title: 'Rencana',
+          title: 'Paket',
         },
         Help: {
           title: 'Bantuan',
@@ -940,8 +1024,64 @@ const messages = {
           title: 'Whitelabel',
         },
         PaymentGateways: {
-          title: 'Payment Gateways',
+          title: 'Gateway pembayaran',
         },
+        AIProvider: {
+          title: 'Layanan AI',
+        },
+        AudioTranscriptions: {
+          title: 'Transkripsi audio',
+        },
+        TagsMode: {
+          title: 'Mode tag',
+          options: {
+            ticket: 'Tiket',
+            contact: 'Kontak',
+            both: 'Tiket dan Kontak',
+          },
+        },
+        schedulesUpdated: 'Jadwal berhasil diperbarui.',
+        operationUpdated: 'Operasi berhasil diperbarui.',
+        paymentGateway: 'Gateway pembayaran',
+        none: 'Tidak ada',
+        owenPayments: 'Owen Payments 💎',
+        efi: 'Efí',
+        apiToken: 'Token API',
+        aiKey: 'Kunci AI',
+        defaultAppName: 'Ticketz',
+        // Timeout settings
+        ratingsTimeout: 'Timeout penilaian (menit)',
+        noQueueTimeout: 'Timeout tanpa antrian (menit)',
+        noQueueTimeoutAction: 'Aksi timeout tanpa antrian',
+        openTicketTimeout: 'Timeout tiket terbuka (menit)',
+        openTicketTimeoutAction: 'Aksi timeout tiket terbuka',
+        autoReopenTimeout: 'Timeout buka ulang otomatis (menit)',
+        // Actions
+        returnToQueue: 'Kembali ke antrian',
+        // Office hours
+        officeHours: 'Jam kantor',
+        officeManagement: 'Manajemen kantor',
+        managementByQueue: 'Manajemen per antrian',
+        managementByCompany: 'Manajemen per perusahaan',
+        // Groups
+        groups: 'Grup',
+        ignoreGroupMessages: 'Abaikan pesan grup',
+        groupSoundNotifications: 'Notifikasi suara grup',
+        groupsTab: 'Tab Grup',
+        // Confidentiality
+        confidentiality: 'Kerahasiaan',
+        messageVisibility: 'Visibilitas pesan',
+        respectMessageQueue: 'Hormati antrian pesan',
+        respectTicketQueue: 'Hormati antrian tiket',
+        keepQueueAndUser: 'Pertahankan antrian dan pengguna',
+        // API
+        api: 'API',
+        // Out of hours
+        outOfHoursAction: 'Aksi di luar jam kerja',
+        leaveAsPending: 'Biarkan sebagai tertunda',
+        // Enabled/Disabled
+        enabled: 'Diaktifkan',
+        disabled: 'Dinonaktifkan',
       },
       messagesList: {
         header: {
@@ -1108,13 +1248,52 @@ const messages = {
           international: 'Donasi dalam USD',
         },
       },
+      interactions: {
+        toasts: {
+          created: 'Interaksi berhasil dibuat',
+        },
+        buttons: {
+          add: 'Tambah Interaksi',
+        },
+        types: {
+          note: 'Catatan',
+          email: 'E-mail',
+          message: 'Pesan',
+          file: 'File',
+        },
+        categories: {
+          internal_note: 'Catatan Internal',
+          customer_communication: 'Komunikasi Pelanggan',
+          system: 'Sistem',
+        },
+        dialog: {
+          add: 'Tambah Interaksi',
+        },
+        form: {
+          type: 'Jenis',
+          category: 'Kategori',
+          notes: 'Catatan',
+        },
+      },
       leads: {
         title: 'Prospek',
         searchPlaceholder: 'Cari prospek',
+        notFound: 'Prospek tidak ditemukan',
         buttons: {
           add: 'Prospek Baru',
           save: 'Simpan',
           cancel: 'Batal',
+        },
+        views: {
+          board: 'Papan',
+          list: 'Daftar',
+        },
+        tabs: {
+          basic: 'Dasar',
+          contact: 'Kontak',
+          financial: 'Keuangan',
+          tags: 'Tag',
+          notes: 'Catatan',
         },
         modal: {
           add: {
@@ -1136,42 +1315,145 @@ const messages = {
             selectUser: 'Pilih pengguna',
           },
         },
-        table: {
+        dialog: {
+          new: 'Prospek Baru',
+          edit: 'Edit Prospek',
+          addTag: 'Tambah Tag',
+        },
+        form: {
           name: 'Nama',
-          contact: 'Kontak',
-          stage: 'Tahap',
+          title: 'Judul',
+          titleHelper: 'Deskripsi singkat prospek',
+          description: 'Deskripsi',
           temperature: 'Temperatur',
+          status: 'Status',
+          pipeline: 'Pipeline',
+          contact: 'Kontak',
+          column: 'Kolom',
+          assignedTo: 'Ditugaskan ke',
+          unassigned: 'Tidak ditugaskan',
           source: 'Sumber',
           expectedValue: 'Nilai yang Diharapkan',
-          probability: 'Probabilitas',
-          expectedClosingDate: 'Tanggal Penutupan',
+          currency: 'Mata Uang',
+          probability: 'Probabilitas (%)',
+          probabilityHelper: 'Probabilitas menutup kesepakatan (0-100%)',
+          expectedClosingDate: 'Tanggal Penutupan yang Diharapkan',
+          tags: 'Tag',
+          addTag: 'Tambah Tag',
+          tag: 'Tag',
+          customFields: 'Bidang Kustom',
+          customFieldName: 'Masukkan nama bidang kustom',
+          addCustomField: 'Tambah Bidang Kustom',
+          notes: 'Catatan',
+        },
+        table: {
+          lead: 'Prospek',
+          contact: 'Kontak',
+          status: 'Status',
+          pipeline: 'Pipeline',
+          column: 'Kolom',
+          temperature: 'Temperatur',
+          tags: 'Tag',
+          financial: 'Keuangan',
           assignedTo: 'Ditugaskan ke',
           actions: 'Tindakan',
+          unassigned: 'Tidak ditugaskan',
         },
-        stages: {
+        sections: {
+          contact: 'Informasi Kontak',
+          financial: 'Informasi Keuangan',
+          tags: 'Tag',
+          customFields: 'Bidang Kustom',
+          notes: 'Catatan',
+        },
+        fields: {
+          contact: 'Kontak',
+          phone: 'Telepon',
+          email: 'E-mail',
+          source: 'Sumber',
+          assignedTo: 'Ditugaskan ke',
+          expectedValue: 'Nilai yang Diharapkan',
+          probability: 'Probabilitas',
+          expectedClosingDate: 'Tanggal Penutupan yang Diharapkan',
+        },
+        status: {
           new: 'Baru',
           contacted: 'Dihubungi',
-          qualified: 'Terkualifikasi',
+          follow_up: 'Tindak Lanjut',
           proposal: 'Proposal',
           negotiation: 'Negosiasi',
-          closed_won: 'Menang',
-          closed_lost: 'Kalah',
+          qualified: 'Terkualifikasi',
+          unqualified: 'Tidak Terkualifikasi',
+          converted: 'Dikonversi',
+          lost: 'Kalah',
+          closed_won: 'Ditutup Menang',
+          closed_lost: 'Ditutup Kalah',
         },
-        temperatures: {
+        pipeline: {
+          default: 'Default',
+          sales: 'Penjualan',
+          support: 'Dukungan',
+          onboarding: 'Onboarding',
+        },
+        temperature: {
           hot: 'Panas',
           warm: 'Hangat',
           cold: 'Dingin',
         },
+        timeline: {
+          title: 'Timeline',
+          empty: 'Tidak ada interaksi ditemukan',
+        },
         toasts: {
           created: 'Prospek berhasil dibuat',
           updated: 'Prospek berhasil diperbarui',
+          deleted: 'Prospek berhasil dihapus',
           contactRequired: 'Kontak diperlukan',
+          tagAdded: 'Tag berhasil ditambahkan',
+          tagRemoved: 'Tag berhasil dihapus',
+        },
+        validation: {
+          name: {
+            required: 'Nama diperlukan',
+          },
+          title: {
+            max: 'Judul harus maksimal 255 karakter',
+          },
+          contact: {
+            required: 'Kontak diperlukan',
+          },
+          column: {
+            required: 'Kolom diperlukan',
+          },
+          temperature: {
+            required: 'Temperatur diperlukan',
+          },
+          status: {
+            required: 'Status diperlukan',
+          },
+          pipeline: {
+            required: 'Pipeline diperlukan',
+          },
+          source: {
+            required: 'Sumber diperlukan',
+          },
+          currency: {
+            required: 'Mata uang diperlukan',
+          },
+          probability: {
+            min: 'Probabilitas harus minimal 0',
+            max: 'Probabilitas harus maksimal 100',
+          },
         },
         leadColumns: {
           buttons: {
             add: 'Kolom Baru',
             save: 'Simpan',
             cancel: 'Batal',
+          },
+          dialog: {
+            new: 'Kolom Baru',
+            edit: 'Edit Kolom',
           },
           modal: {
             add: {
@@ -1194,6 +1476,11 @@ const messages = {
       },
       spyChat: 'Mata-matai Percakapan',
       closeChat: 'Tutup Obrolan',
+      ticketMessagesDialog: {
+        buttons: {
+          close: 'Tutup',
+        },
+      },
     },
   },
 };

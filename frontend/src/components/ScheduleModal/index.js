@@ -349,7 +349,7 @@ const ScheduleModal = ({
                   onClick={handleClose}
                   color='secondary'
                   disabled={isSubmitting}
-                  variant='outlined'
+                  variant='contained'
                 >
                   {i18n.t('scheduleModal.buttons.cancel')}
                 </Button>

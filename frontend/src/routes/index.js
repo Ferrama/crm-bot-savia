@@ -21,7 +21,6 @@ import TicketResponsiveContainer from '../pages/TicketResponsiveContainer';
 import Users from '../pages/Users';
 // import Companies from "../pages/Companies/";
 import { AuthProvider } from '../context/Auth/AuthContext';
-import { SaviaIframeProvider } from '../context/SaviaIframe/SaviaIframeContext';
 import { TicketsContextProvider } from '../context/Tickets/TicketsContext';
 import { WhatsAppsProvider } from '../context/WhatsApp/WhatsAppsContext';
 import Annoucements from '../pages/Annoucements';
@@ -30,7 +29,7 @@ import Campaigns from '../pages/Campaigns';
 import CampaignsConfig from '../pages/CampaignsConfig';
 import Chat from '../pages/Chat';
 import QuickMessages from '../pages/QuickMessages/';
-import SaviaIframe from '../pages/SaviaIframe';
+
 import Schedules from '../pages/Schedules';
 import Subscription from '../pages/Subscription/';
 import ToDoList from '../pages/ToDoList/';
@@ -50,136 +49,119 @@ const Routes = () => {
     <BrowserRouter>
       <AuthProvider>
         <TicketsContextProvider>
-          <SaviaIframeProvider>
-            <Switch>
-              <Route exact path='/login' component={Login} />
-              <Route exact path='/signup' component={Signup} />
-              {/* <Route exact path="/create-company" component={Companies} /> */}
-              <WhatsAppsProvider>
-                <LoggedInLayout>
-                  <Route exact path='/' component={Dashboard} isPrivate />
-                  <Route
-                    exact
-                    path='/tickets/:ticketId?'
-                    component={TicketResponsiveContainer}
-                    isPrivate
-                  />
-                  <Route
-                    exact
-                    path='/connections'
-                    component={Connections}
-                    isPrivate
-                  />
-                  <Route
-                    exact
-                    path='/quick-messages'
-                    component={QuickMessages}
-                    isPrivate
-                  />
-                  <Route
-                    exact
-                    path='/schedules'
-                    component={Schedules}
-                    isPrivate
-                  />
-                  <Route
-                    exact
-                    path='/todolist'
-                    component={ToDoList}
-                    isPrivate
-                  />
-                  <Route exact path='/tags' component={Tags} isPrivate />
-                  <Route
-                    exact
-                    path='/contacts'
-                    component={Contacts}
-                    isPrivate
-                  />
-                  <Route exact path='/leads' component={Leads} isPrivate />
-                  <Route exact path='/helps' component={Helps} isPrivate />
-                  <Route exact path='/users' component={Users} isPrivate />
-                  <Route
-                    exact
-                    path='/savia'
-                    component={SaviaIframe}
-                    isPrivate
-                  />
-                  <Route
-                    exact
-                    path='/messages-api'
-                    component={MessagesAPI}
-                    isPrivate
-                  />
-                  <Route
-                    exact
-                    path='/settings'
-                    component={SettingsCustom}
-                    isPrivate
-                  />
-                  <Route
-                    exact
-                    path='/financeiro'
-                    component={Financeiro}
-                    isPrivate
-                  />
-                  <Route exact path='/queues' component={Queues} isPrivate />
-                  <Route
-                    exact
-                    path='/announcements'
-                    component={Annoucements}
-                    isPrivate
-                  />
-                  <Route
-                    exact
-                    path='/subscription'
-                    component={Subscription}
-                    isPrivate
-                  />
+          <Switch>
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/signup' component={Signup} />
+            {/* <Route exact path="/create-company" component={Companies} /> */}
+            <WhatsAppsProvider>
+              <LoggedInLayout>
+                <Route exact path='/' component={Dashboard} isPrivate />
+                <Route
+                  exact
+                  path='/tickets/:ticketId?'
+                  component={TicketResponsiveContainer}
+                  isPrivate
+                />
+                <Route
+                  exact
+                  path='/connections'
+                  component={Connections}
+                  isPrivate
+                />
+                <Route
+                  exact
+                  path='/quick-messages'
+                  component={QuickMessages}
+                  isPrivate
+                />
+                <Route
+                  exact
+                  path='/schedules'
+                  component={Schedules}
+                  isPrivate
+                />
+                <Route exact path='/todolist' component={ToDoList} isPrivate />
+                <Route exact path='/tags' component={Tags} isPrivate />
+                <Route exact path='/contacts' component={Contacts} isPrivate />
+                <Route exact path='/leads' component={Leads} isPrivate />
+                <Route exact path='/helps' component={Helps} isPrivate />
+                <Route exact path='/users' component={Users} isPrivate />
+                {/* <Route exact path='/savia' component={SaviaIframe} isPrivate /> */}
+                <Route
+                  exact
+                  path='/messages-api'
+                  component={MessagesAPI}
+                  isPrivate
+                />
+                <Route
+                  exact
+                  path='/settings'
+                  component={SettingsCustom}
+                  isPrivate
+                />
+                <Route
+                  exact
+                  path='/financeiro'
+                  component={Financeiro}
+                  isPrivate
+                />
+                <Route exact path='/queues' component={Queues} isPrivate />
+                <Route
+                  exact
+                  path='/announcements'
+                  component={Annoucements}
+                  isPrivate
+                />
+                <Route
+                  exact
+                  path='/subscription'
+                  component={Subscription}
+                  isPrivate
+                />
 
-                  <Route exact path='/chats/:id?' component={Chat} isPrivate />
-                  {showCampaigns && (
-                    <>
-                      <Route
-                        exact
-                        path='/contact-lists'
-                        component={ContactLists}
-                        isPrivate
-                      />
-                      <Route
-                        exact
-                        path='/contact-lists/:contactListId/contacts'
-                        component={ContactListItems}
-                        isPrivate
-                      />
-                      <Route
-                        exact
-                        path='/campaigns'
-                        component={Campaigns}
-                        isPrivate
-                      />
-                      <Route
-                        exact
-                        path='/campaign/:campaignId/report'
-                        component={CampaignReport}
-                        isPrivate
-                      />
-                      <Route
-                        exact
-                        path='/campaigns-config'
-                        component={CampaignsConfig}
-                        isPrivate
-                      />
-                    </>
-                  )}
-                </LoggedInLayout>
-              </WhatsAppsProvider>
-            </Switch>
-            <ToastContainer
-              autoClose={3000}
-              hideProgressBar={true}
-              closeButton={false}
-            />
-          </SaviaIframeProvider>
+                <Route exact path='/chats/:id?' component={Chat} isPrivate />
+                {showCampaigns && (
+                  <>
+                    <Route
+                      exact
+                      path='/contact-lists'
+                      component={ContactLists}
+                      isPrivate
+                    />
+                    <Route
+                      exact
+                      path='/contact-lists/:contactListId/contacts'
+                      component={ContactListItems}
+                      isPrivate
+                    />
+                    <Route
+                      exact
+                      path='/campaigns'
+                      component={Campaigns}
+                      isPrivate
+                    />
+                    <Route
+                      exact
+                      path='/campaign/:campaignId/report'
+                      component={CampaignReport}
+                      isPrivate
+                    />
+                    <Route
+                      exact
+                      path='/campaigns-config'
+                      component={CampaignsConfig}
+                      isPrivate
+                    />
+                  </>
+                )}
+              </LoggedInLayout>
+            </WhatsAppsProvider>
+          </Switch>
+          <ToastContainer
+            autoClose={3000}
+            hideProgressBar={true}
+            closeButton={false}
+          />
         </TicketsContextProvider>
       </AuthProvider>
     </BrowserRouter>

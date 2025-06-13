@@ -1,17 +1,27 @@
 {
     "title": "Leads",
-    "search": "Buscar leads...",
+    "searchPlaceholder": "Buscar leads...",
+    "views": {
+        "board": "Quadro",
+        "list": "Lista"
+    },
     "table": {
+        "lead": "Lead",
         "name": "Nome",
         "contact": "Contato",
         "column": "Coluna",
         "stage": "Estágio",
+        "status": "Status",
+        "pipeline": "Pipeline",
         "temperature": "Temperatura",
         "source": "Origem",
+        "tags": "Tags",
+        "financial": "Financeiro",
         "expectedValue": "Valor Esperado",
         "probability": "Probabilidade",
         "expectedClosingDate": "Data Prevista de Fechamento",
         "assignedTo": "Atribuído a",
+        "unassigned": "Não atribuído",
         "actions": "Ações"
     },
     "buttons": {
@@ -21,47 +31,92 @@
         "save": "Salvar",
         "cancel": "Cancelar"
     },
-    "modal": {
-        "add": {
-            "title": "Adicionar Novo Lead"
-        },
-        "edit": {
-            "title": "Editar Lead"
-        },
-        "form": {
-            "name": "Nome",
-            "contact": "Contato",
-            "column": "Coluna",
-            "temperature": "Temperatura",
-            "source": "Origem",
-            "expectedValue": "Valor Esperado",
-            "currency": "Moeda",
-            "probability": "Probabilidade",
-            "expectedClosingDate": "Data Prevista de Fechamento",
-            "assignedTo": "Atribuído a",
-            "tags": "Tags",
-            "none": "Nenhum"
-        }
+    "dialog": {
+        "new": "Novo Lead",
+        "edit": "Editar Lead",
+        "readonly": "Visualizar Lead"
     },
-    "stages": {
+    "form": {
+        "name": "Nome",
+        "title": "Título",
+        "titleHelper": "Título opcional do lead",
+        "description": "Descrição",
+        "contact": "Contato",
+        "column": "Coluna",
+        "status": "Status",
+        "pipeline": "Pipeline",
+        "temperature": "Temperatura",
+        "source": "Origem",
+        "expectedValue": "Valor Esperado",
+        "currency": "Moeda",
+        "probability": "Probabilidade",
+        "probabilityHelper": "Probabilidade de fechamento (0-100%)",
+        "expectedClosingDate": "Data Prevista de Fechamento",
+        "assignedTo": "Atribuído a",
+        "unassigned": "Não atribuído",
+        "tags": "Tags",
+        "addTag": "Adicionar Tag",
+        "customFields": "Campos Personalizados",
+        "addCustomField": "Adicionar Campo Personalizado",
+        "customFieldName": "Nome do campo personalizado",
+        "notes": "Notas",
+        "none": "Nenhum"
+    },
+    "tabs": {
+        "basic": "Informações Básicas",
+        "contact": "Contato",
+        "financial": "Financeiro",
+        "tags": "Tags e Campos",
+        "notes": "Notas"
+    },
+    "status": {
         "new": "Novo",
         "contacted": "Contatado",
-        "qualified": "Qualificado",
+        "follow_up": "Follow-up",
         "proposal": "Proposta",
         "negotiation": "Negociação",
+        "qualified": "Qualificado",
+        "unqualified": "Não Qualificado",
+        "converted": "Convertido",
+        "lost": "Perdido",
         "closed_won": "Fechado (Ganho)",
         "closed_lost": "Fechado (Perdido)"
     },
-    "temperatures": {
+    "pipeline": {
+        "default": "Padrão",
+        "sales": "Vendas",
+        "support": "Suporte",
+        "onboarding": "Onboarding"
+    },
+    "temperature": {
         "hot": "Quente",
         "warm": "Morno",
         "cold": "Frio"
+    },
+    "sections": {
+        "contact": "Informações de Contato",
+        "financial": "Informações Financeiras",
+        "tags": "Tags",
+        "customFields": "Campos Personalizados",
+        "notes": "Notas"
+    },
+    "fields": {
+        "contact": "Contato",
+        "phone": "Telefone",
+        "email": "E-mail",
+        "source": "Origem",
+        "assignedTo": "Atribuído a",
+        "expectedValue": "Valor Esperado",
+        "probability": "Probabilidade",
+        "expectedClosingDate": "Data Prevista de Fechamento"
     },
     "toasts": {
         "created": "Lead criado com sucesso!",
         "updated": "Lead atualizado com sucesso!",
         "deleted": "Lead excluído com sucesso!",
-        "contactRequired": "Por favor, selecione um contato"
+        "contactRequired": "Por favor, selecione um contato",
+        "tagAdded": "Tag adicionada com sucesso!",
+        "tagRemoved": "Tag removida com sucesso!"
     },
     "delete": {
         "title": "Excluir Lead",
@@ -71,11 +126,20 @@
         "name": {
             "required": "Nome é obrigatório"
         },
+        "title": {
+            "max": "Título deve ter no máximo 255 caracteres"
+        },
         "contact": {
             "required": "Contato é obrigatório"
         },
         "column": {
             "required": "Coluna é obrigatória"
+        },
+        "status": {
+            "required": "Status é obrigatório"
+        },
+        "pipeline": {
+            "required": "Pipeline é obrigatório"
         },
         "temperature": {
             "required": "Temperatura é obrigatória"
@@ -90,5 +154,10 @@
             "min": "Probabilidade deve ser no mínimo 0",
             "max": "Probabilidade deve ser no máximo 100"
         }
-    }
+    },
+    "timeline": {
+        "title": "Linha do Tempo",
+        "empty": "Nenhuma atividade registrada ainda"
+    },
+    "notFound": "Lead não encontrado"
 }

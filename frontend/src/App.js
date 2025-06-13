@@ -171,7 +171,7 @@ const App = () => {
             borderPrimary:
               mode === 'light' ? primaryColorLight : primaryColorDark,
             background: {
-              default: mode === 'light' ? '#fafafa' : '#1a1d21',
+              default: mode === 'light' ? '#fafafa' : '#2e353b',
               paper: mode === 'light' ? '#fff' : '#2e353b',
             },
             backgroundContrast: {
@@ -191,12 +191,12 @@ const App = () => {
             inputdigita: mode === 'light' ? '#fff' : '#2e353b',
             contactdrawer: mode === 'light' ? '#fff' : '#2e353b',
             announcements: mode === 'light' ? '#ededed' : '#2e353b',
-            login: mode === 'light' ? '#fff' : '#1a1d21',
+            login: mode === 'light' ? '#fff' : '#2e353b',
             announcementspopover: mode === 'light' ? '#fff' : '#3a4249',
             chatlist: mode === 'light' ? '#eee' : '#3a4249',
             boxlist: mode === 'light' ? '#ededed' : '#3a4249',
             boxchatlist: mode === 'light' ? '#ededed' : '#2e353b',
-            total: mode === 'light' ? '#fff' : '#1a1d21',
+            total: mode === 'light' ? '#fff' : '#2e353b',
             messageIcons: mode === 'light' ? 'grey' : '#F3F3F3',
             inputBackground: mode === 'light' ? '#FFFFFF' : '#2e353b',
             barraSuperior: mode === 'light' ? primaryColorLight : '#3a4249',
@@ -1133,7 +1133,7 @@ const App = () => {
                 '& .MuiSwitch-thumb': {
                   width: 14,
                   height: 14,
-                  margin: 4.2,
+                  margin: 5,
                   boxShadow: '0 1px 2px 0 rgba(0,0,0,0.2)',
                 },
                 '& .MuiSwitch-track': {

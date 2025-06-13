@@ -23,6 +23,7 @@ import { SocketContext } from '../../context/Socket/SocketContext';
 import toastError from '../../errors/toastError';
 import { useDate } from '../../hooks/useDate';
 import api from '../../services/api';
+import { i18n } from '../../translate/i18n';
 
 import useSound from 'use-sound';
 import notifySound from '../../assets/chat_notify.mp3';
@@ -280,7 +281,7 @@ export default function ChatPopover() {
                 </ListItem>
               ))}
             {isArray(chats) && chats.length === 0 && (
-              <ListItemText primary='Nenhum registro' />
+              <ListItemText primary={i18n.t('internalChat.noRecords')} />
             )}
           </List>
         </Paper>

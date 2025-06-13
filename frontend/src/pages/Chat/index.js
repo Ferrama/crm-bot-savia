@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory, useParams } from 'react-router-dom';
 
 import {
   Button,
@@ -14,52 +14,50 @@ import {
   Tab,
   Tabs,
   TextField,
-} from "@material-ui/core";
-import ChatList from "./ChatList";
-import ChatMessages from "./ChatMessages";
-import { UsersFilter } from "../../components/UsersFilter";
-import api from "../../services/api";
-import { SocketContext } from "../../context/Socket/SocketContext";
+} from '@material-ui/core';
+import { UsersFilter } from '../../components/UsersFilter';
+import { SocketContext } from '../../context/Socket/SocketContext';
+import api from '../../services/api';
+import ChatList from './ChatList';
+import ChatMessages from './ChatMessages';
 
-import { has, isObject } from "lodash";
+import { has, isObject } from 'lodash';
 
-import { AuthContext } from "../../context/Auth/AuthContext";
-import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-import whatsBackground from "../../assets/wa-background.png"
-import whatsBackgroundDark from "../../assets/wa-background-dark.png";
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import { AuthContext } from '../../context/Auth/AuthContext';
 
-import { i18n } from "../../translate/i18n";
-import Title from "../../components/Title";
+import Title from '../../components/Title';
+import { i18n } from '../../translate/i18n';
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
     flex: 1,
     padding: theme.spacing(2),
     height: `calc(100% - 48px)`,
-    overflowY: "hidden",
-    border: "1px solid rgba(0, 0, 0, 0.12)",
-   // backgroundImage: theme.mode === 'light' ? `url(${whatsBackground})` : `url(${whatsBackgroundDark})`,
-		backgroundPosition: 'center', 
-		backgroundSize: 'cover', 
-		backgroundRepeat: 'no-repeat', 
+    overflowY: 'hidden',
+    border: '1px solid rgba(0, 0, 0, 0.12)',
+    // backgroundImage: theme.mode === 'light' ? `url(${whatsBackground})` : `url(${whatsBackgroundDark})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
   },
   gridContainer: {
     flex: 1,
-    height: "100%",
-    border: "1px solid rgba(0, 0, 0, 0.12)",
-    backgroundColor: "inherit",
+    height: '100%',
+    border: '1px solid rgba(0, 0, 0, 0.12)',
+    backgroundColor: 'inherit',
   },
   gridItem: {
-    height: "100%",
+    height: '100%',
   },
   gridItemTab: {
-    height: "92%",
-    width: "100%",
+    height: '92%',
+    width: '100%',
   },
   btnContainer: {
-    textAlign: "right",
+    textAlign: 'right',
     padding: 10,
   },
 }));
@@ -73,12 +71,12 @@ export function ChatModal({
   user,
 }) {
   const [users, setUsers] = useState([]);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
 
   useEffect(() => {
-    setTitle("");
+    setTitle('');
     setUsers([]);
-    if (type === "edit" && chat?.users) {
+    if (type === 'edit' && chat?.users) {
       const userList = chat.users.map((u) => ({
         id: u.user.id,
         name: u.user.name,
@@ -91,22 +89,22 @@ export function ChatModal({
   const handleSave = async () => {
     try {
       if (!title) {
-        alert("Por favor, preencha o título da conversa.");
+        alert(i18n.t('internalChat.dialog.fillTitle'));
         return;
       }
 
       if (!users || users.length === 0) {
-        alert("Por favor, selecione pelo menos um usuário.");
+        alert(i18n.t('internalChat.dialog.selectUser'));
         return;
       }
 
-      if (type === "edit") {
+      if (type === 'edit') {
         await api.put(`/chats/${chat.id}`, {
           users,
           title,
         });
       } else {
-        const { data } = await api.post("/chats", {
+        const { data } = await api.post('/chats', {
           users,
           title,
         });
@@ -114,26 +112,28 @@ export function ChatModal({
       }
       handleClose();
     } catch (err) {}
-  };  
+  };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      aria-labelledby='alert-dialog-title'
+      aria-describedby='alert-dialog-description'
     >
-      <DialogTitle id="alert-dialog-title">Conversa</DialogTitle>
+      <DialogTitle id='alert-dialog-title'>
+        {i18n.t('internalChat.dialog.title')}
+      </DialogTitle>
       <DialogContent>
         <Grid spacing={2} container>
           <Grid xs={12} style={{ padding: 18 }} item>
             <TextField
-              label="Título"
-              placeholder="Título"
+              label={i18n.t('internalChat.dialog.titleLabel')}
+              placeholder={i18n.t('internalChat.dialog.titlePlaceholder')}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              variant="outlined"
-              size="small"
+              variant='outlined'
+              size='small'
               fullWidth
             />
           </Grid>
@@ -147,11 +147,11 @@ export function ChatModal({
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Fechar
+        <Button onClick={handleClose} color='secondary' variant='contained'>
+          {i18n.t('internalChat.dialog.close')}
         </Button>
-        <Button onClick={handleSave} color="primary" variant="contained">
-          Salvar
+        <Button onClick={handleSave} color='primary' variant='contained'>
+          {i18n.t('internalChat.dialog.save')}
         </Button>
       </DialogActions>
     </Dialog>
@@ -164,7 +164,7 @@ function Chat(props) {
   const history = useHistory();
 
   const [showDialog, setShowDialog] = useState(false);
-  const [dialogType, setDialogType] = useState("new");
+  const [dialogType, setDialogType] = useState('new');
   const [currentChat, setCurrentChat] = useState({});
   const [chats, setChats] = useState([]);
   const [chatsPageInfo, setChatsPageInfo] = useState({ hasMore: false });
@@ -204,9 +204,9 @@ function Chat(props) {
   }, []);
 
   useEffect(() => {
-    if (isObject(currentChat) && has(currentChat, "id")) {
+    if (isObject(currentChat) && has(currentChat, 'id')) {
       findMessages(currentChat.id).then(() => {
-        if (typeof scrollToBottomRef.current === "function") {
+        if (typeof scrollToBottomRef.current === 'function') {
           setTimeout(() => {
             scrollToBottomRef.current();
           }, 300);
@@ -217,14 +217,14 @@ function Chat(props) {
   }, [currentChat]);
 
   useEffect(() => {
-    const companyId = localStorage.getItem("companyId");
+    const companyId = localStorage.getItem('companyId');
     const socket = socketManager.GetSocket(companyId);
 
     const onChatUser = (data) => {
-      if (data.action === "create") {
+      if (data.action === 'create') {
         setChats((prev) => [data.record, ...prev]);
       }
-      if (data.action === "update") {
+      if (data.action === 'update') {
         const changedChats = chats.map((chat) => {
           if (chat.id === data.record.id) {
             setCurrentChat(data.record);
@@ -236,59 +236,59 @@ function Chat(props) {
         });
         setChats(changedChats);
       }
-    }
+    };
 
     const onChat = (data) => {
-      if (data.action === "delete") {
+      if (data.action === 'delete') {
         const filteredChats = chats.filter((c) => c.id !== +data.id);
         setChats(filteredChats);
         setMessages([]);
         setMessagesPage(1);
         setMessagesPageInfo({ hasMore: false });
         setCurrentChat({});
-        history.push("/chats");
+        history.push('/chats');
       }
-    }
+    };
 
     const onCurrentChat = (data) => {
-        if (data.action === "new-message") {
-          setMessages((prev) => [...prev, data.newMessage]);
-          const changedChats = chats.map((chat) => {
-            if (chat.id === data.newMessage.chatId) {
-              return {
-                ...data.chat,
-              };
-            }
-            return chat;
-          });
-          setChats(changedChats);
-          scrollToBottomRef.current();
-        }
-
-        if (data.action === "update") {
-          const changedChats = chats.map((chat) => {
-            if (chat.id === data.chat.id) {
-              return {
-                ...data.chat,
-              };
-            }
-            return chat;
-          });
-          setChats(changedChats);
-          scrollToBottomRef.current();
-        }
+      if (data.action === 'new-message') {
+        setMessages((prev) => [...prev, data.newMessage]);
+        const changedChats = chats.map((chat) => {
+          if (chat.id === data.newMessage.chatId) {
+            return {
+              ...data.chat,
+            };
+          }
+          return chat;
+        });
+        setChats(changedChats);
+        scrollToBottomRef.current();
       }
 
-    socket.on(`company-${companyId}-chat-user-${user.id}`, onChatUser); 
+      if (data.action === 'update') {
+        const changedChats = chats.map((chat) => {
+          if (chat.id === data.chat.id) {
+            return {
+              ...data.chat,
+            };
+          }
+          return chat;
+        });
+        setChats(changedChats);
+        scrollToBottomRef.current();
+      }
+    };
+
+    socket.on(`company-${companyId}-chat-user-${user.id}`, onChatUser);
     socket.on(`company-${companyId}-chat`, onChat);
-    if (isObject(currentChat) && has(currentChat, "id")) {
+    if (isObject(currentChat) && has(currentChat, 'id')) {
       socket.on(`company-${companyId}-chat-${currentChat.id}`, onCurrentChat);
     }
-        
+
     return () => {
       socket.disconnect();
     };
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat, socketManager]);
 
@@ -338,7 +338,7 @@ function Chat(props) {
 
   const findChats = async () => {
     try {
-      const { data } = await api.get("/chats");
+      const { data } = await api.get('/chats');
       return data;
     } catch (err) {
       console.log(err);
@@ -348,49 +348,48 @@ function Chat(props) {
   const renderGrid = () => {
     return (
       <>
-      <Title>{i18n.t("internalChat.title")}</Title>
-      <Grid className={classes.gridContainer} container>
-        <Grid className={classes.gridItem} md={3} item>
-         
+        <Title>{i18n.t('internalChat.title')}</Title>
+        <Grid className={classes.gridContainer} container>
+          <Grid className={classes.gridItem} md={3} item>
             <div className={classes.btnContainer}>
               <Button
                 onClick={() => {
-                  setDialogType("new");
+                  setDialogType('new');
                   setShowDialog(true);
                 }}
-                color="primary"
-                variant="contained"
+                color='primary'
+                variant='contained'
               >
-                Nova
+                {i18n.t('internalChat.new')}
               </Button>
             </div>
-        
-          <ChatList
-            chats={chats}
-            pageInfo={chatsPageInfo}
-            loading={loading}
-            handleSelectChat={(chat) => selectChat(chat)}
-            handleDeleteChat={(chat) => deleteChat(chat)}
-            handleEditChat={() => {
-              setDialogType("edit");
-              setShowDialog(true);
-            }}
-          />
-        </Grid>
-        <Grid className={classes.gridItem} md={9} item>
-          {isObject(currentChat) && has(currentChat, "id") && (
-            <ChatMessages
-              chat={currentChat}
-              scrollToBottomRef={scrollToBottomRef}
-              pageInfo={messagesPageInfo}
-              messages={messages}
+
+            <ChatList
+              chats={chats}
+              pageInfo={chatsPageInfo}
               loading={loading}
-              handleSendMessage={sendMessage}
-              handleLoadMore={loadMoreMessages}
+              handleSelectChat={(chat) => selectChat(chat)}
+              handleDeleteChat={(chat) => deleteChat(chat)}
+              handleEditChat={() => {
+                setDialogType('edit');
+                setShowDialog(true);
+              }}
             />
-          )}
+          </Grid>
+          <Grid className={classes.gridItem} md={9} item>
+            {isObject(currentChat) && has(currentChat, 'id') && (
+              <ChatMessages
+                chat={currentChat}
+                scrollToBottomRef={scrollToBottomRef}
+                pageInfo={messagesPageInfo}
+                messages={messages}
+                loading={loading}
+                handleSendMessage={sendMessage}
+                handleLoadMore={loadMoreMessages}
+              />
+            )}
+          </Grid>
         </Grid>
-      </Grid>
       </>
     );
   };
@@ -401,13 +400,13 @@ function Chat(props) {
         <Grid md={12} item>
           <Tabs
             value={tab}
-            indicatorColor="primary"
-            textColor="primary"
+            indicatorColor='primary'
+            textColor='primary'
             onChange={(e, v) => setTab(v)}
-            aria-label="disabled tabs example"
+            aria-label='disabled tabs example'
           >
-            <Tab label="Chats" />
-            <Tab label="Mensagens" />
+            <Tab label={i18n.t('internalChat.tabs.chats')} />
+            <Tab label={i18n.t('internalChat.tabs.messages')} />
           </Tabs>
         </Grid>
         {tab === 0 && (
@@ -415,10 +414,10 @@ function Chat(props) {
             <div className={classes.btnContainer}>
               <Button
                 onClick={() => setShowDialog(true)}
-                color="primary"
-                variant="contained"
+                color='primary'
+                variant='contained'
               >
-                Novo
+                {i18n.t('internalChat.new')}
               </Button>
             </div>
             <ChatList
@@ -432,7 +431,7 @@ function Chat(props) {
         )}
         {tab === 1 && (
           <Grid className={classes.gridItemTab} md={12} item>
-            {isObject(currentChat) && has(currentChat, "id") && (
+            {isObject(currentChat) && has(currentChat, 'id') && (
               <ChatMessages
                 chat={currentChat}
                 scrollToBottomRef={scrollToBottomRef}
@@ -466,7 +465,7 @@ function Chat(props) {
         user={user}
       />
       <Paper className={classes.mainContainer}>
-        {isWidthUp("md", props.width) ? renderGrid() : renderTab()}
+        {isWidthUp('md', props.width) ? renderGrid() : renderTab()}
       </Paper>
     </>
   );

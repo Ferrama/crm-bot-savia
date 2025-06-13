@@ -1,16 +1,27 @@
 {
     "title": "Leads",
-    "search": "Search leads...",
+    "searchPlaceholder": "Search leads...",
+    "views": {
+        "board": "Board",
+        "list": "List"
+    },
     "table": {
+        "lead": "Lead",
         "name": "Name",
         "contact": "Contact",
+        "column": "Column",
         "stage": "Stage",
+        "status": "Status",
+        "pipeline": "Pipeline",
         "temperature": "Temperature",
         "source": "Source",
+        "tags": "Tags",
+        "financial": "Financial",
         "expectedValue": "Expected Value",
         "probability": "Probability",
         "expectedClosingDate": "Expected Closing Date",
         "assignedTo": "Assigned To",
+        "unassigned": "Unassigned",
         "actions": "Actions"
     },
     "buttons": {
@@ -20,50 +31,92 @@
         "save": "Save",
         "cancel": "Cancel"
     },
-    "modal": {
-        "add": {
-            "title": "Add New Lead"
-        },
-        "edit": {
-            "title": "Edit Lead"
-        },
-        "form": {
-            "contact": "Contact",
-            "stage": "Stage",
-            "temperature": "Temperature",
-            "source": "Source",
-            "expectedValue": "Expected Value",
-            "currency": "Currency",
-            "probability": "Probability (%)",
-            "expectedClosingDate": "Expected Closing Date",
-            "assignedTo": "Assigned To",
-            "notes": "Notes",
-            "selectUser": "Select a user...",
-            "name": "Name",
-            "column": "Column",
-            "tags": "Tags",
-            "none": "None"
-        }
+    "dialog": {
+        "new": "New Lead",
+        "edit": "Edit Lead",
+        "readonly": "View Lead"
     },
-    "stages": {
+    "form": {
+        "name": "Name",
+        "title": "Title",
+        "titleHelper": "Optional lead title",
+        "description": "Description",
+        "contact": "Contact",
+        "column": "Column",
+        "status": "Status",
+        "pipeline": "Pipeline",
+        "temperature": "Temperature",
+        "source": "Source",
+        "expectedValue": "Expected Value",
+        "currency": "Currency",
+        "probability": "Probability",
+        "probabilityHelper": "Closing probability (0-100%)",
+        "expectedClosingDate": "Expected Closing Date",
+        "assignedTo": "Assigned To",
+        "unassigned": "Unassigned",
+        "tags": "Tags",
+        "addTag": "Add Tag",
+        "customFields": "Custom Fields",
+        "addCustomField": "Add Custom Field",
+        "customFieldName": "Custom field name",
+        "notes": "Notes",
+        "none": "None"
+    },
+    "tabs": {
+        "basic": "Basic Information",
+        "contact": "Contact",
+        "financial": "Financial",
+        "tags": "Tags & Fields",
+        "notes": "Notes"
+    },
+    "status": {
         "new": "New",
         "contacted": "Contacted",
-        "qualified": "Qualified",
+        "follow_up": "Follow-up",
         "proposal": "Proposal",
         "negotiation": "Negotiation",
+        "qualified": "Qualified",
+        "unqualified": "Unqualified",
+        "converted": "Converted",
+        "lost": "Lost",
         "closed_won": "Closed Won",
         "closed_lost": "Closed Lost"
     },
-    "temperatures": {
+    "pipeline": {
+        "default": "Default",
+        "sales": "Sales",
+        "support": "Support",
+        "onboarding": "Onboarding"
+    },
+    "temperature": {
         "hot": "Hot",
         "warm": "Warm",
         "cold": "Cold"
+    },
+    "sections": {
+        "contact": "Contact Information",
+        "financial": "Financial Information",
+        "tags": "Tags",
+        "customFields": "Custom Fields",
+        "notes": "Notes"
+    },
+    "fields": {
+        "contact": "Contact",
+        "phone": "Phone",
+        "email": "Email",
+        "source": "Source",
+        "assignedTo": "Assigned To",
+        "expectedValue": "Expected Value",
+        "probability": "Probability",
+        "expectedClosingDate": "Expected Closing Date"
     },
     "toasts": {
         "created": "Lead created successfully!",
         "updated": "Lead updated successfully!",
         "deleted": "Lead deleted successfully!",
-        "contactRequired": "Please select a contact"
+        "contactRequired": "Please select a contact",
+        "tagAdded": "Tag added successfully!",
+        "tagRemoved": "Tag removed successfully!"
     },
     "delete": {
         "title": "Delete Lead",
@@ -73,11 +126,20 @@
         "name": {
             "required": "Name is required"
         },
+        "title": {
+            "max": "Title must be at most 255 characters"
+        },
         "contact": {
             "required": "Contact is required"
         },
         "column": {
             "required": "Column is required"
+        },
+        "status": {
+            "required": "Status is required"
+        },
+        "pipeline": {
+            "required": "Pipeline is required"
         },
         "temperature": {
             "required": "Temperature is required"
@@ -92,5 +154,10 @@
             "min": "Probability must be at least 0",
             "max": "Probability must be at most 100"
         }
-    }
+    },
+    "timeline": {
+        "title": "Timeline",
+        "empty": "No activities recorded yet"
+    },
+    "notFound": "Lead not found"
 }

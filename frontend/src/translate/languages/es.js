@@ -31,38 +31,7 @@ const messages = {
         noqueue: 'Sin cola',
         rating: 'Calificación',
         transferTo: 'Transferir a',
-        refreshed: 'Actualizadas con éxito',
-        refreshedError: 'Error al actualizar',
-        search: 'Buscar',
-        filter: 'Filtrar',
-        edit: 'Editar',
-        delete: 'Eliminar',
-        cancel: 'Cancelar',
-        save: 'Guardar',
-        confirm: 'Confirmar',
-        close: 'Cerrar',
-        error: 'Error',
-        success: 'Éxito',
-        actions: 'Acciones',
-        add: 'Añadir',
-        name: 'Nombre',
-        email: 'Correo electrónico',
-        phone: 'Teléfono',
-        company: 'Empresa',
-        user: 'Usuario',
-        connection: 'Conexión',
-        queue: 'Cola',
-        contact: 'Contacto',
-        whatsappNumber: 'Número de WhatsApp',
-        dueDate: 'Fecha de vencimiento',
-        copy: 'Copiar',
-        paste: 'Pegar',
-        proceed: 'Proceder',
-        enabled: 'Activado',
-        disabled: 'Desactivado',
-        noqueue: 'Sin cola',
-        rating: 'Calificación',
-        transferTo: 'Transferir a',
+        remove: 'Eliminar',
       },
       signup: {
         title: 'Registrarse',
@@ -218,6 +187,24 @@ const messages = {
         closed: 'CERRADO',
         pending: 'PENDIENTE',
         open: 'ABIERTO',
+        conversation: 'Conversar',
+        location: 'Ubicación',
+        clickToViewLocation: 'Haga clic para ver ubicación',
+        download: 'Descargar',
+        noRecords: 'Sin registros',
+        dialog: {
+          title: 'Conversación',
+          titleLabel: 'Título',
+          titlePlaceholder: 'Título',
+          close: 'Cerrar',
+          save: 'Guardar',
+          fillTitle: 'Por favor, complete el título de la conversación.',
+          selectUser: 'Por favor, seleccione al menos un usuario.',
+        },
+        tabs: {
+          chats: 'Chats',
+          messages: 'Mensajes',
+        },
         presence: {
           composing: 'Escribiendo...',
           recording: 'Grabando...',
@@ -365,6 +352,7 @@ const messages = {
           sendAt: 'Enviar a las',
           saveMessage: 'Guardar como plantilla',
           contactPlaceholder: 'Contacto',
+          whatsappPlaceholder: 'WhatsApp',
         },
         buttons: {
           cancel: 'Cancelar',
@@ -492,6 +480,10 @@ const messages = {
           kanban: 'Kanban',
           leads: 'Leads',
           todoList: 'Lista de Tareas',
+          savia: 'Savia',
+          listing: 'Listado',
+          contactLists: 'Listas de Contactos',
+          configurations: 'Configuraciones',
         },
         appBar: {
           i18n: {
@@ -537,6 +529,49 @@ const messages = {
             cancel: 'Cancelar',
             save: 'Guardar',
           },
+        },
+      },
+      companiesManager: {
+        buttons: {
+          delete: 'Eliminar',
+          incrementDueDate: 'Incrementar Fecha de Vencimiento',
+          user: 'Usuario',
+          save: 'Guardar',
+        },
+        table: {
+          name: 'Nombre',
+          email: 'Email',
+          phone: 'Teléfono',
+          plan: 'Plan',
+          campaigns: 'Campañas',
+          status: 'Estado',
+          createdAt: 'Creado en',
+          dueDate: 'Fecha de Vencimiento',
+        },
+        status: {
+          yes: 'Activo',
+          no: 'Inactivo',
+        },
+        campaigns: {
+          enabled: 'Habilitado',
+          disabled: 'Deshabilitado',
+        },
+      },
+      helpsManager: {
+        buttons: {
+          clear: 'Limpiar',
+          delete: 'Eliminar',
+          save: 'Guardar',
+        },
+        table: {
+          title: 'Título',
+          description: 'Descripción',
+          video: 'Vídeo',
+        },
+        confirmationModal: {
+          title: 'Eliminar Ayuda',
+          message:
+            '¿Está seguro de que desea eliminar esta ayuda? Esta acción no se puede deshacer.',
         },
       },
       kanban: {
@@ -666,11 +701,21 @@ const messages = {
             confirmationMessage4: 'Mensaje de Confirmación 4',
             confirmationMessage5: 'Mensaje de Confirmación 5',
             messagePlaceholder: 'Contenido del mensaje',
+            messageHelperText:
+              'Use variables como {nombre}, {numero}, {email} o defina variables personalizadas.',
             whatsapp: 'Conexión',
             status: 'Estado',
             scheduledAt: 'Agendamiento',
             confirmation: 'Confirmación',
             contactList: 'Lista de Contacto',
+            disabled: 'Deshabilitada',
+            enabled: 'Habilitada',
+            none: 'Ninguna',
+            msg1: 'Msg. 1',
+            msg2: 'Msg. 2',
+            msg3: 'Msg. 3',
+            msg4: 'Msg. 4',
+            msg5: 'Msg. 5',
           },
           buttons: {
             add: 'Agregar',
@@ -691,6 +736,30 @@ const messages = {
           cancel: 'Campaña cancelada',
           restart: 'Campaña reiniciada',
           deleted: 'Registro eliminado',
+        },
+        status: {
+          inactive: 'Inactiva',
+          scheduled: 'Programada',
+          inProgress: 'En Progreso',
+          cancelled: 'Cancelada',
+          finished: 'Finalizada',
+        },
+        tableData: {
+          notDefined: 'No definida',
+          notDefinedMale: 'No definido',
+          noSchedule: 'Sin agendamiento',
+          notCompleted: 'No completada',
+          enabled: 'Habilitada',
+          disabled: 'Deshabilitada',
+        },
+        tooltips: {
+          stopCampaign: 'Detener Campaña',
+          restartCampaign: 'Reiniciar Campaña',
+        },
+        validation: {
+          tooShort: '¡Muy corto!',
+          tooLong: '¡Muy largo!',
+          required: 'Requerido',
         },
       },
       announcements: {
@@ -752,6 +821,7 @@ const messages = {
         saveSettings: 'Guardar Configuraciones',
         shortcode: 'Atajo',
         content: 'Contenido',
+        variables: 'Variables',
       },
       queues: {
         title: 'Colas y Chatbot',
@@ -807,11 +877,6 @@ const messages = {
         aboutauthorsite: 'Sitio del autor',
         aboutwhaticketsite: 'Sitio de la Comunidad Whaticket en Github',
         aboutvemfazersite: 'Sitio del canal Vem Fazer en Github',
-        licenseheading: 'Licencia de Código Abierto',
-        licensedetail:
-          'El ticketz está licenciado bajo la Licencia Pública General Affero de GNU versión 3, lo que significa que cualquier usuario que tenga acceso a esta aplicación tiene derecho a obtener acceso al código fuente. Más información en los siguientes enlaces:',
-        licensefulltext: 'Texto completo de la licencia',
-        licensesourcecode: 'Código fuente de ticketz',
       },
       schedules: {
         title: 'Agendamientos',
@@ -869,19 +934,18 @@ const messages = {
         group: {
           general: 'General',
           timeouts: 'Tiempos de espera',
-          officeHours: 'Horas de oficina',
+          officeHours: 'Horario de oficina',
           groups: 'Grupos',
           confidenciality: 'Confidencialidad',
           api: 'API',
           externalServices: 'Servicios externos',
           serveradmin: 'Administración del servidor',
         },
-        success: 'Configuraciones guardadas exitosamente.',
+        success: 'Configuraciones guardadas con éxito.',
         copiedToClipboard: 'Copiado al portapapeles',
         title: 'Configuraciones',
-        chatbotTicketTimeout:
-          'Tiempo de espera del ticket del chatbot (minutos)',
-        chatbotTicketTimeoutAction: 'Acción después del tiempo de espera',
+        chatbotTicketTimeout: 'Timeout del chatbot (minutos)',
+        chatbotTicketTimeoutAction: 'Acción del timeout del chatbot',
         settings: {
           userCreation: {
             name: 'Creación de usuario',
@@ -892,81 +956,81 @@ const messages = {
           },
         },
         validations: {
-          title: 'Validaciones',
+          title: 'Calificaciones',
           options: {
             enabled: 'Habilitado',
             disabled: 'Deshabilitado',
           },
         },
         OfficeManagement: {
-          title: 'Gestión de despachos',
+          title: 'Gestión de Oficina',
           options: {
             disabled: 'Deshabilitado',
-            ManagementByDepartment: 'Gestión por departamento',
-            ManagementByCompany: 'Gestión por empresa',
+            ManagementByDepartment: 'Gestión Por Cola',
+            ManagementByCompany: 'Gestión Por Empresa',
           },
         },
         outOfHoursAction: {
           title: 'Acción fuera del horario',
           options: {
-            pending: 'Dejar pendiente',
+            pending: 'Dejar como pendiente',
             closed: 'Cerrar ticket',
           },
         },
         IgnoreGroupMessages: {
-          title: 'Ignorar mensajes de grupo',
+          title: 'Ignorar Mensajes de Grupos',
           options: {
-            enabled: 'Activado',
-            disabled: 'Desactivado',
+            enabled: 'Habilitado',
+            disabled: 'Deshabilitado',
           },
         },
         soundGroupNotifications: {
           title: 'Notificaciones de sonido de grupo',
           options: {
-            enabled: 'Activado',
-            disabled: 'Desactivado',
+            enabled: 'Habilitado',
+            disabled: 'Deshabilitado',
           },
         },
         groupsTab: {
-          title: 'Pestaña de grupos',
+          title: 'Pestaña de Grupos',
           options: {
-            enabled: 'Activado',
-            disabled: 'Desactivado',
+            enabled: 'Habilitado',
+            disabled: 'Deshabilitado',
           },
         },
         VoiceAndVideoCalls: {
-          title: 'Llamadas de voz y vídeo',
+          title: 'Llamadas de Voz y Vídeo',
           options: {
             enabled: 'Ignorar',
-            disabled: 'informe de indisponibilidad',
+            disabled: 'Informar indisponibilidad',
           },
         },
         AutomaticChatbotOutput: {
-          title: 'Salida automática del chatbot',
+          title: 'Salida automática de chatbot',
           options: {
-            enabled: 'Activado',
-            disabled: 'Desactivado',
+            enabled: 'Habilitado',
+            disabled: 'Deshabilitado',
           },
         },
         ShowNumericEmoticons: {
-          title: 'Mostrar emojis numéricos en la cola',
+          title: 'Mostrar emoticones numéricos en cola',
           options: {
-            enabled: 'Activado',
-            disabled: 'Desactivado',
+            enabled: 'Habilitado',
+            disabled: 'Deshabilitado',
           },
         },
         QuickMessages: {
-          title: 'Respuestas rápidas',
+          title: 'Mensajes Rápidos',
           options: {
             enabled: 'Por empresa',
             disabled: 'Por Usuario',
           },
         },
         AllowRegistration: {
-          title: 'Permitir el registro',
+          title: 'Permitir registro',
           options: {
-            enabled: 'Activado',
-            disabled: 'Desactivado',
+            enabled: 'Habilitado',
+            disabled: 'Deshabilitado',
           },
         },
         FileUploadLimit: {
@@ -978,15 +1042,15 @@ const messages = {
         messageVisibility: {
           title: 'Visibilidad del mensaje',
           options: {
-            respectMessageQueue: 'Respetar fila de mensajes',
-            respectTicketQueue: 'Respetar fila de tickets',
+            respectMessageQueue: 'Respetar cola del mensaje',
+            respectTicketQueue: 'Respetar cola del ticket',
           },
         },
-        removeQueueAndUser: {
-          title: 'Mantener fila y usuario en ticket cerrado',
+        keepQueueAndUser: {
+          title: 'Mantener cola y usuario en ticket cerrado',
           options: {
-            enabled: 'Activado',
-            disabled: 'Desactivado',
+            enabled: 'Habilitado',
+            disabled: 'Deshabilitado',
           },
         },
         GracePeriod: {
@@ -1004,8 +1068,8 @@ const messages = {
           title: 'Variables disponibles:',
         },
         WelcomeGreeting: {
-          greetings: 'hola',
-          welcome: 'bienvenido a',
+          greetings: 'Hola',
+          welcome: 'Bienvenido a',
           expirationTime: 'Activo hasta',
         },
         Options: {
@@ -1015,7 +1079,7 @@ const messages = {
           title: 'Empresas',
         },
         schedules: {
-          title: 'horarios',
+          title: 'Horarios',
         },
         Plans: {
           title: 'Planes',
@@ -1027,22 +1091,124 @@ const messages = {
           title: 'Whitelabel',
         },
         PaymentGateways: {
-          title: 'Payment gateways',
+          title: 'Pasarelas de Pago',
         },
         AIProvider: {
-          title: 'Proveedor de IA',
+          title: 'Servicio de IA',
         },
         AudioTranscriptions: {
-          title: 'Transcripciones de audio',
+          title: 'Transcripción de audio',
         },
         TagsMode: {
-          title: 'Modo de etiquetas',
+          title: 'Modo de Etiquetas',
           options: {
             ticket: 'Ticket',
             contact: 'Contacto',
-            both: 'Ticket y contacto',
+            both: 'Ticket y Contacto',
           },
         },
+        schedulesUpdated: 'Horarios actualizados con éxito.',
+        operationUpdated: 'Operación actualizada con éxito.',
+        paymentGateway: 'Pasarela de Pago',
+        none: 'Ninguno',
+        owenPayments: 'Owen Payments 💎',
+        efi: 'Efí',
+        apiToken: 'Token de API',
+        aiKey: 'Clave de IA',
+        defaultAppName: 'Ticketz',
+        // Timeout settings
+        ratingsTimeout: 'Timeout para evaluación (minutos)',
+        noQueueTimeout: 'Timeout para ticket sin cola (minutos)',
+        noQueueTimeoutAction: 'Acción para timeout de ticket sin cola',
+        openTicketTimeout: 'Timeout para ticket en atención (minutos)',
+        openTicketTimeoutAction: 'Acción para timeout de ticket abierto',
+        autoReopenTimeout: 'Timeout para reapertura automática (minutos)',
+        // Actions
+        returnToQueue: 'Retornar a la cola',
+        // Office hours
+        officeHours: 'Horario de oficina',
+        officeManagement: 'Gestión de Oficina',
+        managementByQueue: 'Gestión por Cola',
+        managementByCompany: 'Gestión por Empresa',
+        // Groups
+        groups: 'Grupos',
+        ignoreGroupMessages: 'Ignorar Mensajes de Grupos',
+        groupSoundNotifications: 'Notificaciones de sonido de grupo',
+        // Confidentiality
+        confidentiality: 'Confidencialidad',
+        respectMessageQueue: 'Respetar cola del mensaje',
+        respectTicketQueue: 'Respetar cola del ticket',
+        // API
+        api: 'API',
+        // Out of hours
+        leaveAsPending: 'Dejar como pendiente',
+        // Enabled/Disabled
+        enabled: 'Habilitado',
+        disabled: 'Deshabilitado',
+        // Form fields
+        name: 'Nombre',
+        email: 'Email',
+        phone: 'Teléfono',
+        company: 'Empresa',
+        plan: 'Plan',
+        campaigns: 'Campañas',
+        status: 'Estado',
+        createdAt: 'Creado en',
+        dueDate: 'Fecha de Vencimiento',
+        value: 'Valor',
+        users: 'Usuarios',
+        connections: 'Conexiones',
+        queues: 'Filas',
+        public: 'Público',
+        yes: 'Sí',
+        no: 'No',
+        active: 'Activo',
+        inactive: 'Inactivo',
+        // Plan management
+        planName: 'Nombre del Plan',
+        planValue: 'Valor del Plan',
+        planUsers: 'Usuarios del Plan',
+        planConnections: 'Conexiones del Plan',
+        planQueues: 'Filas del Plan',
+        planPublic: 'Plan Público',
+        // Campaign management
+        campaignTitle: 'Título de Campaña',
+        campaignCode: 'Código de Campaña',
+        campaignDescription: 'Descripción de Campaña',
+        campaignEnabled: 'Campaña Habilitada',
+        campaignDisabled: 'Campaña Deshabilitada',
+        // User management
+        userName: 'Nombre de Usuario',
+        userEmail: 'Email de Usuario',
+        userPhone: 'Teléfono de Usuario',
+        userCompany: 'Empresa de Usuario',
+        userPlan: 'Plan de Usuario',
+        // Whitelabel
+        primaryColorLight: 'Color primario claro',
+        primaryColorDark: 'Color primario oscuro',
+        appLogoLight: 'Logo de la aplicación claro',
+        appLogoDark: 'Logo de la aplicación oscuro',
+        appName: 'Nombre de la aplicación',
+        appFavicon: 'Favicon de la aplicación',
+        logoSvgHint: 'Prefiera SVG y aspecto de 28:10',
+        faviconSvgHint: 'Prefiera imagen SVG cuadrada o PNG de 512x512',
+        // Buttons
+        clear: 'Limpiar',
+        save: 'Guardar',
+        cancel: 'Cancelar',
+        edit: 'Editar',
+        delete: 'Eliminar',
+        add: 'Agregar',
+        // Date format
+        dateFormat: 'dd/mm/yyyy',
+        // Recurrence
+        recurrence: 'Recurrencia',
+        // Contact lists
+        contactLists: 'Listas de Contactos',
+        // Navigation
+        listing: 'Listado',
+        // System description
+        systemDescription: 'ticketz chat based ticket system',
       },
       messagesList: {
         header: {
@@ -1212,13 +1378,52 @@ const messages = {
           international: 'Donaciones en USD',
         },
       },
+      interactions: {
+        toasts: {
+          created: 'Interacción creada con éxito',
+        },
+        buttons: {
+          add: 'Agregar Interacción',
+        },
+        types: {
+          note: 'Nota',
+          email: 'Correo electrónico',
+          message: 'Mensaje',
+          file: 'Archivo',
+        },
+        categories: {
+          internal_note: 'Nota Interna',
+          customer_communication: 'Comunicación con Cliente',
+          system: 'Sistema',
+        },
+        dialog: {
+          add: 'Agregar Interacción',
+        },
+        form: {
+          type: 'Tipo',
+          category: 'Categoría',
+          notes: 'Notas',
+        },
+      },
       leads: {
         title: 'Leads',
         searchPlaceholder: 'Buscar leads',
+        notFound: 'Lead no encontrado',
         buttons: {
           add: 'Nuevo Lead',
           save: 'Guardar',
           cancel: 'Cancelar',
+        },
+        views: {
+          board: 'Tablero',
+          list: 'Lista',
+        },
+        tabs: {
+          basic: 'Básico',
+          contact: 'Contacto',
+          financial: 'Financiero',
+          tags: 'Etiquetas',
+          notes: 'Notas',
         },
         modal: {
           add: {
@@ -1241,42 +1446,145 @@ const messages = {
             selectUser: 'Seleccionar usuario',
           },
         },
-        table: {
+        dialog: {
+          new: 'Nuevo Lead',
+          edit: 'Editar Lead',
+          addTag: 'Agregar Etiqueta',
+        },
+        form: {
           name: 'Nombre',
-          contact: 'Contacto',
-          stage: 'Etapa',
+          title: 'Título',
+          titleHelper: 'Breve descripción del lead',
+          description: 'Descripción',
           temperature: 'Temperatura',
+          status: 'Estado',
+          pipeline: 'Pipeline',
+          contact: 'Contacto',
+          column: 'Columna',
+          assignedTo: 'Asignado a',
+          unassigned: 'Sin asignar',
           source: 'Fuente',
           expectedValue: 'Valor Esperado',
-          probability: 'Probabilidad',
-          expectedClosingDate: 'Fecha de Cierre',
+          currency: 'Moneda',
+          probability: 'Probabilidad (%)',
+          probabilityHelper: 'Probabilidad de cerrar el trato (0-100%)',
+          expectedClosingDate: 'Fecha Esperada de Cierre',
+          tags: 'Etiquetas',
+          addTag: 'Agregar Etiqueta',
+          tag: 'Etiqueta',
+          customFields: 'Campos Personalizados',
+          customFieldName: 'Ingrese nombre del campo personalizado',
+          addCustomField: 'Agregar Campo Personalizado',
+          notes: 'Notas',
+        },
+        table: {
+          lead: 'Lead',
+          contact: 'Contacto',
+          status: 'Estado',
+          pipeline: 'Pipeline',
+          column: 'Columna',
+          temperature: 'Temperatura',
+          tags: 'Etiquetas',
+          financial: 'Financiero',
           assignedTo: 'Asignado a',
           actions: 'Acciones',
+          unassigned: 'Sin asignar',
         },
-        stages: {
+        sections: {
+          contact: 'Información de Contacto',
+          financial: 'Información Financiera',
+          tags: 'Etiquetas',
+          customFields: 'Campos Personalizados',
+          notes: 'Notas',
+        },
+        fields: {
+          contact: 'Contacto',
+          phone: 'Teléfono',
+          email: 'Correo electrónico',
+          source: 'Fuente',
+          assignedTo: 'Asignado a',
+          expectedValue: 'Valor Esperado',
+          probability: 'Probabilidad',
+          expectedClosingDate: 'Fecha Esperada de Cierre',
+        },
+        status: {
           new: 'Nuevo',
           contacted: 'Contactado',
-          qualified: 'Calificado',
+          follow_up: 'Seguimiento',
           proposal: 'Propuesta',
           negotiation: 'Negociación',
-          closed_won: 'Ganado',
-          closed_lost: 'Perdido',
+          qualified: 'Calificado',
+          unqualified: 'No calificado',
+          converted: 'Convertido',
+          lost: 'Perdido',
+          closed_won: 'Cerrado Ganado',
+          closed_lost: 'Cerrado Perdido',
         },
-        temperatures: {
+        pipeline: {
+          default: 'Predeterminado',
+          sales: 'Ventas',
+          support: 'Soporte',
+          onboarding: 'Incorporación',
+        },
+        temperature: {
           hot: 'Caliente',
           warm: 'Tibio',
           cold: 'Frío',
         },
+        timeline: {
+          title: 'Línea de Tiempo',
+          empty: 'No se encontraron interacciones',
+        },
         toasts: {
           created: 'Lead creado con éxito',
           updated: 'Lead actualizado con éxito',
+          deleted: 'Lead eliminado con éxito',
           contactRequired: 'Se requiere un contacto',
+          tagAdded: 'Etiqueta agregada con éxito',
+          tagRemoved: 'Etiqueta removida con éxito',
+        },
+        validation: {
+          name: {
+            required: 'Nombre es obligatorio',
+          },
+          title: {
+            max: 'El título debe tener máximo 255 caracteres',
+          },
+          contact: {
+            required: 'Contacto es obligatorio',
+          },
+          column: {
+            required: 'Columna es obligatoria',
+          },
+          temperature: {
+            required: 'Temperatura es obligatoria',
+          },
+          status: {
+            required: 'Estado es obligatorio',
+          },
+          pipeline: {
+            required: 'Pipeline es obligatorio',
+          },
+          source: {
+            required: 'Fuente es obligatoria',
+          },
+          currency: {
+            required: 'Moneda es obligatoria',
+          },
+          probability: {
+            min: 'Probabilidad debe ser al menos 0',
+            max: 'Probabilidad debe ser máximo 100',
+          },
         },
         leadColumns: {
           buttons: {
             add: 'Nueva Columna',
             save: 'Guardar',
             cancel: 'Cancelar',
+          },
+          dialog: {
+            new: 'Nueva Columna',
+            edit: 'Editar Columna',
           },
           modal: {
             add: {
@@ -1308,6 +1616,11 @@ const messages = {
         taskPlaceholder: 'Ingrese una nueva tarea',
         lastUpdate: 'Última actualización',
         taskRequired: 'El texto de la tarea es requerido',
+      },
+      ticketMessagesDialog: {
+        buttons: {
+          close: 'Cerrar',
+        },
       },
     },
   },

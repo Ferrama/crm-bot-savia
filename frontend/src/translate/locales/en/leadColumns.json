@@ -1,0 +1,36 @@
+{
+    "title": "Lead Columns",
+    "buttons": {
+        "add": "Add Column",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel"
+    },
+    "dialog": {
+        "new": "New Column",
+        "edit": "Edit Column"
+    },
+    "form": {
+        "name": "Name",
+        "color": "Color",
+        "order": "Order"
+    },
+    "toasts": {
+        "created": "Column created successfully!",
+        "updated": "Column updated successfully!",
+        "deleted": "Column deleted successfully!",
+        "hasLeads": "Cannot delete a column that contains leads"
+    },
+    "validation": {
+        "name": {
+            "required": "Name is required"
+        },
+        "color": {
+            "required": "Color is required"
+        },
+        "order": {
+            "required": "Order is required"
+        }
+    }
+}

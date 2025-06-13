@@ -85,7 +85,7 @@ const CampaignReport = () => {
         setConfirmed(data.confirmed);
         setDelivered(data.delivered);
 
-        if (data.campaign.status === 'FINALIZADA') {
+        if (data.campaign.status === 'FINISHED') {
           setTimeout(() => {
             findCampaign();
           }, 5000);
@@ -114,16 +114,16 @@ const CampaignReport = () => {
 
   const formatStatus = (val) => {
     switch (val) {
-      case 'INATIVA':
-        return 'Inativa';
-      case 'PROGRAMADA':
-        return 'Programada';
-      case 'EM_ANDAMENTO':
-        return 'Em Andamento';
-      case 'CANCELADA':
-        return 'Cancelada';
-      case 'FINALIZADA':
-        return 'Finalizada';
+      case 'INACTIVE':
+        return 'Inactive';
+      case 'SCHEDULED':
+        return 'Scheduled';
+      case 'IN_PROGRESS':
+        return 'In Progress';
+      case 'CANCELLED':
+        return 'Cancelled';
+      case 'FINISHED':
+        return 'Finished';
       default:
         return val;
     }

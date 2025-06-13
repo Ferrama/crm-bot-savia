@@ -31,36 +31,7 @@ const messages = {
         noqueue: 'No queue',
         rating: 'Rating',
         transferTo: 'Transfer to',
-        search: 'Search',
-        filter: 'Filter',
-        edit: 'Edit',
-        delete: 'Delete',
-        cancel: 'Cancel',
-        save: 'Save',
-        confirm: 'Confirm',
-        close: 'Close',
-        error: 'Error',
-        success: 'Success',
-        actions: 'Actions',
-        add: 'Add',
-        name: 'Name',
-        email: 'Email',
-        phone: 'Phone',
-        company: 'Company',
-        user: 'User',
-        connection: 'Connection',
-        queue: 'Queue',
-        contact: 'Contact',
-        whatsappNumber: 'WhatsApp Number',
-        dueDate: 'Due Date',
-        copy: 'Copy',
-        paste: 'Paste',
-        proceed: 'Proceed',
-        enabled: 'Enabled',
-        disabled: 'Disabled',
-        noqueue: 'No queue',
-        rating: 'Rating',
-        transferTo: 'Transfer to',
+        remove: 'Remove',
       },
       signup: {
         title: 'Sign Up',
@@ -217,6 +188,24 @@ const messages = {
         closed: 'CLOSED',
         pending: 'PENDING',
         open: 'OPEN',
+        conversation: 'Conversation',
+        location: 'Location',
+        clickToViewLocation: 'Click to view location',
+        download: 'Download',
+        noRecords: 'No records',
+        dialog: {
+          title: 'Conversation',
+          titleLabel: 'Title',
+          titlePlaceholder: 'Title',
+          close: 'Close',
+          save: 'Save',
+          fillTitle: 'Please fill in the conversation title.',
+          selectUser: 'Please select at least one user.',
+        },
+        tabs: {
+          chats: 'Chats',
+          messages: 'Messages',
+        },
         presence: {
           composing: 'Composing...',
           recording: 'Recording...',
@@ -367,6 +356,7 @@ const messages = {
           sendAt: 'Send at',
           saveMessage: 'Save as template',
           contactPlaceholder: 'Contact',
+          whatsappPlaceholder: 'WhatsApp',
         },
         buttons: {
           cancel: 'Cancel',
@@ -486,6 +476,10 @@ const messages = {
           kanban: 'Kanban',
           leads: 'Leads',
           todoList: 'To-Do List',
+          savia: 'Savia',
+          listing: 'Listing',
+          contactLists: 'Contact Lists',
+          configurations: 'Configurations',
         },
         appBar: {
           i18n: {
@@ -533,687 +527,68 @@ const messages = {
           },
         },
       },
-      kanban: {
-        title: 'Kanban',
-        searchPlaceholder: 'Search',
-        subMenus: {
-          list: 'Panel',
-          tags: 'Lanes',
-        },
-      },
-      tagsKanban: {
-        title: 'Lanes',
-        laneDefault: 'Open',
-        confirmationModal: {
-          deleteTitle: 'Are you sure you want to delete this Lane?',
-          deleteMessage: 'This action cannot be undone.',
+      helpsManager: {
+        buttons: {
+          clear: 'Clear',
+          delete: 'Delete',
+          save: 'Save',
         },
         table: {
-          name: 'Name',
-          color: 'Color',
-          tickets: 'Tickets',
-          actions: 'Actions',
-        },
-        buttons: {
-          add: 'New Lane',
-        },
-        toasts: {
-          deleted: 'Lane deleted successfully.',
-        },
-      },
-      contactLists: {
-        title: 'Contact Lists',
-        table: {
-          name: 'Name',
-          contacts: 'Contacts',
-          actions: 'Actions',
-        },
-        buttons: {
-          add: 'New List',
-        },
-        dialog: {
-          name: 'Name',
-          company: 'Company',
-          okEdit: 'Edit',
-          okAdd: 'Add',
-          add: 'Add',
-          edit: 'Edit',
-          cancel: 'Cancel',
-        },
-        confirmationModal: {
-          deleteTitle: 'Delete',
-          deleteMessage: 'This action cannot be undone.',
-        },
-        toasts: {
-          deleted: 'Record deleted',
-          created: 'Record created',
-        },
-      },
-      contactListItems: {
-        title: 'Contacts',
-        searchPlaceholder: 'Search',
-        buttons: {
-          add: 'New',
-          lists: 'Lists',
-          import: 'Import',
-        },
-        dialog: {
-          name: 'Name',
-          number: 'Number',
-          whatsapp: 'WhatsApp',
-          email: 'Email',
-          okEdit: 'Edit',
-          okAdd: 'Add',
-          add: 'Add',
-          edit: 'Edit',
-          cancel: 'Cancel',
-        },
-        table: {
-          name: 'Name',
-          number: 'Number',
-          whatsapp: 'WhatsApp',
-          email: 'Email',
-          actions: 'Actions',
-        },
-        confirmationModal: {
-          deleteTitle: 'Delete',
-          deleteMessage: 'This action cannot be undone.',
-          importMessage:
-            'Do you want to import the contacts from this spreadsheet? ',
-          importTitlte: 'Import',
-        },
-        toasts: {
-          deleted: 'Record deleted',
-        },
-      },
-      campaigns: {
-        title: 'Campaigns',
-        searchPlaceholder: 'Search',
-        buttons: {
-          add: 'New Campaign',
-          contactLists: 'Contact Lists',
-        },
-        table: {
-          name: 'Name',
-          whatsapp: 'Connection',
-          contactList: 'Contact List',
-          status: 'Status',
-          scheduledAt: 'Scheduled',
-          completedAt: 'Completed',
-          confirmation: 'Confirmation',
-          actions: 'Actions',
-        },
-        dialog: {
-          new: 'New Campaign',
-          update: 'Edit Campaign',
-          readonly: 'Read-only',
-          form: {
-            name: 'Name',
-            message1: 'Message 1',
-            message2: 'Message 2',
-            message3: 'Message 3',
-            message4: 'Message 4',
-            message5: 'Message 5',
-            confirmationMessage1: 'Confirmation Message 1',
-            confirmationMessage2: 'Confirmation Message 2',
-            confirmationMessage3: 'Confirmation Message 3',
-            confirmationMessage4: 'Confirmation Message 4',
-            confirmationMessage5: 'Confirmation Message 5',
-            messagePlaceholder: 'Message content',
-            whatsapp: 'Connection',
-            status: 'Status',
-            scheduledAt: 'Scheduled',
-            confirmation: 'Confirmation',
-            contactList: 'Contact List',
-          },
-          buttons: {
-            add: 'Add',
-            edit: 'Update',
-            okadd: 'Ok',
-            cancel: 'Cancel Dispatches',
-            restart: 'Restart Dispatches',
-            close: 'Close',
-            attach: 'Attach File',
-          },
-        },
-        confirmationModal: {
-          deleteTitle: 'Delete',
-          deleteMessage: 'This action cannot be undone.',
-        },
-        toasts: {
-          success: 'Operation completed successfully',
-          cancel: 'Campaign canceled',
-          restart: 'Campaign restarted',
-          deleted: 'Record deleted',
-        },
-      },
-      announcements: {
-        title: 'Announcements',
-        searchPlaceholder: 'Search',
-        buttons: {
-          add: 'New Announcement',
-          contactLists: 'Announcement Lists',
-        },
-        table: {
-          priority: 'Priority',
           title: 'Title',
-          text: 'Text',
-          mediaName: 'File',
-          status: 'Status',
-          actions: 'Actions',
-        },
-        dialog: {
-          edit: 'Announcement Edit',
-          add: 'New Announcement',
-          update: 'Edit Announcement',
-          readonly: 'Read-only',
-          form: {
-            priority: 'Priority',
-            title: 'Title',
-            text: 'Text',
-            mediaPath: 'File',
-            status: 'Status',
-          },
-          buttons: {
-            add: 'Add',
-            edit: 'Update',
-            okadd: 'Ok',
-            cancel: 'Cancel',
-            close: 'Close',
-            attach: 'Attach File',
-          },
+          description: 'Description',
+          video: 'Video',
         },
         confirmationModal: {
-          deleteTitle: 'Delete',
-          deleteMessage: 'This action cannot be undone.',
-        },
-        toasts: {
-          success: 'Operation completed successfully',
-          deleted: 'Record deleted',
-        },
-      },
-      campaignsConfig: {
-        title: 'Campaign Settings',
-        intervals: 'Intervals',
-        messageInterval: 'Random Send Interval',
-        longerIntervalAfter: 'Longer Interval After',
-        greaterInterval: 'Greater Send Interval',
-        noInterval: 'No Interval',
-        notDefined: 'Not Defined',
-        seconds: 'seconds',
-        messages: 'messages',
-        addVariable: 'Add Variable',
-        saveSettings: 'Save Settings',
-        shortcode: 'Shortcode',
-        content: 'Content',
-      },
-      queues: {
-        title: 'Queues & Chatbot',
-        table: {
-          name: 'Name',
-          color: 'Color',
-          greeting: 'Greeting Message',
-          actions: 'Actions',
-        },
-      },
-      buttons: {
-        add: 'Add Queue',
-      },
-      confirmationModal: {
-        deleteTitle: 'Delete',
-        deleteMessage:
-          'Are you sure? This action cannot be undone! The tickets from this queue will still exist but will no longer be assigned to any queue.',
-      },
-      queueSelect: {
-        inputLabel: 'Queues',
-      },
-      users: {
-        title: 'Users',
-        table: {
-          name: 'Name',
-          email: 'Email',
-          profile: 'Profile',
-          actions: 'Actions',
-        },
-        buttons: {
-          add: 'Add User',
-        },
-        toasts: {
-          deleted: 'User deleted successfully.',
-        },
-        confirmationModal: {
-          deleteTitle: 'Delete',
-          deleteMessage:
-            'All user data will be lost. Open tickets from this user will be moved to the queue.',
-        },
-      },
-      helps: {
-        title: 'Help Center',
-      },
-      about: {
-        aboutthe: 'About the',
-        copyright: '© 2024 - Powered by ticketz',
-        buttonclose: 'Close',
-        title: 'About ticketz',
-        abouttitle: 'Origin and improvements',
-        aboutdetail:
-          'ticketz is indirectly derived from the Whaticket project with improvements shared by the developers of the EquipeChat system through the VemFazer channel on YouTube, later improved by Claudemir Todo Bom',
-        aboutauthorsite: "Author's site",
-        aboutwhaticketsite: 'Whaticket Community site on Github',
-        aboutvemfazersite: 'Vem Fazer channel site on Github',
-        licenseheading: 'Open Source License',
-        licensedetail:
-          'ticketz is licensed under the GNU Affero General Public License version 3, which means that any user who has access to this application has the right to obtain access to the source code. More information at the links below:',
-        licensefulltext: 'Full text of the license',
-        licensesourcecode: 'Ticketz source code',
-      },
-      schedules: {
-        title: 'Schedules',
-        confirmationModal: {
-          deleteTitle: 'Are you sure you want to delete this Schedule?',
-          deleteMessage: 'This action cannot be undone.',
-        },
-        table: {
-          contact: 'Contact',
-          body: 'Message',
-          sendAt: 'Scheduling Date',
-          sentAt: 'Sending Date',
-          status: 'Status',
-          actions: 'Actions',
-        },
-        buttons: {
-          add: 'New Schedule',
-        },
-        toasts: {
-          deleted: 'Schedule deleted successfully.',
-        },
-      },
-      tags: {
-        title: 'Tags',
-        confirmationModal: {
-          deleteTitle: 'Are you sure you want to delete this Tag?',
-          deleteMessage: 'This action cannot be undone.',
-        },
-        table: {
-          name: 'Name',
-          color: 'Color',
-          tickets: 'Records',
-          actions: 'Actions',
-          id: 'Id',
-          kanban: 'Kanban',
-        },
-        buttons: {
-          add: 'New Tag',
-        },
-        toasts: {
-          deleted: 'Tag deleted successfully.',
-        },
-      },
-      whitelabel: {
-        primaryColorLight: 'Primary color light',
-        primaryColorDark: 'Primary color dark',
-        lightLogo: 'App logo light',
-        darkLogo: 'App logo dark',
-        favicon: 'App logo favicon',
-        appname: 'App name',
-        logoHint: 'Prefer SVG and aspect of 28:10',
-        faviconHint: 'Prefer square SVG image or 512x512 PNG',
-      },
-      settings: {
-        group: {
-          general: 'General',
-          timeouts: 'Timeouts',
-          officeHours: 'Office Hours',
-          groups: 'Groups',
-          confidenciality: 'Confidentiality',
-          api: 'API',
-          externalServices: 'External Services',
-          serveradmin: 'Server Administration',
-        },
-        success: 'Setting saved successfully.',
-        copiedToClipboard: 'Copied to clipboard',
-        title: 'Settings',
-        chatbotTicketTimeout: 'Chatbot ticket timeout (minutes)',
-        chatbotTicketTimeoutAction: 'Action after chatbot timeout',
-        settings: {
-          userCreation: {
-            name: 'User creation',
-            options: {
-              enabled: 'Enabled',
-              disabled: 'Disabled',
-            },
-          },
-        },
-        validations: {
-          title: 'validations',
-          options: {
-            enabled: 'enabled',
-            disabled: 'disabled',
-          },
-        },
-        OfficeManagement: {
-          title: 'Office Management',
-          options: {
-            disabled: 'disabled',
-            ManagementByDepartment: 'Management By Department',
-            ManagementByCompany: 'Management By Company',
-          },
-        },
-        outOfHoursAction: {
-          title: 'Out of Hours Action',
-          options: {
-            pending: 'Leave as pending',
-            closed: 'Close ticket',
-          },
-        },
-        IgnoreGroupMessages: {
-          title: 'Ignore Group Messages',
-          options: {
-            enabled: 'enabled',
-            disabled: 'disabled',
-          },
-        },
-        soundGroupNotifications: {
-          title: 'Sound on Group Notifications',
-          options: {
-            enabled: 'enabled',
-            disabled: 'disabled',
-          },
-        },
-        groupsTab: {
-          title: 'Groups Tab',
-          options: {
-            enabled: 'enabled',
-            disabled: 'disabled',
-          },
-        },
-        VoiceAndVideoCalls: {
-          title: 'Voice and video calls',
-          options: {
-            enabled: 'Ignore',
-            disabled: 'unavailability report',
-          },
-        },
-        AutomaticChatbotOutput: {
-          title: 'Automatic Chatbot Output',
-          options: {
-            enabled: 'enabled',
-            disabled: 'disabled',
-          },
-        },
-        ShowNumericEmoticons: {
-          title: 'Display numeric emojis in the queue',
-          options: {
-            enabled: 'enabled',
-            disabled: 'disabled',
-          },
-        },
-        QuickMessages: {
-          title: 'Quick Messages',
-          options: {
-            enabled: 'By company',
-            disabled: 'By User',
-          },
-        },
-        AllowRegistration: {
-          title: 'Allow Registration',
-          options: {
-            enabled: 'enabled',
-            disabled: 'disabled',
-          },
-        },
-        FileUploadLimit: {
-          title: 'File Upload Limit (MB)',
-        },
-        FileDownloadLimit: {
-          title: 'File Download Limit (MB)',
-        },
-        messageVisibility: {
-          title: 'Message Visibility',
-          options: {
-            respectMessageQueue: 'Respect queue of message',
-            respectTicketQueue: 'Respect queue of ticket',
-          },
-        },
-        keepQueueAndUser: {
-          title: 'Keep queue and user on closed ticket',
-          options: {
-            enabled: 'Enabled',
-            disabled: 'Disabled',
-          },
-        },
-        GracePeriod: {
-          title: 'Subscription Grace Period (days)',
-        },
-        ticketAcceptedMessage: {
-          title: 'Ticket Accepted Message',
-          placeholder: 'Enter your ticket accepted message here',
-        },
-        transferMessage: {
-          title: 'Transfer Message',
-          placeholder: 'Enter your transfer message here',
-        },
-        mustacheVariables: {
-          title: 'Available variables:',
-        },
-        WelcomeGreeting: {
-          greetings: 'Hello',
-          welcome: 'Welcome to',
-          expirationTime: 'Active until',
-        },
-        Options: {
-          title: 'Options',
-        },
-        Companies: {
-          title: 'Companies',
-        },
-        schedules: {
-          title: 'schedules',
-        },
-        Plans: {
-          title: 'Plans',
-        },
-        Help: {
-          title: 'Help',
-        },
-        Whitelabel: {
-          title: 'Whitelabel',
-        },
-        PaymentGateways: {
-          title: 'Pasarelas de pago',
-        },
-        AIProvider: {
-          title: 'AI Provider',
-        },
-        AudioTranscriptions: {
-          title: 'Audio Transcriptions',
-        },
-        TagsMode: {
-          title: 'Tags Mode',
-          options: {
-            ticket: 'Ticket',
-            contact: 'Contact',
-            both: 'Ticket and Contact',
-          },
-        },
-      },
-      messagesList: {
-        header: {
-          assignedTo: 'Assigned to:',
-          buttons: {
-            return: 'Return',
-            resolve: 'Resolve',
-            reopen: 'Reopen',
-            accept: 'Accept',
-          },
-        },
-      },
-      messagesInput: {
-        placeholderOpen: 'Type a message',
-        placeholderClosed: 'Reopen or accept this ticket to send a message.',
-        signMessage: 'Sign',
-        replying: 'Replying',
-        editing: 'Editing',
-      },
-      message: {
-        edited: 'Edited',
-        forwarded: 'Forwarded',
-      },
-
-      contactDrawer: {
-        header: 'Contact Information',
-        buttons: {
-          edit: 'Edit Contact',
-        },
-        extraInfo: 'Other information',
-      },
-      ticketOptionsMenu: {
-        schedule: 'Schedule',
-        delete: 'Delete',
-        transfer: 'Transfer',
-        registerAppointment: 'Contact Notes',
-        appointmentsModal: {
-          title: 'Contact Notes',
-          textarea: 'Note',
-          placeholder: 'Insert the information you want to record here',
-        },
-        confirmationModal: {
-          title: 'Delete contact ticket',
+          title: 'Delete Help',
           message:
-            'Attention! All messages related to the ticket will be lost.',
+            'Are you sure you want to delete this help? This action cannot be undone.',
         },
+      },
+      companiesManager: {
         buttons: {
           delete: 'Delete',
-          cancel: 'Cancel',
+          incrementDueDate: 'Increment Due Date',
+          user: 'User',
+          save: 'Save',
         },
-      },
-      confirmationModal: {
-        buttons: {
-          confirm: 'Ok',
-          cancel: 'Cancel',
-        },
-      },
-      messageOptionsMenu: {
-        delete: 'Delete',
-        edit: 'Edit',
-        forward: 'Forward',
-        history: 'History',
-        reply: 'Reply',
-        confirmationModal: {
-          title: 'Delete message?',
-          message: 'This action cannot be undone.',
-        },
-      },
-      messageHistoryModal: {
-        close: 'Close',
-        title: 'Message edit history',
-      },
-      presence: {
-        unavailable: 'Unavailable',
-        available: 'Available',
-        composing: 'Composing...',
-        recording: 'Recording...',
-        paused: 'Paused',
-      },
-      privacyModal: {
-        title: 'Edit Whatsapp Privacy',
-        buttons: {
-          cancel: 'Cancel',
-          okEdit: 'Save',
-        },
-        form: {
-          menu: {
-            all: 'All',
-            none: 'Nobody',
-            contacts: 'My contacts',
-            contact_blacklist: 'Selected contacts',
-            match_last_seen: 'Match Last Seen',
-            known: 'Known',
-            disable: 'Disabled',
-            hrs24: '24 Hours',
-            dias7: '7 Days',
-            dias90: '90 Days',
-          },
-          readreceipts: 'To update the Read Receipts privacy',
-          profile: 'To update the Profile Picture privacy',
-          status: 'To update the Messages privacy',
-          online: 'To update the Online privacy',
-          last: 'To update the LastSeen privacy',
-          groupadd: 'To update the Groups Add privacy',
-          calladd: 'To update the Call Add privacy',
-          disappearing: 'To update the Default Disappearing Mode',
-        },
-      },
-      backendErrors: {
-        ERR_UNAUTHORIZED: 'You are not authorized to perform this action.',
-        ERR_FORBIDDEN: 'You do not have permission to access this resource.',
-        ERR_CHECK_NUMBER: 'Check the number and try again.',
-        ERR_NO_OTHER_WHATSAPP: 'There must be at least one default WhatsApp.',
-        ERR_NO_DEF_WAPP_FOUND:
-          'No default WhatsApp found. Check the connections page.',
-        ERR_WAPP_NOT_INITIALIZED:
-          'This WhatsApp session has not been initialized. Check the connections page.',
-        ERR_WAPP_CHECK_CONTACT:
-          'Could not check WhatsApp contact. Check the connections page.',
-        ERR_WAPP_INVALID_CONTACT: 'This is not a valid WhatsApp number.',
-        ERR_WAPP_DOWNLOAD_MEDIA:
-          'Could not download media from WhatsApp. Check the connections page.',
-        ERR_INVALID_CREDENTIALS: 'Authentication error. Please try again.',
-        ERR_SENDING_WAPP_MSG:
-          'Error sending WhatsApp message. Check the connections page.',
-        ERR_DELETE_WAPP_MSG: 'Could not delete WhatsApp message.',
-        ERR_EDITING_WAPP_MSG: 'Could not edit WhatsApp message.',
-        ERR_OTHER_OPEN_TICKET:
-          'There is already an open ticket for this contact.',
-        ERR_SESSION_EXPIRED: 'Session expired. Please log in.',
-        ERR_USER_CREATION_DISABLED:
-          'User creation has been disabled by the administrator.',
-        ERR_NO_PERMISSION:
-          'You do not have permission to access this resource.',
-        ERR_DUPLICATED_CONTACT: 'A contact with this number already exists.',
-        ERR_NO_SETTING_FOUND: 'No setting found with this ID.',
-        ERR_NO_CONTACT_FOUND: 'No contact found with this ID.',
-        ERR_NO_TICKET_FOUND: 'No ticket found with this ID.',
-        ERR_NO_USER_FOUND: 'No user found with this ID.',
-        ERR_NO_WAPP_FOUND: 'No WhatsApp found with this ID.',
-        ERR_CREATING_MESSAGE: 'Error creating message in the database.',
-        ERR_CREATING_TICKET: 'Error creating ticket in the database.',
-        ERR_FETCH_WAPP_MSG:
-          'Error fetching message from WhatsApp, perhaps it is too old.',
-        ERR_QUEUE_COLOR_ALREADY_EXISTS:
-          'This color is already in use, choose another.',
-        ERR_WAPP_GREETING_REQUIRED:
-          'Greeting message is mandatory when there is more than one queue.',
-        ERR_SUBSCRIPTION_CHECK_FAILED: 'Subscription check failed.',
-        ERR_WAPP_NOT_FOUND: 'Connection unavailable.',
-        ERR_SUBSCRIPTION_EXPIRED: 'Your subscription has expired.',
-        ERR_UNKOWN: 'Unknown error.',
-      },
-      ticketz: {
-        registration: {
-          header: 'Register in the Ticketz user base',
-          description:
-            'Fill in the fields below to register in the Ticketz user base and receive news about the project.',
+        table: {
           name: 'Name',
-          country: 'Country',
-          phoneNumber: 'Whatsapp Number',
-          submit: 'Register',
+          email: 'Email',
+          phone: 'Phone',
+          plan: 'Plan',
+          campaigns: 'Campaigns',
+          status: 'Status',
+          createdAt: 'Created At',
+          dueDate: 'Due Date',
         },
-        support: {
-          title: 'Support Ticketz project',
-          mercadopagotitle: 'Credit Card',
-          recurringbrl: 'Recurring donations in BRL',
-          paypaltitle: 'Credit Card',
-          international: 'Donations in USD',
+        status: {
+          yes: 'Active',
+          no: 'Inactive',
+        },
+        campaigns: {
+          enabled: 'Enabled',
+          disabled: 'Disabled',
         },
       },
       leads: {
         title: 'Leads',
         searchPlaceholder: 'Search leads',
+        notFound: 'Lead not found',
         buttons: {
           add: 'New Lead',
           save: 'Save',
           cancel: 'Cancel',
+        },
+        views: {
+          board: 'Board',
+          list: 'List',
+        },
+        tabs: {
+          basic: 'Basic',
+          contact: 'Contact',
+          financial: 'Financial',
+          tags: 'Tags',
+          notes: 'Notes',
         },
         modal: {
           add: {
@@ -1235,42 +610,145 @@ const messages = {
             selectUser: 'Select user',
           },
         },
-        table: {
+        dialog: {
+          new: 'New Lead',
+          edit: 'Edit Lead',
+          addTag: 'Add Tag',
+        },
+        form: {
           name: 'Name',
-          contact: 'Contact',
-          stage: 'Stage',
+          title: 'Title',
+          titleHelper: 'Brief description of the lead',
+          description: 'Description',
           temperature: 'Temperature',
+          status: 'Status',
+          pipeline: 'Pipeline',
+          contact: 'Contact',
+          column: 'Column',
+          assignedTo: 'Assigned To',
+          unassigned: 'Unassigned',
           source: 'Source',
           expectedValue: 'Expected Value',
-          probability: 'Probability',
-          expectedClosingDate: 'Closing Date',
+          currency: 'Currency',
+          probability: 'Probability (%)',
+          probabilityHelper: 'Probability of closing the deal (0-100%)',
+          expectedClosingDate: 'Expected Closing Date',
+          tags: 'Tags',
+          addTag: 'Add Tag',
+          tag: 'Tag',
+          customFields: 'Custom Fields',
+          customFieldName: 'Enter custom field name',
+          addCustomField: 'Add Custom Field',
+          notes: 'Notes',
+        },
+        table: {
+          lead: 'Lead',
+          contact: 'Contact',
+          status: 'Status',
+          pipeline: 'Pipeline',
+          column: 'Column',
+          temperature: 'Temperature',
+          tags: 'Tags',
+          financial: 'Financial',
           assignedTo: 'Assigned To',
           actions: 'Actions',
+          unassigned: 'Unassigned',
         },
-        stages: {
+        sections: {
+          contact: 'Contact Information',
+          financial: 'Financial Information',
+          tags: 'Tags',
+          customFields: 'Custom Fields',
+          notes: 'Notes',
+        },
+        fields: {
+          contact: 'Contact',
+          phone: 'Phone',
+          email: 'Email',
+          source: 'Source',
+          assignedTo: 'Assigned To',
+          expectedValue: 'Expected Value',
+          probability: 'Probability',
+          expectedClosingDate: 'Expected Closing Date',
+        },
+        status: {
           new: 'New',
           contacted: 'Contacted',
-          qualified: 'Qualified',
+          follow_up: 'Follow Up',
           proposal: 'Proposal',
           negotiation: 'Negotiation',
-          closed_won: 'Won',
-          closed_lost: 'Lost',
+          qualified: 'Qualified',
+          unqualified: 'Unqualified',
+          converted: 'Converted',
+          lost: 'Lost',
+          closed_won: 'Closed Won',
+          closed_lost: 'Closed Lost',
         },
-        temperatures: {
+        pipeline: {
+          default: 'Default',
+          sales: 'Sales',
+          support: 'Support',
+          onboarding: 'Onboarding',
+        },
+        temperature: {
           hot: 'Hot',
           warm: 'Warm',
           cold: 'Cold',
         },
+        timeline: {
+          title: 'Timeline',
+          empty: 'No interactions found',
+        },
         toasts: {
           created: 'Lead created successfully',
           updated: 'Lead updated successfully',
+          deleted: 'Lead deleted successfully',
           contactRequired: 'Contact is required',
+          tagAdded: 'Tag added successfully',
+          tagRemoved: 'Tag removed successfully',
+        },
+        validation: {
+          name: {
+            required: 'Name is required',
+          },
+          title: {
+            max: 'Title must be at most 255 characters',
+          },
+          contact: {
+            required: 'Contact is required',
+          },
+          column: {
+            required: 'Column is required',
+          },
+          temperature: {
+            required: 'Temperature is required',
+          },
+          status: {
+            required: 'Status is required',
+          },
+          pipeline: {
+            required: 'Pipeline is required',
+          },
+          source: {
+            required: 'Source is required',
+          },
+          currency: {
+            required: 'Currency is required',
+          },
+          probability: {
+            min: 'Probability must be at least 0',
+            max: 'Probability must be at most 100',
+          },
         },
         leadColumns: {
           buttons: {
             add: 'New Column',
             save: 'Save',
             cancel: 'Cancel',
+          },
+          dialog: {
+            new: 'New Column',
+            edit: 'Edit Column',
           },
           modal: {
             add: {
@@ -1302,6 +780,392 @@ const messages = {
         taskPlaceholder: 'Enter a new task',
         lastUpdate: 'Last update',
         taskRequired: 'Task text is required',
+      },
+      settings: {
+        group: {
+          general: 'General',
+          timeouts: 'Timeouts',
+          officeHours: 'Office Hours',
+          groups: 'Groups',
+          confidenciality: 'Confidentiality',
+          api: 'API',
+          externalServices: 'External Services',
+          serveradmin: 'Server Administration',
+        },
+        success: 'Settings saved successfully.',
+        copiedToClipboard: 'Copied to clipboard',
+        title: 'Settings',
+        chatbotTicketTimeout: 'Chatbot timeout (minutes)',
+        chatbotTicketTimeoutAction: 'Chatbot timeout action',
+        settings: {
+          userCreation: {
+            name: 'User Creation',
+            options: {
+              enabled: 'Enabled',
+              disabled: 'Disabled',
+            },
+          },
+        },
+        validations: {
+          title: 'Ratings',
+          options: {
+            enabled: 'Enabled',
+            disabled: 'Disabled',
+          },
+        },
+        OfficeManagement: {
+          title: 'Office Management',
+          options: {
+            disabled: 'Disabled',
+            ManagementByDepartment: 'Management By Queue',
+            ManagementByCompany: 'Management By Company',
+          },
+        },
+        outOfHoursAction: {
+          title: 'Out of hours action',
+          options: {
+            pending: 'Leave as pending',
+            closed: 'Close ticket',
+          },
+        },
+        IgnoreGroupMessages: {
+          title: 'Ignore Group Messages',
+          options: {
+            enabled: 'Enabled',
+            disabled: 'Disabled',
+          },
+        },
+        soundGroupNotifications: {
+          title: 'Group sound notifications',
+          options: {
+            enabled: 'Enabled',
+            disabled: 'Disabled',
+          },
+        },
+        groupsTab: {
+          title: 'Groups Tab',
+          options: {
+            enabled: 'Enabled',
+            disabled: 'Disabled',
+          },
+        },
+        VoiceAndVideoCalls: {
+          title: 'Voice and Video Calls',
+          options: {
+            enabled: 'Ignore',
+            disabled: 'Inform unavailability',
+          },
+        },
+        AutomaticChatbotOutput: {
+          title: 'Automatic chatbot exit',
+          options: {
+            enabled: 'Enabled',
+            disabled: 'Disabled',
+          },
+        },
+        ShowNumericEmoticons: {
+          title: 'Show numeric emoticons in queue',
+          options: {
+            enabled: 'Enabled',
+            disabled: 'Disabled',
+          },
+        },
+        QuickMessages: {
+          title: 'Quick Messages',
+          options: {
+            enabled: 'By company',
+            disabled: 'By User',
+          },
+        },
+        AllowRegistration: {
+          title: 'Allow registration',
+          options: {
+            enabled: 'Enabled',
+            disabled: 'Disabled',
+          },
+        },
+        FileUploadLimit: {
+          title: 'File upload limit (MB)',
+        },
+        FileDownloadLimit: {
+          title: 'File download limit (MB)',
+        },
+        messageVisibility: {
+          title: 'Message visibility',
+          options: {
+            respectMessageQueue: 'Respect message queue',
+            respectTicketQueue: 'Respect ticket queue',
+          },
+        },
+        keepQueueAndUser: {
+          title: 'Keep queue and user in closed ticket',
+          options: {
+            enabled: 'Enabled',
+            disabled: 'Disabled',
+          },
+        },
+        GracePeriod: {
+          title: 'Grace period after expiration (days)',
+        },
+        ticketAcceptedMessage: {
+          title: 'Ticket accepted message',
+          placeholder: 'Enter your ticket accepted message here',
+        },
+        transferMessage: {
+          title: 'Transfer message',
+          placeholder: 'Enter your transfer message here',
+        },
+        mustacheVariables: {
+          title: 'Available variables:',
+        },
+        WelcomeGreeting: {
+          greetings: 'Hello',
+          welcome: 'Welcome to',
+          expirationTime: 'Active until',
+        },
+        Options: {
+          title: 'Options',
+        },
+        Companies: {
+          title: 'Companies',
+        },
+        schedules: {
+          title: 'Schedules',
+        },
+        Plans: {
+          title: 'Plans',
+        },
+        Help: {
+          title: 'Help',
+        },
+        Whitelabel: {
+          title: 'Whitelabel',
+        },
+        PaymentGateways: {
+          title: 'Payment Gateways',
+        },
+        AIProvider: {
+          title: 'AI Service',
+        },
+        AudioTranscriptions: {
+          title: 'Audio transcription',
+        },
+        TagsMode: {
+          title: 'Tags Mode',
+          options: {
+            ticket: 'Ticket',
+            contact: 'Contact',
+            both: 'Ticket and Contact',
+          },
+        },
+        schedulesUpdated: 'Schedules updated successfully.',
+        operationUpdated: 'Operation updated successfully.',
+        paymentGateway: 'Payment Gateway',
+        none: 'None',
+        owenPayments: 'Owen Payments 💎',
+        efi: 'Efí',
+        apiToken: 'API Token',
+        aiKey: 'AI Key',
+        defaultAppName: 'Ticketz',
+        ratingsTimeout: 'Rating timeout (minutes)',
+        noQueueTimeout: 'No queue timeout (minutes)',
+        noQueueTimeoutAction: 'No queue timeout action',
+        openTicketTimeout: 'Open ticket timeout (minutes)',
+        openTicketTimeoutAction: 'Open ticket timeout action',
+        close: 'Close',
+        returnToQueue: 'Return to queue',
+        officeHours: 'Office Hours',
+        officeManagement: 'Office Management',
+        managementByQueue: 'Management by Queue',
+        managementByCompany: 'Management by Company',
+        groups: 'Groups',
+        ignoreGroupMessages: 'Ignore Group Messages',
+        groupSoundNotifications: 'Group Sound Notifications',
+        confidentiality: 'Confidentiality',
+        respectMessageQueue: 'Respect Message Queue',
+        respectTicketQueue: 'Respect Ticket Queue',
+        api: 'API',
+        leaveAsPending: 'Leave as Pending',
+        // Form fields
+        name: 'Name',
+        email: 'Email',
+        phone: 'Phone',
+        company: 'Company',
+        plan: 'Plan',
+        campaigns: 'Campaigns',
+        status: 'Status',
+        createdAt: 'Created At',
+        dueDate: 'Due Date',
+        value: 'Value',
+        users: 'Users',
+        connections: 'Connections',
+        queues: 'Queues',
+        public: 'Public',
+        yes: 'Yes',
+        no: 'No',
+        active: 'Active',
+        inactive: 'Inactive',
+        // Plan management
+        planName: 'Plan Name',
+        planValue: 'Plan Value',
+        planUsers: 'Plan Users',
+        planConnections: 'Plan Connections',
+        planQueues: 'Plan Queues',
+        planPublic: 'Plan Public',
+        // Campaign management
+        campaignTitle: 'Campaign Title',
+        campaignCode: 'Campaign Code',
+        campaignDescription: 'Campaign Description',
+        campaignEnabled: 'Campaign Enabled',
+        campaignDisabled: 'Campaign Disabled',
+        // User management
+        userName: 'User Name',
+        userEmail: 'User Email',
+        userPhone: 'User Phone',
+        userCompany: 'User Company',
+        userPlan: 'User Plan',
+        // Whitelabel
+        primaryColorLight: 'Primary Color Light',
+        primaryColorDark: 'Primary Color Dark',
+        appLogoLight: 'App Logo Light',
+        appLogoDark: 'App Logo Dark',
+        appName: 'App Name',
+        appFavicon: 'App Favicon',
+        logoSvgHint: 'Prefer SVG and 28:10 aspect ratio',
+        faviconSvgHint: 'Prefer square SVG image or 512x512 PNG',
+        // Buttons
+        clear: 'Clear',
+        save: 'Save',
+        cancel: 'Cancel',
+        edit: 'Edit',
+        delete: 'Delete',
+        add: 'Add',
+        // Date format
+        dateFormat: 'dd/mm/yyyy',
+        // Recurrence
+        recurrence: 'Recurrence',
+        // Contact lists
+        contactLists: 'Contact Lists',
+        // Navigation
+        listing: 'Listing',
+        // System description
+        systemDescription: 'ticketz chat based ticket system',
+      },
+      campaigns: {
+        title: 'Campaigns',
+        searchPlaceholder: 'Search',
+        buttons: {
+          add: 'New Campaign',
+          contactLists: 'Contact Lists',
+        },
+        table: {
+          name: 'Name',
+          whatsapp: 'Connection',
+          contactList: 'Contact List',
+          status: 'Status',
+          scheduledAt: 'Scheduled At',
+          completedAt: 'Completed',
+          confirmation: 'Confirmation',
+          actions: 'Actions',
+        },
+        dialog: {
+          new: 'New Campaign',
+          update: 'Edit Campaign',
+          readonly: 'Read Only',
+          form: {
+            name: 'Name',
+            message1: 'Message 1',
+            message2: 'Message 2',
+            message3: 'Message 3',
+            message4: 'Message 4',
+            message5: 'Message 5',
+            confirmationMessage1: 'Confirmation Message 1',
+            confirmationMessage2: 'Confirmation Message 2',
+            confirmationMessage3: 'Confirmation Message 3',
+            confirmationMessage4: 'Confirmation Message 4',
+            confirmationMessage5: 'Confirmation Message 5',
+            messagePlaceholder: 'Message content',
+            messageHelperText:
+              'Use variables like {name}, {number}, {email} or define custom variables.',
+            whatsapp: 'Connection',
+            status: 'Status',
+            scheduledAt: 'Scheduled At',
+            confirmation: 'Confirmation',
+            contactList: 'Contact List',
+            disabled: 'Disabled',
+            enabled: 'Enabled',
+            none: 'None',
+            msg1: 'Msg. 1',
+            msg2: 'Msg. 2',
+            msg3: 'Msg. 3',
+            msg4: 'Msg. 4',
+            msg5: 'Msg. 5',
+          },
+          buttons: {
+            add: 'Add',
+            edit: 'Update',
+            okadd: 'Ok',
+            cancel: 'Cancel Campaign',
+            restart: 'Restart Campaign',
+            close: 'Close',
+            attach: 'Attach File',
+          },
+        },
+        confirmationModal: {
+          deleteTitle: 'Delete',
+          deleteMessage: 'This action cannot be undone.',
+        },
+        toasts: {
+          success: 'Operation completed successfully',
+          cancel: 'Campaign cancelled',
+          restart: 'Campaign restarted',
+          deleted: 'Record deleted',
+        },
+        status: {
+          inactive: 'Inactive',
+          scheduled: 'Scheduled',
+          inProgress: 'In Progress',
+          cancelled: 'Cancelled',
+          finished: 'Finished',
+        },
+        tableData: {
+          notDefined: 'Not defined',
+          notDefinedMale: 'Not defined',
+          noSchedule: 'No schedule',
+          notCompleted: 'Not completed',
+          enabled: 'Enabled',
+          disabled: 'Disabled',
+        },
+        tooltips: {
+          stopCampaign: 'Stop Campaign',
+          restartCampaign: 'Restart Campaign',
+        },
+        validation: {
+          tooShort: 'Too short!',
+          tooLong: 'Too long!',
+          required: 'Required',
+        },
+      },
+      campaignsConfig: {
+        title: 'Campaigns Settings',
+        intervals: 'Intervals',
+        messageInterval: 'Message interval',
+        longerIntervalAfter: 'Longer interval after',
+        greaterInterval: 'Greater interval',
+        noInterval: 'No interval',
+        notDefined: 'Not defined',
+        seconds: 'seconds',
+        messages: 'messages',
+        addVariable: 'Add Variable',
+        saveSettings: 'Save Settings',
+        shortcode: 'Shortcode',
+        content: 'Content',
+        variables: 'Variables',
+      },
+      ticketMessagesDialog: {
+        buttons: {
+          close: 'Close',
+        },
       },
     },
   },

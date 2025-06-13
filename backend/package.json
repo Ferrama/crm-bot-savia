@@ -19,7 +19,7 @@
     "mark-seeds": "node dist/database/markSeedsAsExecuted.js"
   },
   "author": "",
-  "license": "MIT",
+
   "dependencies": {
     "@adiwajshing/keyed-db": "^0.2.4",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",

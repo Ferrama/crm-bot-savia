@@ -6,10 +6,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import {
-  DeleteOutline as DeleteOutlineIcon,
-  Edit as EditIcon,
-} from '@material-ui/icons';
+import { Edit3, Trash2 } from 'lucide-react';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { i18n } from '../../translate/i18n';
@@ -47,11 +44,11 @@ function QuickMessagesTable(props) {
           {!readOnly ? (
             <TableCell align='center'>
               <IconButton size='small' onClick={() => handleEdit(message)}>
-                <EditIcon size={20} />
+                <Edit3 size={20} />
               </IconButton>
 
               <IconButton size='small' onClick={() => handleDelete(message)}>
-                <DeleteOutlineIcon size={20} />
+                <Trash2 size={20} />
               </IconButton>
             </TableCell>
           ) : null}

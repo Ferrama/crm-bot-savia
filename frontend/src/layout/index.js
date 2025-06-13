@@ -39,7 +39,7 @@ import { useDate } from '../hooks/useDate';
 import NestedMenuItem from 'material-ui-nested-menu-item';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import OnlyForSuperUser from '../components/OnlyForSuperUser';
-import SaviaIframePersistent from '../components/SaviaIframePersistent';
+
 import SaviaSessionManager from '../components/SaviaSessionManager';
 import ColorModeContext from '../layout/themeContext';
 
@@ -462,16 +462,6 @@ const LoggedInLayout = ({ children, themeToggle }) => {
           <ChatPopover />
 
           <div>
-            <IconButton
-              aria-label='language selection'
-              aria-controls='language-appbar'
-              aria-haspopup='true'
-              onClick={handleLanguageMenu}
-              variant='contained'
-              style={{ color: 'white' }}
-            >
-              🌐
-            </IconButton>
             <Menu
               id='language-appbar'
               anchorEl={anchorEl}
@@ -555,7 +545,7 @@ const LoggedInLayout = ({ children, themeToggle }) => {
         <OnlyForSuperUser user={currentUser} yes={() => <GoogleAnalytics />} />
         {children ? children : null}
       </main>
-      <SaviaIframePersistent />
+
       <SaviaSessionManager />
     </div>
   );

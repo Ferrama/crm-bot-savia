@@ -6,7 +6,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit3, Trash2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { i18n } from '../../translate/i18n';
 
@@ -30,17 +30,11 @@ const useStyles = makeStyles({
     width: '100%',
     height: '100%',
     marginTop: '1rem',
+    // backgroundColor: '#f5f5f5',
     borderRadius: '5px',
-    color: '#888',
   },
   list: {
     marginBottom: '5px',
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    width: 'auto',
-    alignItems: 'flex-end',
   },
 });
 
@@ -111,46 +105,29 @@ const ToDoList = () => {
           value={task}
           onChange={handleTaskChange}
           variant='outlined'
-          placeholder={i18n.t('todoList.taskPlaceholder')}
         />
-        <div className={classes.buttonContainer}>
-          <Button variant='contained' color='primary' onClick={handleAddTask}>
-            {editIndex >= 0 ? i18n.t('todoList.save') : i18n.t('todoList.add')}
-          </Button>
-        </div>
+        <Button variant='contained' color='primary' onClick={handleAddTask}>
+          {editIndex >= 0 ? i18n.t('todoList.save') : i18n.t('todoList.add')}
+        </Button>
       </div>
       <div className={classes.listContainer}>
         <List>
-          {tasks.length === 0 ? (
-            <ListItem>
-              <ListItemText primary={i18n.t('todoList.noTasks')} />
+          {tasks.map((task, index) => (
+            <ListItem key={index} className={classes.list}>
+              <ListItemText
+                primary={task.text}
+                secondary={task.updatedAt.toLocaleString()}
+              />
+              <ListItemSecondaryAction>
+                <IconButton onClick={() => handleEditTask(index)}>
+                  <Edit3 />
+                </IconButton>
+                <IconButton onClick={() => handleDeleteTask(index)}>
+                  <Trash2 />
+                </IconButton>
+              </ListItemSecondaryAction>
             </ListItem>
-          ) : (
-            tasks.map((task, index) => (
-              <ListItem key={index} className={classes.list}>
-                <ListItemText
-                  primary={task.text}
-                  secondary={`${i18n.t(
-                    'todoList.lastUpdate'
-                  )}: ${task.updatedAt.toLocaleString()}`}
-                />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    onClick={() => handleEditTask(index)}
-                    title={i18n.t('todoList.edit')}
-                  >
-                    <Edit size={20} />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => handleDeleteTask(index)}
-                    title={i18n.t('todoList.delete')}
-                  >
-                    <Trash2 size={20} />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))
-          )}
+          ))}
         </List>
       </div>
     </div>

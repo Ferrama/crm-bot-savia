@@ -32,18 +32,15 @@ const UpdateService = async (data: Data): Promise<Campaign> => {
     throw new AppError("ERR_NO_CAMPAIGN_FOUND", 404);
   }
 
-  if (["INATIVA", "PROGRAMADA", "CANCELADA"].indexOf(data.status) === -1) {
+  if (["INACTIVE", "SCHEDULED", "CANCELLED"].indexOf(data.status) === -1) {
     throw new AppError(
-      "Só é permitido alterar campanha Inativa e Programada",
+      "Only inactive and scheduled campaigns can be modified",
       400
     );
   }
 
-  if (
-    data.scheduledAt != null &&
-    data.status === "INATIVA"
-  ) {
-    data.status = "PROGRAMADA";
+  if (data.scheduledAt != null && data.status === "INACTIVE") {
+    data.status = "SCHEDULED";
   }
 
   await record.update(data);

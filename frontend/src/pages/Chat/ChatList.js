@@ -12,6 +12,7 @@ import React, { useContext, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/Auth/AuthContext';
 import { useDate } from '../../hooks/useDate';
+import { i18n } from '../../translate/i18n';
 
 import { Edit, Trash2 } from 'lucide-react';
 
@@ -116,12 +117,12 @@ export default function ChatList({
   return (
     <>
       <ConfirmationModal
-        title={'Excluir Conversa'}
+        title={i18n.t('internalChat.confirmDelete')}
         open={confirmationModal}
         onClose={setConfirmModalOpen}
         onConfirm={handleDelete}
       >
-        Esta ação não pode ser revertida, confirmar?
+        {i18n.t('internalChat.confirmDeleteMessage')}
       </ConfirmationModal>
       <div className={classes.mainContainer}>
         <div className={classes.chatList}>

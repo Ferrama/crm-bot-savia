@@ -209,7 +209,7 @@ const ContactListItemModal = ({
                   onClick={handleClose}
                   color='secondary'
                   disabled={isSubmitting}
-                  variant='outlined'
+                  variant='contained'
                 >
                   {i18n.t('contactModal.buttons.cancel')}
                 </Button>

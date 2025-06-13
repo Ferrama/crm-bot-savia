@@ -1,0 +1,36 @@
+{
+    "title": "Colunas de Leads",
+    "buttons": {
+        "add": "Adicionar Coluna",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "save": "Salvar",
+        "cancel": "Cancelar"
+    },
+    "dialog": {
+        "new": "Nova Coluna",
+        "edit": "Editar Coluna"
+    },
+    "form": {
+        "name": "Nome",
+        "color": "Cor",
+        "order": "Ordem"
+    },
+    "toasts": {
+        "created": "Coluna criada com sucesso!",
+        "updated": "Coluna atualizada com sucesso!",
+        "deleted": "Coluna excluída com sucesso!",
+        "hasLeads": "Não é possível excluir uma coluna que contém leads"
+    },
+    "validation": {
+        "name": {
+            "required": "Nome é obrigatório"
+        },
+        "color": {
+            "required": "Cor é obrigatória"
+        },
+        "order": {
+            "required": "Ordem é obrigatória"
+        }
+    }
+}

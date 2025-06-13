@@ -25,6 +25,7 @@ import { SocketContext } from '../../context/Socket/SocketContext';
 import toastError from '../../errors/toastError';
 import api from '../../services/api';
 import { getBackendURL } from '../../services/config';
+import { i18n } from '../../translate/i18n';
 
 const useStyles = makeStyles((theme) => ({
   contend: { minWidth: 300, maxWidth: 500 },
@@ -41,8 +42,9 @@ const useStyles = makeStyles((theme) => ({
 function AnnouncementDialog({ announcement, open, handleClose }) {
   const classes = useStyles();
   const getMediaPath = (filename) => {
-    return `${getBackendURL()}}/public/${filename}`;
+    return `${getBackendURL()}/public/${filename}`;
   };
+
   return (
     <Dialog
       open={open}
@@ -51,16 +53,13 @@ function AnnouncementDialog({ announcement, open, handleClose }) {
       aria-describedby='alert-dialog-description'
     >
       <DialogTitle id='alert-dialog-title'>{announcement.title}</DialogTitle>
-      <DialogContent className={classes.contend}>
+      <DialogContent>
         {announcement.mediaPath && (
           <div
             style={{
-              border: '1px solid #f1f1f1',
-              margin: '0 auto 20px',
-              textAlign: 'center',
-              width: '90%',
-              height: 300,
-              //backgroundImage: `url(${getMediaPath(announcement.mediaPath)})`,
+              width: '100%',
+              height: 200,
+              backgroundImage: `url(${getMediaPath(announcement.mediaPath)})`,
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'contain',
               backgroundPosition: 'center',
@@ -72,8 +71,19 @@ function AnnouncementDialog({ announcement, open, handleClose }) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleClose()} color='primary' autoFocus>
-          Fechar
+        <Button
+          onClick={() => handleClose()}
+          color='secondary'
+          variant='contained'
+        >
+          {i18n.t('confirmationModal.buttons.cancel')}
+        </Button>
+        <Button
+          onClick={() => handleClose()}
+          color='primary'
+          variant='contained'
+        >
+          {i18n.t('announcementsPopover.buttons.close')}
         </Button>
       </DialogActions>
     </Dialog>

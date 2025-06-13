@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Chip,
@@ -13,7 +14,15 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Edit, Plus, Trash2 } from 'lucide-react';
+import {
+  Calendar,
+  DollarSign,
+  Edit,
+  Percent,
+  Plus,
+  Trash2,
+  User,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
@@ -39,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 0,
   },
   column: {
-    minWidth: 300,
-    maxWidth: 300,
+    minWidth: 320,
+    maxWidth: 320,
     backgroundColor: theme.palette.background.default,
     borderRadius: theme.shape.borderRadius,
     display: 'flex',
@@ -82,14 +91,33 @@ const useStyles = makeStyles((theme) => ({
   },
   leadName: {
     fontWeight: 'bold',
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(0.5),
+    fontSize: '1rem',
   },
-  leadInfo: {
+  leadTitle: {
     fontSize: '0.875rem',
     color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(1),
+    fontStyle: 'italic',
+  },
+  leadDescription: {
+    fontSize: '0.75rem',
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(1),
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+  },
+  leadInfo: {
+    fontSize: '0.75rem',
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(0.5),
   },
   temperatureChip: {
     marginTop: theme.spacing(1),
+    height: 20,
+    fontSize: '0.75rem',
   },
   hotChip: {
     backgroundColor: '#ff6b6b',
@@ -103,11 +131,39 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#6c5ce7',
     color: 'white',
   },
+  statusChip: {
+    height: 20,
+    fontSize: '0.75rem',
+    marginBottom: theme.spacing(1),
+  },
   addButton: {
     marginTop: theme.spacing(1),
   },
   tagChip: {
-    margin: theme.spacing(0.5),
+    margin: theme.spacing(0.25),
+    height: 18,
+    fontSize: '0.7rem',
+  },
+  leadMeta: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    marginBottom: theme.spacing(0.5),
+    fontSize: '0.75rem',
+    color: theme.palette.text.secondary,
+  },
+  leadMetaIcon: {
+    width: 14,
+    height: 14,
+  },
+  assignedUser: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
+    marginTop: theme.spacing(1),
+  },
+  userAvatar: {
+    width: 20,
     height: 20,
     fontSize: '0.75rem',
   },
@@ -204,13 +260,16 @@ const LeadBoard = () => {
 
   const handleEditColumn = async () => {
     try {
-      const { data } = await api.put(`/lead-columns/${selectedColumn.id}`, {
-        name: selectedColumn.name,
-        color: selectedColumn.color,
-      });
-      setColumns(columns.map((col) => (col.id === data.id ? data : col)));
+      const { data } = await api.put(
+        `/lead-columns/${selectedColumn.id}`,
+        newColumn
+      );
+      setColumns(
+        columns.map((col) => (col.id === selectedColumn.id ? data : col))
+      );
       setShowColumnModal(false);
       setSelectedColumn(null);
+      setNewColumn({ name: '', color: '#000000' });
       toast.success(i18n.t('leadColumns.toasts.updated'));
     } catch (err) {
       toastError(err);
@@ -229,11 +288,13 @@ const LeadBoard = () => {
 
   const handleAddLead = (columnId) => {
     setSelectedColumn(columns.find((col) => col.id === columnId));
+    setSelectedLead(null);
     setShowLeadModal(true);
   };
 
   const handleEditLead = (lead) => {
     setSelectedLead(lead);
+    setSelectedColumn(null);
     setShowLeadModal(true);
   };
 
@@ -246,8 +307,112 @@ const LeadBoard = () => {
     return colors[temperature] || classes.coldChip;
   };
 
+  const getStatusColor = (status) => {
+    const colors = {
+      new: '#2196f3',
+      contacted: '#ff9800',
+      follow_up: '#9c27b0',
+      proposal: '#4caf50',
+      negotiation: '#ff5722',
+      qualified: '#00bcd4',
+      unqualified: '#f44336',
+      converted: '#4caf50',
+      lost: '#f44336',
+      closed_won: '#4caf50',
+      closed_lost: '#f44336',
+    };
+    return colors[status] || '#757575';
+  };
+
+  const formatExpectedValue = (lead) => {
+    if (!lead.expectedValue) return '';
+    const currency = lead.currency;
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency?.code || 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(lead.expectedValue);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const getInitials = (name) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   return (
     <div className={classes.root}>
+      <Dialog
+        open={showColumnModal}
+        onClose={() => setShowColumnModal(false)}
+        maxWidth='sm'
+        fullWidth
+      >
+        <DialogTitle>
+          {selectedColumn
+            ? i18n.t('leadColumns.dialog.edit')
+            : i18n.t('leadColumns.dialog.new')}
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label={i18n.t('leadColumns.form.name')}
+                value={newColumn.name}
+                onChange={(e) =>
+                  setNewColumn({ ...newColumn, name: e.target.value })
+                }
+                variant='outlined'
+                margin='dense'
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label={i18n.t('leadColumns.form.color')}
+                type='color'
+                value={newColumn.color}
+                onChange={(e) =>
+                  setNewColumn({ ...newColumn, color: e.target.value })
+                }
+                variant='outlined'
+                margin='dense'
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowColumnModal(false)} color='secondary'>
+            {i18n.t('common.cancel')}
+          </Button>
+          <Button
+            onClick={selectedColumn ? handleEditColumn : handleAddColumn}
+            color='primary'
+            variant='contained'
+          >
+            {selectedColumn ? i18n.t('common.update') : i18n.t('common.create')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <LeadModal
+        open={showLeadModal}
+        onClose={() => setShowLeadModal(false)}
+        reload={loadColumns}
+        lead={selectedLead}
+        columnId={selectedColumn?.id}
+      />
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className={classes.board}>
           {columns.map((column) => (
@@ -259,22 +424,28 @@ const LeadBoard = () => {
                     style={{ backgroundColor: column.color }}
                   />
                   <Typography variant='h6'>{column.name}</Typography>
+                  <Chip
+                    label={column.leads?.length || 0}
+                    size='small'
+                    color='primary'
+                  />
                 </div>
                 <div>
                   <IconButton
                     size='small'
                     onClick={() => {
                       setSelectedColumn(column);
+                      setNewColumn({ name: column.name, color: column.color });
                       setShowColumnModal(true);
                     }}
                   >
-                    <Edit size={20} />
+                    <Edit size={16} />
                   </IconButton>
                   <IconButton
                     size='small'
                     onClick={() => handleDeleteColumn(column.id)}
                   >
-                    <Trash2 size={20} />
+                    <Trash2 size={16} />
                   </IconButton>
                 </div>
               </div>
@@ -285,7 +456,7 @@ const LeadBoard = () => {
                     {...provided.droppableProps}
                     className={classes.columnContent}
                   >
-                    {column.leads.map((lead, index) => (
+                    {column.leads?.map((lead, index) => (
                       <Draggable
                         key={lead.id}
                         draggableId={lead.id.toString()}
@@ -295,42 +466,102 @@ const LeadBoard = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
-                            {...provided.dragHandleProps}
+                            {...provided.droppableProps}
                             className={classes.leadCard}
                             onClick={() => handleEditLead(lead)}
                           >
-                            <Typography className={classes.leadName}>
-                              {lead.name}
-                            </Typography>
-                            <Typography className={classes.leadInfo}>
-                              {lead.contact.name}
-                            </Typography>
-                            <Typography className={classes.leadInfo}>
-                              {lead.contact.number}
-                            </Typography>
-                            <Box display='flex' flexWrap='wrap' mt={1}>
-                              <Chip
-                                label={i18n.t(
-                                  `leads.temperatures.${lead.temperature}`
+                            <div className={classes.leadName}>{lead.name}</div>
+
+                            {lead.title && (
+                              <div className={classes.leadTitle}>
+                                {lead.title}
+                              </div>
+                            )}
+
+                            {lead.description && (
+                              <div className={classes.leadDescription}>
+                                {lead.description}
+                              </div>
+                            )}
+
+                            <Chip
+                              label={i18n.t(`leads.status.${lead.status}`)}
+                              className={classes.statusChip}
+                              style={{
+                                backgroundColor: getStatusColor(lead.status),
+                                color: 'white',
+                              }}
+                              size='small'
+                            />
+
+                            <div className={classes.leadMeta}>
+                              <User className={classes.leadMetaIcon} />
+                              <span>{lead.contact?.name}</span>
+                            </div>
+
+                            {lead.expectedValue && (
+                              <div className={classes.leadMeta}>
+                                <DollarSign className={classes.leadMetaIcon} />
+                                <span>{formatExpectedValue(lead)}</span>
+                              </div>
+                            )}
+
+                            {lead.probability && (
+                              <div className={classes.leadMeta}>
+                                <Percent className={classes.leadMetaIcon} />
+                                <span>{lead.probability}%</span>
+                              </div>
+                            )}
+
+                            {lead.expectedClosingDate && (
+                              <div className={classes.leadMeta}>
+                                <Calendar className={classes.leadMetaIcon} />
+                                <span>
+                                  {formatDate(lead.expectedClosingDate)}
+                                </span>
+                              </div>
+                            )}
+
+                            <Chip
+                              label={i18n.t(
+                                `leads.temperature.${lead.temperature}`
+                              )}
+                              className={`${
+                                classes.temperatureChip
+                              } ${getTemperatureColor(lead.temperature)}`}
+                              size='small'
+                            />
+
+                            {lead.tags && lead.tags.length > 0 && (
+                              <Box className={classes.chips}>
+                                {lead.tags.slice(0, 3).map((tag) => (
+                                  <Chip
+                                    key={tag}
+                                    label={tag}
+                                    className={classes.tagChip}
+                                    size='small'
+                                  />
+                                ))}
+                                {lead.tags.length > 3 && (
+                                  <Chip
+                                    label={`+${lead.tags.length - 3}`}
+                                    className={classes.tagChip}
+                                    size='small'
+                                  />
                                 )}
-                                size='small'
-                                className={`${
-                                  classes.temperatureChip
-                                } ${getTemperatureColor(lead.temperature)}`}
-                              />
-                              {lead.tags?.map((tag) => (
-                                <Chip
-                                  key={tag.id}
-                                  label={tag.name}
-                                  size='small'
-                                  className={classes.tagChip}
-                                  style={{
-                                    backgroundColor: tag.color || '#ccc',
-                                    color: 'white',
-                                  }}
-                                />
-                              ))}
-                            </Box>
+                              </Box>
+                            )}
+
+                            {lead.assignedTo && (
+                              <div className={classes.assignedUser}>
+                                <Avatar className={classes.userAvatar}>
+                                  {getInitials(lead.assignedTo.name)}
+                                </Avatar>
+                                <Typography variant='caption'>
+                                  {lead.assignedTo.name}
+                                </Typography>
+                              </div>
+                            )}
                           </div>
                         )}
                       </Draggable>
@@ -338,9 +569,10 @@ const LeadBoard = () => {
                     {provided.placeholder}
                     <Button
                       fullWidth
-                      startIcon={<Plus size={20} />}
+                      variant='outlined'
                       onClick={() => handleAddLead(column.id)}
                       className={classes.addButton}
+                      startIcon={<Plus />}
                     >
                       {i18n.t('leads.buttons.add')}
                     </Button>
@@ -349,96 +581,8 @@ const LeadBoard = () => {
               </Droppable>
             </Paper>
           ))}
-          <Button
-            variant='outlined'
-            startIcon={<Plus size={20} />}
-            onClick={() => {
-              setSelectedColumn(null);
-              setShowColumnModal(true);
-            }}
-          ></Button>
         </div>
       </DragDropContext>
-
-      <Dialog
-        open={showColumnModal}
-        onClose={() => {
-          setShowColumnModal(false);
-          setSelectedColumn(null);
-          setNewColumn({ name: '', color: '#000000' });
-        }}
-      >
-        <DialogTitle>
-          {selectedColumn
-            ? i18n.t('leads.leadColumns.modal.edit.title')
-            : i18n.t('leads.leadColumns.modal.add.title')}
-        </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label={i18n.t('leads.leadColumns.modal.form.name')}
-                value={selectedColumn ? selectedColumn.name : newColumn.name}
-                onChange={(e) =>
-                  selectedColumn
-                    ? setSelectedColumn({
-                        ...selectedColumn,
-                        name: e.target.value,
-                      })
-                    : setNewColumn({ ...newColumn, name: e.target.value })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                type='color'
-                label={i18n.t('leads.leadColumns.modal.form.color')}
-                value={selectedColumn ? selectedColumn.color : newColumn.color}
-                onChange={(e) =>
-                  selectedColumn
-                    ? setSelectedColumn({
-                        ...selectedColumn,
-                        color: e.target.value,
-                      })
-                    : setNewColumn({ ...newColumn, color: e.target.value })
-                }
-              />
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setShowColumnModal(false);
-              setSelectedColumn(null);
-              setNewColumn({ name: '', color: '#000000' });
-            }}
-          >
-            {i18n.t('leads.leadColumns.buttons.cancel')}
-          </Button>
-          <Button
-            onClick={selectedColumn ? handleEditColumn : handleAddColumn}
-            color='primary'
-            variant='contained'
-          >
-            {i18n.t('leads.leadColumns.buttons.save')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <LeadModal
-        open={showLeadModal}
-        onClose={() => {
-          setShowLeadModal(false);
-          setSelectedLead(null);
-          setSelectedColumn(null);
-          loadColumns();
-        }}
-        lead={selectedLead}
-        columnId={selectedColumn?.id}
-      />
     </div>
   );
 };

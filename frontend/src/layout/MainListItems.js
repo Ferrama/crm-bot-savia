@@ -329,7 +329,11 @@ const MainListItems = (props) => {
                 primary={i18n.t('mainDrawer.listItems.leads')}
                 icon={<TrendingUp />}
               />
-              <ListItemLink to='/savia' primary={'Savia'} icon={<Album />} />
+              <ListItemLink
+                to='/savia'
+                primary={i18n.t('mainDrawer.listItems.savia')}
+                icon={<Album />}
+              />
             </>
           </>
         )}
@@ -357,7 +361,7 @@ const MainListItems = (props) => {
             <ListItemLink
               small
               to='/'
-              primary='Dashboard'
+              primary={i18n.t('mainDrawer.listItems.dashboard')}
               icon={<LayoutDashboard />}
             />
           </>
@@ -408,7 +412,9 @@ const MainListItems = (props) => {
                       <ListItemIcon>
                         <LucideList />
                       </ListItemIcon>
-                      <ListItemText primary='Listagem' />
+                      <ListItemText
+                        primary={i18n.t('mainDrawer.listItems.listing')}
+                      />
                     </ListItem>
                     <ListItem
                       onClick={() => history.push('/contact-lists')}
@@ -417,7 +423,9 @@ const MainListItems = (props) => {
                       <ListItemIcon>
                         <Users />
                       </ListItemIcon>
-                      <ListItemText primary='Listas de Contatos' />
+                      <ListItemText
+                        primary={i18n.t('mainDrawer.listItems.contactLists')}
+                      />
                     </ListItem>
                     <ListItem
                       onClick={() => history.push('/campaigns-config')}
@@ -426,7 +434,9 @@ const MainListItems = (props) => {
                       <ListItemIcon>
                         <Settings />
                       </ListItemIcon>
-                      <ListItemText primary='Configurações' />
+                      <ListItemText
+                        primary={i18n.t('mainDrawer.listItems.configurations')}
+                      />
                     </ListItem>
                   </List>
                 </Collapse>

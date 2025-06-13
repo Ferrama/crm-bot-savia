@@ -16,10 +16,11 @@ const messages = {
         name: 'Name',
         email: 'E-Mail',
         phone: 'Telefon',
-        company: 'Firma',
+        company: 'Unternehmen',
         connection: 'Verbindung',
         queue: 'Warteschlange',
         contact: 'Kontakt',
+        remove: 'Entfernen',
       },
       signup: {
         title: 'Registrieren',
@@ -123,6 +124,58 @@ const messages = {
       },
       internalChat: {
         title: 'Interner Chat',
+        new: 'Neu',
+        edit: 'Bearbeiten',
+        delete: 'Löschen',
+        close: 'Schließen',
+        save: 'Speichern',
+        chat: 'Chat',
+        titlePlaceholder: 'Titel',
+        confirmDelete: 'Sind Sie sicher, dass Sie diesen Chat löschen möchten?',
+        confirmDeleteMessage:
+          'Diese Aktion kann nicht rückgängig gemacht werden.',
+        noChats: 'Keine Chats gefunden',
+        noMessages: 'Keine Nachrichten gefunden',
+        typeMessage: 'Nachricht eingeben',
+        messages: 'Nachrichten',
+        chats: 'Chats',
+        spyChat: 'Konversation überwachen',
+        closeChat: 'Chat schließen',
+        acceptChat: 'Chat akzeptieren',
+        chatbot: 'Chatbot',
+        queue: 'Warteschlange',
+        noQueue: 'Keine Warteschlange',
+        assignedTo: 'Zugewiesen an',
+        lastMessage: 'Letzte Nachricht',
+        newMessage: 'Neue Nachricht',
+        unreadMessages: 'Ungelesene Nachrichten',
+        closed: 'GESCHLOSSEN',
+        pending: 'AUSSTEHEND',
+        open: 'OFFEN',
+        conversation: 'Unterhaltung',
+        location: 'Standort',
+        clickToViewLocation: 'Klicken Sie, um den Standort anzuzeigen',
+        download: 'Herunterladen',
+        noRecords: 'Keine Aufzeichnungen',
+        dialog: {
+          title: 'Unterhaltung',
+          titleLabel: 'Titel',
+          titlePlaceholder: 'Titel',
+          close: 'Schließen',
+          save: 'Speichern',
+          fillTitle: 'Bitte füllen Sie den Titel der Unterhaltung aus.',
+          selectUser: 'Bitte wählen Sie mindestens einen Benutzer aus.',
+        },
+        tabs: {
+          chats: 'Chats',
+          messages: 'Nachrichten',
+        },
+        presence: {
+          composing: 'Schreibt...',
+          recording: 'Nimmt auf...',
+          available: 'Verfügbar',
+          unavailable: 'Nicht verfügbar',
+        },
       },
       whatsappModal: {
         title: {
@@ -264,6 +317,7 @@ const messages = {
           sendAt: 'Senden um',
           saveMessage: 'Als Vorlage speichern',
           contactPlaceholder: 'Kontakt',
+          whatsappPlaceholder: 'WhatsApp',
         },
         buttons: {
           cancel: 'Abbrechen',
@@ -392,6 +446,10 @@ const messages = {
           todoList: 'Aufgabenliste',
           spyChat: 'Konversation überwachen',
           closeChat: 'Chat schließen',
+          savia: 'Savia',
+          listing: 'Auflistung',
+          contactLists: 'Kontaktlisten',
+          configurations: 'Konfigurationen',
         },
         appBar: {
           i18n: {
@@ -636,6 +694,19 @@ const messages = {
       },
       campaignsConfig: {
         title: 'Kampagnenkonfigurationen',
+        intervals: 'Intervalle',
+        messageInterval: 'Nachrichtenintervall',
+        longerIntervalAfter: 'Längeres Intervall nach',
+        greaterInterval: 'Größeres Intervall',
+        noInterval: 'Kein Intervall',
+        notDefined: 'Nicht definiert',
+        seconds: 'Sekunden',
+        messages: 'Nachrichten',
+        addVariable: 'Variable hinzufügen',
+        saveSettings: 'Einstellungen speichern',
+        shortcode: 'Kurzcode',
+        content: 'Inhalt',
+        variables: 'Variablen',
       },
       queues: {
         title: 'Warteschlangen & Chatbot',
@@ -743,15 +814,19 @@ const messages = {
       settings: {
         group: {
           general: 'Allgemein',
-          timeouts: 'Zeitüberschreitungen',
+          timeouts: 'Timeouts',
           officeHours: 'Bürozeiten',
           groups: 'Gruppen',
           confidenciality: 'Vertraulichkeit',
           api: 'API',
-          serveradmin: 'Serververwaltung',
+          externalServices: 'Externe Dienste',
+          serveradmin: 'Server-Administration',
         },
         success: 'Einstellungen erfolgreich gespeichert.',
+        copiedToClipboard: 'In die Zwischenablage kopiert',
         title: 'Einstellungen',
+        chatbotTicketTimeout: 'Chatbot-Timeout (Minuten)',
+        chatbotTicketTimeoutAction: 'Chatbot-Timeout-Aktion',
         settings: {
           userCreation: {
             name: 'Benutzererstellung',
@@ -769,7 +844,7 @@ const messages = {
           },
         },
         OfficeManagement: {
-          title: 'Bürozeitenverwaltung',
+          title: 'Büroverwaltung',
           options: {
             disabled: 'Deaktiviert',
             ManagementByDepartment: 'Verwaltung nach Warteschlange',
@@ -777,7 +852,7 @@ const messages = {
           },
         },
         outOfHoursAction: {
-          title: 'Aktion außerhalb der Bürozeiten',
+          title: 'Aktion außerhalb der Geschäftszeiten',
           options: {
             pending: 'Als ausstehend belassen',
             closed: 'Ticket schließen',
@@ -791,7 +866,7 @@ const messages = {
           },
         },
         soundGroupNotifications: {
-          title: 'Gruppentonbenachrichtigungen',
+          title: 'Gruppen-Sound-Benachrichtigungen',
           options: {
             enabled: 'Aktiviert',
             disabled: 'Deaktiviert',
@@ -808,25 +883,25 @@ const messages = {
           title: 'Sprach- und Videoanrufe',
           options: {
             enabled: 'Ignorieren',
-            disabled: 'Verfügbarkeit melden',
+            disabled: 'Nichtverfügbarkeit melden',
           },
         },
         AutomaticChatbotOutput: {
-          title: 'Automatische Chatbot-Ausgabe',
+          title: 'Automatischer Chatbot-Ausgang',
           options: {
             enabled: 'Aktiviert',
             disabled: 'Deaktiviert',
           },
         },
         ShowNumericEmoticons: {
-          title: 'Numerische Emojis in der Warteschlange anzeigen',
+          title: 'Numerische Emoticons in der Warteschlange anzeigen',
           options: {
             enabled: 'Aktiviert',
             disabled: 'Deaktiviert',
           },
         },
         QuickMessages: {
-          title: 'Schnellnachrichten',
+          title: 'Schnelle Nachrichten',
           options: {
             enabled: 'Nach Unternehmen',
             disabled: 'Nach Benutzer',
@@ -839,8 +914,11 @@ const messages = {
             disabled: 'Deaktiviert',
           },
         },
+        FileUploadLimit: {
+          title: 'Datei-Upload-Limit (MB)',
+        },
         FileDownloadLimit: {
-          title: 'Dateidownload-Limit (MB)',
+          title: 'Datei-Download-Limit (MB)',
         },
         messageVisibility: {
           title: 'Nachrichtensichtbarkeit',
@@ -850,12 +928,25 @@ const messages = {
           },
         },
         keepQueueAndUser: {
-          title:
-            'Warteschlange und Benutzer im geschlossenen Ticket beibehalten',
+          title: 'Warteschlange und Benutzer im geschlossenen Ticket behalten',
           options: {
             enabled: 'Aktiviert',
             disabled: 'Deaktiviert',
           },
+        },
+        GracePeriod: {
+          title: 'Karenzzeit nach Ablauf (Tage)',
+        },
+        ticketAcceptedMessage: {
+          title: 'Ticket angenommen Nachricht',
+          placeholder: 'Geben Sie hier Ihre Ticket angenommen Nachricht ein',
+        },
+        transferMessage: {
+          title: 'Übertragungsnachricht',
+          placeholder: 'Geben Sie hier Ihre Übertragungsnachricht ein',
+        },
+        mustacheVariables: {
+          title: 'Verfügbare Variablen:',
         },
         WelcomeGreeting: {
           greetings: 'Hallo',
@@ -883,6 +974,115 @@ const messages = {
         PaymentGateways: {
           title: 'Zahlungsgateways',
         },
+        AIProvider: {
+          title: 'KI-Service',
+        },
+        AudioTranscriptions: {
+          title: 'Audio-Transkription',
+        },
+        TagsMode: {
+          title: 'Tags-Modus',
+          options: {
+            ticket: 'Ticket',
+            contact: 'Kontakt',
+            both: 'Ticket und Kontakt',
+          },
+        },
+        schedulesUpdated: 'Zeitpläne erfolgreich aktualisiert.',
+        operationUpdated: 'Vorgang erfolgreich aktualisiert.',
+        paymentGateway: 'Zahlungsgateway',
+        none: 'Keine',
+        owenPayments: 'Owen Payments 💎',
+        efi: 'Efí',
+        apiToken: 'API-Token',
+        aiKey: 'KI-Schlüssel',
+        defaultAppName: 'Ticketz',
+        ratingsTimeout: 'Bewertungs-Timeout (Minuten)',
+        noQueueTimeout: 'Keine-Warteschlange-Timeout (Minuten)',
+        noQueueTimeoutAction: 'Keine-Warteschlange-Timeout-Aktion',
+        openTicketTimeout: 'Offenes-Ticket-Timeout (Minuten)',
+        openTicketTimeoutAction: 'Offenes-Ticket-Timeout-Aktion',
+        autoReopenTimeout: 'Auto-Wiedereröffnung-Timeout (Minuten)',
+        close: 'Schließen',
+        returnToQueue: 'Zur Warteschlange zurückkehren',
+        officeHours: 'Bürozeiten',
+        officeManagement: 'Büroverwaltung',
+        managementByQueue: 'Verwaltung nach Warteschlange',
+        managementByCompany: 'Verwaltung nach Unternehmen',
+        groups: 'Gruppen',
+        ignoreGroupMessages: 'Gruppennachrichten ignorieren',
+        groupSoundNotifications: 'Gruppen-Sound-Benachrichtigungen',
+        confidentiality: 'Vertraulichkeit',
+        respectMessageQueue: 'Nachrichtenwarteschlange respektieren',
+        respectTicketQueue: 'Ticketwarteschlange respektieren',
+        api: 'API',
+        leaveAsPending: 'Als ausstehend belassen',
+        enabled: 'Aktiviert',
+        disabled: 'Deaktiviert',
+        // Form fields
+        name: 'Name',
+        email: 'E-Mail',
+        phone: 'Telefon',
+        company: 'Unternehmen',
+        plan: 'Plan',
+        campaigns: 'Kampagnen',
+        status: 'Status',
+        createdAt: 'Erstellt am',
+        dueDate: 'Fälligkeitsdatum',
+        value: 'Wert',
+        users: 'Benutzer',
+        connections: 'Verbindungen',
+        queues: 'Warteschlangen',
+        public: 'Öffentlich',
+        yes: 'Ja',
+        no: 'Nein',
+        active: 'Aktiv',
+        inactive: 'Inaktiv',
+        // Plan management
+        planName: 'Plan Name',
+        planValue: 'Plan Wert',
+        planUsers: 'Plan Benutzer',
+        planConnections: 'Plan Verbindungen',
+        planQueues: 'Plan Warteschlangen',
+        planPublic: 'Plan Öffentlich',
+        // Campaign management
+        campaignTitle: 'Kampagnen Titel',
+        campaignCode: 'Kampagnen Code',
+        campaignDescription: 'Kampagnen Beschreibung',
+        campaignEnabled: 'Kampagne Aktiviert',
+        campaignDisabled: 'Kampagne Deaktiviert',
+        // User management
+        userName: 'Benutzer Name',
+        userEmail: 'Benutzer E-Mail',
+        userPhone: 'Benutzer Telefon',
+        userCompany: 'Benutzer Unternehmen',
+        userPlan: 'Benutzer Plan',
+        // Whitelabel
+        primaryColorLight: 'Primärfarbe hell',
+        primaryColorDark: 'Primärfarbe dunkel',
+        appLogoLight: 'App Logo hell',
+        appLogoDark: 'App Logo dunkel',
+        appName: 'App Name',
+        appFavicon: 'App Favicon',
+        logoSvgHint: 'SVG und 28:10 Seitenverhältnis bevorzugen',
+        faviconSvgHint: 'Quadratisches SVG-Bild oder 512x512 PNG bevorzugen',
+        // Buttons
+        clear: 'Löschen',
+        save: 'Speichern',
+        cancel: 'Abbrechen',
+        edit: 'Bearbeiten',
+        delete: 'Löschen',
+        add: 'Hinzufügen',
+        // Date format
+        dateFormat: 'dd/mm/yyyy',
+        // Recurrence
+        recurrence: 'Wiederholung',
+        // Contact lists
+        contactLists: 'Kontaktlisten',
+        // Navigation
+        listing: 'Auflistung',
+        // System description
+        systemDescription: 'ticketz chat based ticket system',
       },
       messagesList: {
         header: {
@@ -1055,13 +1255,52 @@ const messages = {
           international: 'International in US$',
         },
       },
+      interactions: {
+        toasts: {
+          created: 'Interaktion erfolgreich erstellt',
+        },
+        buttons: {
+          add: 'Interaktion hinzufügen',
+        },
+        types: {
+          note: 'Notiz',
+          email: 'E-Mail',
+          message: 'Nachricht',
+          file: 'Datei',
+        },
+        categories: {
+          internal_note: 'Interne Notiz',
+          customer_communication: 'Kundenkommunikation',
+          system: 'System',
+        },
+        dialog: {
+          add: 'Interaktion hinzufügen',
+        },
+        form: {
+          type: 'Typ',
+          category: 'Kategorie',
+          notes: 'Notizen',
+        },
+      },
       leads: {
         title: 'Leads',
         searchPlaceholder: 'Leads suchen',
+        notFound: 'Lead nicht gefunden',
         buttons: {
           add: 'Neuer Lead',
           save: 'Speichern',
           cancel: 'Abbrechen',
+        },
+        views: {
+          board: 'Board',
+          list: 'Liste',
+        },
+        tabs: {
+          basic: 'Grundlegend',
+          contact: 'Kontakt',
+          financial: 'Finanziell',
+          tags: 'Tags',
+          notes: 'Notizen',
         },
         modal: {
           add: {
@@ -1083,42 +1322,145 @@ const messages = {
             selectUser: 'Benutzer auswählen',
           },
         },
-        table: {
+        dialog: {
+          new: 'Neuer Lead',
+          edit: 'Lead bearbeiten',
+          addTag: 'Tag hinzufügen',
+        },
+        form: {
           name: 'Name',
-          contact: 'Kontakt',
-          stage: 'Phase',
+          title: 'Titel',
+          titleHelper: 'Kurze Beschreibung des Leads',
+          description: 'Beschreibung',
           temperature: 'Temperatur',
+          status: 'Status',
+          pipeline: 'Pipeline',
+          contact: 'Kontakt',
+          column: 'Spalte',
+          assignedTo: 'Zugewiesen an',
+          unassigned: 'Nicht zugewiesen',
           source: 'Quelle',
           expectedValue: 'Erwarteter Wert',
-          probability: 'Wahrscheinlichkeit',
-          expectedClosingDate: 'Abschlussdatum',
+          currency: 'Währung',
+          probability: 'Wahrscheinlichkeit (%)',
+          probabilityHelper: 'Wahrscheinlichkeit des Abschlusses (0-100%)',
+          expectedClosingDate: 'Erwartetes Abschlussdatum',
+          tags: 'Tags',
+          addTag: 'Tag hinzufügen',
+          tag: 'Tag',
+          customFields: 'Benutzerdefinierte Felder',
+          customFieldName: 'Benutzerdefinierten Feldnamen eingeben',
+          addCustomField: 'Benutzerdefiniertes Feld hinzufügen',
+          notes: 'Notizen',
+        },
+        table: {
+          lead: 'Lead',
+          contact: 'Kontakt',
+          status: 'Status',
+          pipeline: 'Pipeline',
+          column: 'Spalte',
+          temperature: 'Temperatur',
+          tags: 'Tags',
+          financial: 'Finanziell',
           assignedTo: 'Zugewiesen an',
           actions: 'Aktionen',
+          unassigned: 'Nicht zugewiesen',
         },
-        stages: {
+        sections: {
+          contact: 'Kontaktinformationen',
+          financial: 'Finanzinformationen',
+          tags: 'Tags',
+          customFields: 'Benutzerdefinierte Felder',
+          notes: 'Notizen',
+        },
+        fields: {
+          contact: 'Kontakt',
+          phone: 'Telefon',
+          email: 'E-Mail',
+          source: 'Quelle',
+          assignedTo: 'Zugewiesen an',
+          expectedValue: 'Erwarteter Wert',
+          probability: 'Wahrscheinlichkeit',
+          expectedClosingDate: 'Erwartetes Abschlussdatum',
+        },
+        status: {
           new: 'Neu',
           contacted: 'Kontaktiert',
-          qualified: 'Qualifiziert',
+          follow_up: 'Nachfassung',
           proposal: 'Angebot',
           negotiation: 'Verhandlung',
-          closed_won: 'Gewonnen',
-          closed_lost: 'Verloren',
+          qualified: 'Qualifiziert',
+          unqualified: 'Nicht qualifiziert',
+          converted: 'Konvertiert',
+          lost: 'Verloren',
+          closed_won: 'Geschlossen Gewonnen',
+          closed_lost: 'Geschlossen Verloren',
         },
-        temperatures: {
+        pipeline: {
+          default: 'Standard',
+          sales: 'Vertrieb',
+          support: 'Support',
+          onboarding: 'Onboarding',
+        },
+        temperature: {
           hot: 'Heiß',
           warm: 'Warm',
           cold: 'Kalt',
         },
+        timeline: {
+          title: 'Zeitleiste',
+          empty: 'Keine Interaktionen gefunden',
+        },
         toasts: {
           created: 'Lead erfolgreich erstellt',
           updated: 'Lead erfolgreich aktualisiert',
+          deleted: 'Lead erfolgreich gelöscht',
           contactRequired: 'Kontakt ist erforderlich',
+          tagAdded: 'Tag erfolgreich hinzugefügt',
+          tagRemoved: 'Tag erfolgreich entfernt',
+        },
+        validation: {
+          name: {
+            required: 'Name ist erforderlich',
+          },
+          title: {
+            max: 'Titel darf maximal 255 Zeichen haben',
+          },
+          contact: {
+            required: 'Kontakt ist erforderlich',
+          },
+          column: {
+            required: 'Spalte ist erforderlich',
+          },
+          temperature: {
+            required: 'Temperatur ist erforderlich',
+          },
+          status: {
+            required: 'Status ist erforderlich',
+          },
+          pipeline: {
+            required: 'Pipeline ist erforderlich',
+          },
+          source: {
+            required: 'Quelle ist erforderlich',
+          },
+          currency: {
+            required: 'Währung ist erforderlich',
+          },
+          probability: {
+            min: 'Wahrscheinlichkeit muss mindestens 0 sein',
+            max: 'Wahrscheinlichkeit muss maximal 100 sein',
+          },
         },
         leadColumns: {
           buttons: {
             add: 'Neue Spalte',
             save: 'Speichern',
             cancel: 'Abbrechen',
+          },
+          dialog: {
+            new: 'Neue Spalte',
+            edit: 'Spalte bearbeiten',
           },
           modal: {
             add: {
@@ -1150,6 +1492,11 @@ const messages = {
         taskPlaceholder: 'Neue Aufgabe eingeben',
         lastUpdate: 'Letzte Aktualisierung',
         taskRequired: 'Aufgabentext ist erforderlich',
+      },
+      ticketMessagesDialog: {
+        buttons: {
+          close: 'Schließen',
+        },
       },
     },
   },
