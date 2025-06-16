@@ -50,6 +50,12 @@ class Company extends Model<Company> {
   @Column
   recurrence: string;
 
+  @Column({ allowNull: true })
+  apiKey: string;
+
+  @Column({ allowNull: true })
+  saviaDbUrl: string;
+
   @Column({
     type: DataType.JSONB
   })

@@ -313,7 +313,7 @@ export const send = async (req: Request, res: Response): Promise<Response> => {
       );
     }
 
-    return res.send({ mensagem: "Message added to queue" });
+    return res.send({ message: "Message added to queue" });
   } catch (err) {
     const error = { errType: typeof err, serialized: JSON.stringify(err), err };
     if (err?.message) {

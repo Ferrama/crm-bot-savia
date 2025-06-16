@@ -55,7 +55,7 @@ const MessagesAPI = () => {
     };
     
     axios.request(options).then(function (response) {
-      toast.success('Mensagem enviada com sucesso');
+      toast.success('Message sent successfully');
     }).catch(function (error) {
       toastError(error);
     });    
@@ -79,7 +79,7 @@ const MessagesAPI = () => {
       };
       
       axios.request(options).then(function (response) {
-        toast.success('Mensagem enviada com sucesso');
+        toast.success('Message sent successfully');
       }).catch(function (error) {
         toastError(error);
       });      

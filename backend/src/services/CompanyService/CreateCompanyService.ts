@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 import AppError from "../../errors/AppError";
 import Company from "../../models/Company";
-import User from "../../models/User";
 import Setting from "../../models/Setting";
+import User from "../../models/User";
 
 interface CompanyData {
   name: string;
@@ -69,8 +69,8 @@ const CreateCompanyService = async (
   const [user, created] = await User.findOrCreate({
     where: { name, email },
     defaults: {
-      name: name,
-      email: email,
+      name,
+      email,
       password: password || "mudar123",
       profile: "admin",
       companyId: company.id
@@ -90,10 +90,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "asaas",
       value: ""
-    },
+    }
   });
 
-  //tokenixc
+  // tokenixc
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -103,10 +103,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "tokenixc",
       value: ""
-    },
+    }
   });
 
-  //ipixc
+  // ipixc
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -116,10 +116,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "ipixc",
       value: ""
-    },
+    }
   });
 
-  //ipmkauth
+  // ipmkauth
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -129,10 +129,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "ipmkauth",
       value: ""
-    },
+    }
   });
 
-  //clientsecretmkauth
+  // clientsecretmkauth
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -142,10 +142,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "clientsecretmkauth",
       value: ""
-    },
+    }
   });
 
-  //clientidmkauth
+  // clientidmkauth
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -155,10 +155,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "clientidmkauth",
       value: ""
-    },
+    }
   });
 
-  //CheckMsgIsGroup
+  // CheckMsgIsGroup
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -168,10 +168,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "enabled",
       value: ""
-    },
+    }
   });
 
-  //CheckMsgIsGroup
+  // CheckMsgIsGroup
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -181,10 +181,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "call",
       value: "disabled"
-    },
+    }
   });
 
-  //scheduleType
+  // scheduleType
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -194,10 +194,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "scheduleType",
       value: "disabled"
-    },
+    }
   });
 
-  //userRating
+  // userRating
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -207,10 +207,10 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "userRating",
       value: "disabled"
-    },
+    }
   });
 
-  //userRating
+  // userRating
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -220,7 +220,7 @@ const CreateCompanyService = async (
       companyId: company.id,
       key: "chatBotType",
       value: "text"
-    },
+    }
   });
 
   if (companyData.campaignsEnabled !== undefined) {
@@ -233,8 +233,7 @@ const CreateCompanyService = async (
         companyId: company.id,
         key: "campaignsEnabled",
         value: `${campaignsEnabled}`
-      },
-
+      }
     });
     if (!created) {
       await setting.update({ value: `${campaignsEnabled}` });

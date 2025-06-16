@@ -17,7 +17,13 @@
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
     "lint": "eslint src/**/*.ts",
     "mark-seeds": "node dist/database/markSeedsAsExecuted.js",
-    "migrate": "sequelize-cli db:migrate"
+    "migrate": "sequelize-cli db:migrate",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:studio": "prisma studio",
+    "prisma:db:push": "prisma db push",
+    "prisma:db:seed": "prisma db seed"
   },
   "author": "",
   "dependencies": {
@@ -26,6 +32,7 @@
     "@flystorage/file-storage": "^1.0.1",
     "@flystorage/local-fs": "^1.0.1",
     "@hapi/boom": "^10.0.1",
+    "@prisma/client": "^6.9.0",
     "@sentry/node": "^9.29.0",
     "@socket.io/admin-ui": "^0.5.1",
     "@types/lodash": "^4.17.1",
@@ -59,6 +66,7 @@
     "pg": "^8.11.5",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
+    "prisma": "^6.9.0",
     "qrcode-terminal": "^0.12.0",
     "reflect-metadata": "^0.2.2",
     "sdk-typescript-apis-efi": "1.0.2",

@@ -1,14 +1,15 @@
 import gracefulShutdown from "http-graceful-shutdown";
 import app from "./app";
+import { setupPrisma, teardownPrisma } from "./database/prismaIntegration";
 import { initIO } from "./libs/socket";
-import { logger } from "./utils/logger";
-import { StartAllWhatsAppsSessions } from "./services/WbotServices/StartAllWhatsAppsSessions";
 import Company from "./models/Company";
 import { startQueueProcess } from "./queues";
 import {
   checkOpenInvoices,
   payGatewayInitialize
 } from "./services/PaymentGatewayServices/PaymentGatewayServices";
+import { StartAllWhatsAppsSessions } from "./services/WbotServices/StartAllWhatsAppsSessions";
+import { logger } from "./utils/logger";
 
 // Environment Variable Validation
 if (!process.env.PORT) {
@@ -19,6 +20,9 @@ if (!process.env.PORT) {
 // Function to start server and initialize services
 async function startServer() {
   try {
+    // Initialize Prisma
+    await setupPrisma();
+
     const companies = await Company.findAll();
     const sessionPromises = companies.map(async company => {
       try {
@@ -63,6 +67,7 @@ gracefulShutdown(server, {
   timeout: 30000,
   onShutdown: async () => {
     logger.info("Shutdown initiated. Cleaning up...");
+    await teardownPrisma();
   },
   finally: () => {
     logger.info("Server has shut down.");

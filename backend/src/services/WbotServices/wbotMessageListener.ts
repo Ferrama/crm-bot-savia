@@ -450,7 +450,7 @@ const downloadMedia = async (
     +message.fileLength > fileLimit * 1024 * 1024
   ) {
     const fileLimitMessage = {
-      text: `*Mensagem Automática*:\nNosso sistema aceita apenas arquivos com no máximo ${fileLimit} MiB`
+      text: `*Automated Message*:\nOur system only accepts files up to ${fileLimit} MiB`
     };
 
     if (!ticket.isGroup && !msg.key?.fromMe) {
@@ -460,7 +460,7 @@ const downloadMedia = async (
       );
 
       sendMsg.message.extendedTextMessage.text =
-        "*Mensagem do sistema*:\nArquivo recebido além do limite de tamanho do sistema, se for necessário ele pode ser obtido no aplicativo do whatsapp.";
+        "*System message*:\nFile received exceeds system size limit, if needed it can be retrieved from the WhatsApp application.";
 
       // eslint-disable-next-line no-use-before-define
       await verifyMessage(sendMsg, ticket, ticket.contact);
@@ -984,10 +984,10 @@ const isValidMsg = (msg: proto.IWebMessageInfo): boolean => {
       msgType === "viewOnceMessageV2";
 
     if (!ifType) {
-      logger.warn(`#### Nao achou o type em isValidMsg: ${msgType}
+      logger.warn(`#### No type found in isValidMsg: ${msgType}
 ${JSON.stringify(msg?.message)}`);
-      Sentry.setExtra("Mensagem", { BodyMsg: msg.message, msg, msgType });
-      Sentry.captureException(new Error("Novo Tipo de Mensagem em isValidMsg"));
+      Sentry.setExtra("Message", { BodyMsg: msg.message, msg, msgType });
+      Sentry.captureException(new Error("New Message Type in isValidMsg"));
     }
 
     return !!ifType;
