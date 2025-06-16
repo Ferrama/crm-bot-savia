@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Request, Response } from "express";
 import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
 import AppError from "../errors/AppError";
 import { getIO } from "../libs/socket";
@@ -14,6 +15,7 @@ import ListCompaniesService from "../services/CompanyService/ListCompaniesServic
 import ShowCompanyService from "../services/CompanyService/ShowCompanyService";
 import UpdateCompanyService from "../services/CompanyService/UpdateCompanyService";
 import UpdateSchedulesService from "../services/CompanyService/UpdateSchedulesService";
+import CreateUserFromSaviaService from "../services/UserServices/CreateUserFromSaviaService";
 
 import CheckSettings from "../helpers/CheckSettings";
 
@@ -30,6 +32,8 @@ type CompanyData = {
   status?: boolean;
   planId?: number;
   dueDate?: string;
+  saviaDbUrl: string;
+  includeUsers: boolean;
 };
 
 type SchedulesData = {
@@ -48,8 +52,16 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
-  const { name, email, phone, status, planId, dueDate } =
-    req.body as CompanyData;
+  const {
+    name,
+    email,
+    phone,
+    status,
+    planId,
+    dueDate,
+    saviaDbUrl,
+    includeUsers
+  } = req.body as CompanyData;
 
   const schema = Yup.object().shape({
     name: Yup.string().required(),
@@ -57,7 +69,13 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     phone: Yup.string().required(),
     status: Yup.boolean().required(),
     planId: Yup.number().required(),
-    dueDate: Yup.date().required()
+    dueDate: Yup.date().required(),
+    saviaDbUrl: Yup.string()
+      .required()
+      .matches(
+        /^mysql:\/\/.+:.+@.+:\d+\/.+$/,
+        "Savia DB URL must be in format: mysql://user:password@host:port/database"
+      )
   });
 
   try {
@@ -72,7 +90,9 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     phone,
     status,
     planId,
-    dueDate
+    dueDate,
+    saviaDbUrl,
+    apiKey: uuidv4()
   });
 
   // Create default lead columns
@@ -98,6 +118,24 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     action: "create",
     company
   });
+
+  // Handle includeUsers action
+  if (includeUsers) {
+    try {
+      const result = await CreateUserFromSaviaService({
+        companyId: company.id
+      });
+      console.log(
+        `User import completed for company ${company.id}: ${result.created} created, ${result.skipped} skipped, ${result.errors.length} errors`
+      );
+      if (result.errors.length > 0) {
+        console.error("User import errors:", result.errors);
+      }
+    } catch (error) {
+      console.error(`Error importing users from Savia DB: ${error.message}`);
+      // Don't fail the company creation if user fetching fails
+    }
+  }
 
   return res.status(200).json(company);
 };
@@ -155,7 +193,18 @@ export const update = async (
   const companyData: CompanyData = req.body;
 
   const schema = Yup.object().shape({
-    name: Yup.string()
+    name: Yup.string().required(),
+    email: Yup.string().email().required(),
+    phone: Yup.string().required(),
+    status: Yup.boolean().required(),
+    planId: Yup.number().required(),
+    dueDate: Yup.date().required(),
+    saviaDbUrl: Yup.string()
+      .required()
+      .matches(
+        /^mysql:\/\/.+:.+@.+:\d+\/.+$/,
+        "Savia DB URL must be in format: mysql://user:password@host:port/database"
+      )
   });
 
   try {

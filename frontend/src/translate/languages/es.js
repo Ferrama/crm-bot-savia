@@ -721,6 +721,10 @@ const messages = {
           createdAt: 'Creado en',
           dueDate: 'Fecha de Vencimiento',
         },
+        form: {
+          saviaDbUrl: 'URL de Base de Datos Savia',
+          includeUsers: 'Incluir Usuarios',
+        },
         status: {
           yes: 'Activo',
           no: 'Inactivo',

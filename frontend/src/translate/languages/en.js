@@ -561,6 +561,10 @@ const messages = {
           createdAt: 'Created At',
           dueDate: 'Due Date',
         },
+        form: {
+          saviaDbUrl: 'Savia DB URL',
+          includeUsers: 'Include Users',
+        },
         status: {
           yes: 'Active',
           no: 'Inactive',

@@ -1,26 +1,26 @@
+import { compare, hash } from "bcryptjs";
 import {
-  Table,
-  Column,
-  CreatedAt,
-  UpdatedAt,
-  Model,
-  DataType,
+  AutoIncrement,
   BeforeCreate,
   BeforeUpdate,
-  PrimaryKey,
-  AutoIncrement,
-  Default,
-  HasMany,
+  BelongsTo,
   BelongsToMany,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
   ForeignKey,
-  BelongsTo
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt
 } from "sequelize-typescript";
-import { hash, compare } from "bcryptjs";
-import Ticket from "./Ticket";
-import Queue from "./Queue";
-import UserQueue from "./UserQueue";
 import Company from "./Company";
+import Queue from "./Queue";
 import QuickMessage from "./QuickMessage";
+import Ticket from "./Ticket";
+import UserQueue from "./UserQueue";
 import UserSocketSession from "./UserSocketSession"; // Importação da nova model
 
 @Table
@@ -55,6 +55,10 @@ class User extends Model<User> {
 
   @Column
   online: boolean;
+
+  @Default(true)
+  @Column
+  enabled: boolean;
 
   @CreatedAt
   createdAt: Date;

@@ -1,5 +1,7 @@
 import {
+  Checkbox,
   FormControl,
+  FormControlLabel,
   Grid,
   IconButton,
   InputLabel,
@@ -98,6 +100,8 @@ export function CompanyForm(props) {
     campaignsEnabled: false,
     dueDate: '',
     recurrence: '',
+    saviaDbUrl: '',
+    includeUsers: true,
     ...initialValue,
   });
 
@@ -242,6 +246,26 @@ export function CompanyForm(props) {
                   variant='outlined'
                   className={classes.fullWidth}
                   margin='dense'
+                />
+              </Grid>
+              <Grid xs={12} sm={6} md={2} item>
+                <Field
+                  as={TextField}
+                  label={i18n.t('companiesManager.form.saviaDbUrl')}
+                  name='saviaDbUrl'
+                  variant='outlined'
+                  className={classes.fullWidth}
+                  margin='dense'
+                  required
+                  placeholder='mysql://user:password@host:port/database'
+                />
+              </Grid>
+              <Grid xs={12} sm={6} md={2} item>
+                <FormControlLabel
+                  control={
+                    <Field as={Checkbox} name='includeUsers' color='primary' />
+                  }
+                  label={i18n.t('companiesManager.form.includeUsers')}
                 />
               </Grid>
               <Grid xs={12} sm={6} md={2} item>
@@ -577,6 +601,8 @@ export default function CompaniesManager() {
     campaignsEnabled: false,
     dueDate: '',
     recurrence: '',
+    saviaDbUrl: '',
+    includeUsers: true,
   });
 
   const { handleImpersonate } = useContext(AuthContext);
@@ -652,6 +678,8 @@ export default function CompaniesManager() {
       campaignsEnabled: false,
       dueDate: '',
       recurrence: '',
+      saviaDbUrl: '',
+      includeUsers: true,
     }));
   };
 
@@ -677,6 +705,8 @@ export default function CompaniesManager() {
       campaignsEnabled,
       dueDate: data.dueDate || '',
       recurrence: data.recurrence || '',
+      saviaDbUrl: data.saviaDbUrl || '',
+      includeUsers: true,
     }));
   };
 
