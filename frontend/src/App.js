@@ -528,6 +528,24 @@ const App = () => {
                     opacity: 1,
                     transform: 'translate(-50%, -50%) scale(1)',
                   },
+                  '&.MuiDialog-paperWidthXs': {
+                    maxWidth: '20rem',
+                  },
+                  '&.MuiDialog-paperWidthSm': {
+                    maxWidth: '32rem',
+                  },
+                  '&.MuiDialog-paperWidthMd': {
+                    maxWidth: '48rem',
+                  },
+                  '&.MuiDialog-paperWidthLg': {
+                    maxWidth: '64rem',
+                  },
+                  '&.MuiDialog-paperWidthXl': {
+                    maxWidth: '80rem',
+                  },
+                  '&.MuiDialog-paperWidthXxl': {
+                    maxWidth: '96rem',
+                  },
                 },
                 '& .MuiDialog-container': {
                   alignItems: 'center',
@@ -613,14 +631,176 @@ const App = () => {
               root: {
                 borderRadius: '6px',
                 transition: 'all 0.2s ease-in-out',
+                color: mode === 'light' ? primaryColorLight : primaryColorDark,
                 '&:hover': {
-                  backgroundColor: 'transparent',
+                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
                 },
                 '&:focus-visible': {
                   outline: 'none',
                   boxShadow: `0 0 0 2px ${
                     mode === 'light' ? primaryColorLight : primaryColorDark
                   }`,
+                },
+                '&.Mui-disabled': {
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                  opacity: 0.5,
+                  cursor: 'not-allowed',
+                },
+                '&.MuiIconButton-containedSecondary': {
+                  backgroundColor: '#94c9de',
+                  color: `${
+                    mode === 'light' ? primaryColorLight : '#000'
+                  } !important`,
+                  '&:hover': {
+                    backgroundColor: '#7ab8d0',
+                    color: `${
+                      mode === 'light' ? primaryColorLight : '#000'
+                    } !important`,
+                  },
+                  '& .MuiSvgIcon-root': {
+                    color: `${
+                      mode === 'light' ? primaryColorLight : '#000'
+                    } !important`,
+                  },
+                  '& svg': {
+                    color: `${
+                      mode === 'light' ? primaryColorLight : '#000'
+                    } !important`,
+                  },
+                },
+              },
+              colorPrimary: {
+                color: mode === 'light' ? primaryColorLight : primaryColorDark,
+                '&:hover': {
+                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#3A4249',
+                },
+                '&.Mui-disabled': {
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                },
+              },
+              colorSecondary: {
+                '&:not(.MuiIconButton-containedSecondary)': {
+                  color: '#94c9de',
+                  '&:hover': {
+                    backgroundColor: '#94c9de1A',
+                  },
+                },
+                '&.Mui-disabled': {
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                },
+              },
+              colorError: {
+                color: mode === 'light' ? '#DC2626' : '#EF4444',
+                '&:hover': {
+                  backgroundColor: '#DC26260A',
+                },
+                '&.Mui-disabled': {
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                },
+              },
+              contained: {
+                backgroundColor:
+                  mode === 'light' ? primaryColorLight : primaryColorDark,
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor:
+                    mode === 'light'
+                      ? `${primaryColorLight}E6` // 90% opacity
+                      : `${primaryColorDark}E6`,
+                },
+                '&.Mui-disabled': {
+                  backgroundColor: mode === 'light' ? '#E0E0E0' : '#42484E',
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                },
+              },
+              containedError: {
+                backgroundColor: mode === 'light' ? '#DC2626' : '#EF4444',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: mode === 'light' ? '#B91C1C' : '#DC2626',
+                },
+                '&.Mui-disabled': {
+                  backgroundColor: mode === 'light' ? '#E0E0E0' : '#42484E',
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                },
+              },
+              outlined: {
+                border: `1px solid ${
+                  mode === 'light' ? primaryColorLight : primaryColorDark
+                }`,
+                backgroundColor: mode === 'light' ? '#fff' : '#3A4249',
+                color: mode === 'light' ? primaryColorLight : primaryColorDark,
+                '&:hover': {
+                  backgroundColor:
+                    mode === 'light'
+                      ? `${primaryColorLight}0A`
+                      : `${primaryColorDark}0A`,
+                  border: `1px solid ${
+                    mode === 'light' ? primaryColorLight : primaryColorDark
+                  }`,
+                },
+                '&.Mui-disabled': {
+                  borderColor:
+                    mode === 'light'
+                      ? `${primaryColorLight}80`
+                      : `${primaryColorDark}80`,
+                  color:
+                    mode === 'light'
+                      ? `${primaryColorLight}80`
+                      : `${primaryColorDark}80`,
+                },
+              },
+              outlinedSecondary: {
+                border: '1px solid #94c9de',
+                backgroundColor: mode === 'light' ? '#fff' : '#3A4249',
+                color: '#94c9de',
+                '&:hover': {
+                  backgroundColor: '#94c9de1A',
+                  border: '1px solid #94c9de',
+                },
+                '&.Mui-disabled': {
+                  borderColor: mode === 'light' ? '#94c9de80' : '#94c9de80',
+                  color: mode === 'light' ? '#94c9de80' : '#94c9de80',
+                },
+              },
+              outlinedError: {
+                border: '1px solid #DC2626',
+                backgroundColor: mode === 'light' ? '#fff' : '#3A4249',
+                color: '#DC2626',
+                '&:hover': {
+                  backgroundColor: '#DC26260A',
+                  border: '1px solid #DC2626',
+                },
+                '&.Mui-disabled': {
+                  borderColor: mode === 'light' ? '#DC262680' : '#DC262680',
+                  color: mode === 'light' ? '#DC262680' : '#DC262680',
+                },
+              },
+              text: {
+                color: mode === 'light' ? primaryColorLight : primaryColorDark,
+                '&:hover': {
+                  backgroundColor: mode === 'light' ? '#F3F4F6' : '#42484E',
+                },
+                '&.Mui-disabled': {
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                },
+              },
+              textSecondary: {
+                color: '#94c9de',
+                '&:hover': {
+                  backgroundColor: '#94c9de1A',
+                },
+                '&.Mui-disabled': {
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
+                },
+              },
+              textError: {
+                color: mode === 'light' ? '#DC2626' : '#EF4444',
+                '&:hover': {
+                  backgroundColor: '#DC26260A',
+                },
+                '&.Mui-disabled': {
+                  color: mode === 'light' ? '#9CA3AF' : '#6B7280',
                 },
               },
             },
@@ -825,7 +1005,7 @@ const App = () => {
                 color: mode === 'light' ? '#9CA3AF' : '#6B7280',
               },
             },
-            MuiMenuItem: {
+            MuiMenItem: {
               root: {
                 minHeight: '36px',
                 maxHeight: '40px',

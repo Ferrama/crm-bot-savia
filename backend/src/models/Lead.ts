@@ -22,6 +22,7 @@ import Interaction from "./Interaction";
 import LeadColumn from "./LeadColumn";
 import LeadTag from "./LeadTag";
 import Tag from "./Tag";
+import Ticket from "./Ticket";
 import User from "./User";
 
 @Table({
@@ -187,6 +188,9 @@ class Lead extends Model {
 
   @BelongsToMany(() => Tag, () => LeadTag)
   tagRelations: Tag[];
+
+  @HasMany(() => Ticket)
+  tickets: Ticket[];
 }
 
 export default Lead;

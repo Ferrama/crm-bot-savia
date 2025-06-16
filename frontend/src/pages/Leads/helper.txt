@@ -1,0 +1,73 @@
+Nuevo → Contactado → Seguimiento → Propuesta → Negociación
+    ↓
+Calificado → Convertido → [Proyecto en curso] → Cerrado Ganado ✅
+    ↓
+No Calificado → Perdido → [Reactivación posible] → Cerrado Perdido ❌
+
+
+Esta lógica representa un pipeline de seguimiento de leads, típico en un CRM (Customer Relationship Management), especialmente en industrias como turismo, ventas o servicios personalizados. Se organiza en etapas secuenciales que reflejan el estado de un lead desde que entra al sistema hasta que se convierte (o no) en cliente. Vamos paso a paso:
+
+⸻
+
+🟢 PRIMER BLOQUE: Captación y contacto inicial
+
+1. Nuevo
+	•	Es un lead recién ingresado, sin ninguna interacción todavía.
+	•	Puede provenir de un formulario web, WhatsApp, llamado, etc.
+
+2. Contactado
+	•	Ya se le envió un mensaje o se lo llamó. Se intentó el primer acercamiento.
+
+3. Seguimiento
+	•	Se estableció algún tipo de diálogo, pero aún no se avanza. Puede estar en espera de respuesta o con alguna info pendiente.
+
+4. Propuesta
+	•	Se envió una propuesta comercial o cotización.
+
+5. Negociación
+	•	El lead muestra interés, se está conversando sobre precios, condiciones, fechas, etc.
+
+⸻
+
+🔵 SEGUNDO BLOQUE: Clasificación y resultados
+
+Desde este punto, el lead se califica o descarta, y puede tomar dos caminos distintos:
+
+A. Si está interesado y encaja con el producto/servicio:
+
+→ Calificado
+	•	Tiene potencial real, interés, y cumple condiciones (presupuesto, tiempos, etc.)
+
+→ Convertido
+	•	Aceptó la propuesta. Se transforma en cliente.
+
+→ [Proyecto en curso]
+	•	Se está ejecutando el servicio o producto contratado.
+
+→ Cerrado Ganado ✅
+	•	El proyecto se completó exitosamente. Venta confirmada y finalizada.
+
+⸻
+
+B. Si no cumple condiciones o desiste:
+
+→ No Calificado
+	•	No es el perfil adecuado (por presupuesto, tiempos, falta de interés, etc.)
+
+→ Perdido
+	•	Estaba calificado, pero por alguna razón no cerró: se cayó la venta.
+
+→ [Reactivación posible]
+	•	Se lo marca para seguimiento futuro (interés latente, puede activarse más adelante).
+
+→ Cerrado Perdido ❌
+	•	Se determina que no hay más oportunidad. Caso cerrado.
+
+⸻
+
+✅ Ventajas de usar esta lógica
+	•	Permite visualizar fácilmente el estado de cada lead.
+	•	Ayuda a priorizar acciones: a quién llamar, a quién mandar propuesta, etc.
+	•	Mejora la eficiencia del equipo comercial.
+	•	Facilita métricas: tasa de conversión, tiempos promedio en cada etapa, etc.
+

@@ -11,6 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -146,7 +147,7 @@ const ContactListItemModal = ({
 
   return (
     <div className={classes.root}>
-      <Dialog open={open} onClose={handleClose} maxWidth='lg' scroll='paper'>
+      <Dialog open={open} onClose={handleClose} maxWidth='sm' scroll='paper'>
         <DialogTitle id='form-dialog-title'>
           {contactId
             ? `${i18n.t('contactModal.title.edit')}`
@@ -169,40 +170,47 @@ const ContactListItemModal = ({
                 <Typography variant='subtitle1' gutterBottom>
                   {i18n.t('contactModal.form.mainInfo')}
                 </Typography>
-                <Field
-                  as={TextField}
-                  label={i18n.t('contactModal.form.name')}
-                  name='name'
-                  autoFocus
-                  error={touched.name && Boolean(errors.name)}
-                  helperText={touched.name && errors.name}
-                  variant='outlined'
-                  margin='dense'
-                  className={classes.textField}
-                />
-                <Field
-                  as={TextField}
-                  label={i18n.t('contactModal.form.number')}
-                  name='number'
-                  error={touched.number && Boolean(errors.number)}
-                  helperText={touched.number && errors.number}
-                  placeholder='54113456789'
-                  variant='outlined'
-                  margin='dense'
-                />
-                <div>
-                  <Field
-                    as={TextField}
-                    label={i18n.t('contactModal.form.email')}
-                    name='email'
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
-                    placeholder='Email address'
-                    fullWidth
-                    margin='dense'
-                    variant='outlined'
-                  />
-                </div>
+                <Grid container spacing={1} direction='row'>
+                  <Grid item xs={12} sm={6}>
+                    <Field
+                      as={TextField}
+                      label={i18n.t('contactModal.form.name')}
+                      name='name'
+                      autoFocus
+                      error={touched.name && Boolean(errors.name)}
+                      helperText={touched.name && errors.name}
+                      variant='outlined'
+                      margin='dense'
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Field
+                      as={TextField}
+                      label={i18n.t('contactModal.form.number')}
+                      name='number'
+                      error={touched.number && Boolean(errors.number)}
+                      helperText={touched.number && errors.number}
+                      placeholder='54113456789'
+                      variant='outlined'
+                      margin='dense'
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      label={i18n.t('contactModal.form.email')}
+                      name='email'
+                      error={touched.email && Boolean(errors.email)}
+                      helperText={touched.email && errors.email}
+                      placeholder='Email address'
+                      fullWidth
+                      margin='dense'
+                      variant='outlined'
+                    />
+                  </Grid>
+                </Grid>
               </DialogContent>
               <DialogActions>
                 <Button

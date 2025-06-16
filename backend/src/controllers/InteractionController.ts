@@ -108,8 +108,8 @@ const InteractionController = {
         .required(),
       notes: Yup.string().when("type", {
         is: InteractionType.MESSAGE,
-        then: Yup.string().required("Message content is required"),
-        otherwise: Yup.string()
+        then: s => s.required("Message content is required"),
+        otherwise: s => s
       }),
       priority: Yup.string().oneOf(Object.values(InteractionPriority)),
       tags: Yup.array().of(Yup.string()),
@@ -123,17 +123,20 @@ const InteractionController = {
       nextFollowUp: Yup.date(),
       messageData: Yup.object().when("type", {
         is: InteractionType.MESSAGE,
-        then: Yup.object().shape({
-          messageId: Yup.string(),
-          platform: Yup.string().required("Platform is required for messages"),
-          direction: Yup.string()
-            .oneOf(["in", "out"])
-            .required("Direction is required for messages"),
-          status: Yup.string(),
-          mediaUrl: Yup.string(),
-          mediaType: Yup.string()
-        }),
-        otherwise: Yup.object().nullable()
+        then: s =>
+          s.shape({
+            messageId: Yup.string(),
+            platform: Yup.string().required(
+              "Platform is required for messages"
+            ),
+            direction: Yup.string()
+              .oneOf(["in", "out"])
+              .required("Direction is required for messages"),
+            status: Yup.string(),
+            mediaUrl: Yup.string(),
+            mediaType: Yup.string()
+          }),
+        otherwise: s => s.nullable()
       })
     });
 

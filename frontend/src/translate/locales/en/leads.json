@@ -5,6 +5,9 @@
         "board": "Board",
         "list": "List"
     },
+    "board": {
+        "title": "Lead Board"
+    },
     "table": {
         "lead": "Lead",
         "name": "Name",

@@ -24,11 +24,14 @@ import {
   Calendar,
   DollarSign,
   Edit,
+  FileText,
   Mail,
   MapPin,
   Percent,
   Phone,
   Plus,
+  Settings,
+  Tag as TagIcon,
   User,
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -43,102 +46,164 @@ import LeadTimeline from './LeadTimeline';
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(3),
+    backgroundColor: theme.palette.grey[50],
+    minHeight: '100vh',
   },
   header: {
+    backgroundColor: 'white',
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    boxShadow: theme.shadows[1],
+  },
+  headerContent: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: theme.spacing(3),
   },
   leadInfo: {
     flex: 1,
   },
   leadName: {
-    fontSize: '2rem',
-    fontWeight: 'bold',
+    fontSize: '2.5rem',
+    fontWeight: 700,
     marginBottom: theme.spacing(1),
+    color: theme.palette.grey[900],
   },
   leadTitle: {
-    fontSize: '1.1rem',
-    color: theme.palette.text.secondary,
+    fontSize: '1.25rem',
+    color: theme.palette.grey[600],
     marginBottom: theme.spacing(1),
     fontStyle: 'italic',
   },
   leadDescription: {
     fontSize: '1rem',
-    color: theme.palette.text.secondary,
+    color: theme.palette.grey[600],
     marginBottom: theme.spacing(2),
+    lineHeight: 1.6,
+  },
+  statusSection: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    flexWrap: 'wrap',
   },
   statusChip: {
-    marginRight: theme.spacing(1),
+    fontWeight: 600,
+    fontSize: '0.875rem',
   },
   actions: {
     display: 'flex',
     gap: theme.spacing(1),
   },
-  infoCard: {
+  contentGrid: {
+    marginBottom: theme.spacing(3),
+  },
+  card: {
     height: '100%',
+    backgroundColor: 'white',
+    boxShadow: theme.shadows[1],
+    borderRadius: theme.shape.borderRadius,
+    transition: 'box-shadow 0.3s ease',
+    '&:hover': {
+      boxShadow: theme.shadows[3],
+    },
+  },
+  cardHeader: {
+    backgroundColor: theme.palette.grey[50],
+    borderBottom: `1px solid ${theme.palette.grey[200]}`,
+    '& .MuiCardHeader-title': {
+      fontSize: '1.1rem',
+      fontWeight: 600,
+      color: theme.palette.grey[800],
+    },
+  },
+  cardContent: {
+    padding: theme.spacing(2),
   },
   infoItem: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: theme.spacing(1),
+    padding: theme.spacing(1.5, 0),
+    borderBottom: `1px solid ${theme.palette.grey[100]}`,
+    '&:last-child': {
+      borderBottom: 'none',
+    },
   },
   infoIcon: {
-    marginRight: theme.spacing(1),
-    color: theme.palette.text.secondary,
+    marginRight: theme.spacing(2),
+    color: theme.palette.primary.main,
+    width: 20,
+    height: 20,
+  },
+  infoContent: {
+    flex: 1,
   },
   infoLabel: {
-    fontWeight: 'bold',
-    marginRight: theme.spacing(1),
-    minWidth: 120,
+    fontSize: '0.875rem',
+    color: theme.palette.grey[600],
+    marginBottom: theme.spacing(0.5),
   },
   infoValue: {
-    color: theme.palette.text.secondary,
-  },
-  financialCard: {
-    height: '100%',
+    fontSize: '1rem',
+    fontWeight: 500,
+    color: theme.palette.grey[900],
   },
   financialItem: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing(1),
+    padding: theme.spacing(1.5, 0),
+    borderBottom: `1px solid ${theme.palette.grey[100]}`,
+    '&:last-child': {
+      borderBottom: 'none',
+    },
   },
   financialLabel: {
     display: 'flex',
     alignItems: 'center',
-    gap: theme.spacing(0.5),
+    gap: theme.spacing(1),
+    fontSize: '0.875rem',
+    color: theme.palette.grey[600],
   },
   financialValue: {
-    fontWeight: 'bold',
+    fontSize: '1.1rem',
+    fontWeight: 600,
+    color: theme.palette.grey[900],
   },
   tagsSection: {
     marginTop: theme.spacing(2),
   },
   tagChip: {
-    margin: theme.spacing(0.25),
-  },
-  customFieldsCard: {
-    height: '100%',
+    margin: theme.spacing(0.5),
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.contrastText,
+    fontWeight: 500,
   },
   customField: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing(1),
-    padding: theme.spacing(1),
-    backgroundColor: theme.palette.grey[50],
-    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(1.5, 0),
+    borderBottom: `1px solid ${theme.palette.grey[100]}`,
+    '&:last-child': {
+      borderBottom: 'none',
+    },
   },
   customFieldLabel: {
-    fontWeight: 'bold',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    color: theme.palette.grey[700],
   },
   customFieldValue: {
-    color: theme.palette.text.secondary,
+    fontSize: '0.875rem',
+    color: theme.palette.grey[600],
   },
   timelineSection: {
-    marginTop: theme.spacing(3),
+    backgroundColor: 'white',
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[1],
+    overflow: 'hidden',
   },
   assignedUser: {
     display: 'flex',
@@ -146,8 +211,30 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(1),
   },
   userAvatar: {
-    width: 32,
-    height: 32,
+    width: 28,
+    height: 28,
+    fontSize: '0.875rem',
+    backgroundColor: theme.palette.primary.main,
+  },
+  notesCard: {
+    backgroundColor: 'white',
+    boxShadow: theme.shadows[1],
+    borderRadius: theme.shape.borderRadius,
+  },
+  notesContent: {
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.grey[50],
+    borderRadius: theme.shape.borderRadius,
+    margin: theme.spacing(2),
+    border: `1px solid ${theme.palette.grey[200]}`,
+  },
+  emptyState: {
+    textAlign: 'center',
+    padding: theme.spacing(4),
+    color: theme.palette.grey[500],
+  },
+  divider: {
+    margin: theme.spacing(2, 0),
   },
 }));
 
@@ -299,107 +386,134 @@ const LeadDetail = () => {
 
   return (
     <Box className={classes.root}>
+      {/* Header Section */}
       <Paper className={classes.header}>
-        <Box className={classes.leadInfo}>
-          <Typography className={classes.leadName}>{lead.name}</Typography>
-          {lead.title && (
-            <Typography className={classes.leadTitle}>{lead.title}</Typography>
-          )}
-          {lead.description && (
-            <Typography className={classes.leadDescription}>
-              {lead.description}
-            </Typography>
-          )}
-          <Box>
-            <Chip
-              label={i18n.t(`leads.status.${lead.status}`)}
-              className={classes.statusChip}
-              style={{
-                backgroundColor: getStatusColor(lead.status),
-                color: 'white',
-              }}
-            />
-            <Chip
-              label={i18n.t(`leads.pipeline.${lead.pipeline}`)}
-              className={classes.statusChip}
-            />
-            <Chip
-              label={i18n.t(`leads.temperature.${lead.temperature}`)}
-              style={{
-                backgroundColor: getTemperatureColor(lead.temperature),
-                color: lead.temperature === 'warm' ? 'black' : 'white',
-              }}
-            />
+        <Box className={classes.headerContent}>
+          <Box className={classes.leadInfo}>
+            <Typography className={classes.leadName}>{lead.name}</Typography>
+            {lead.title && (
+              <Typography className={classes.leadTitle}>
+                {lead.title}
+              </Typography>
+            )}
+            {lead.description && (
+              <Typography className={classes.leadDescription}>
+                {lead.description}
+              </Typography>
+            )}
+            <Box className={classes.statusSection}>
+              <Chip
+                label={i18n.t(`leads.status.${lead.status}`)}
+                className={classes.statusChip}
+                style={{
+                  backgroundColor: getStatusColor(lead.status),
+                  color: 'white',
+                }}
+              />
+              <Chip
+                label={i18n.t(`leads.pipeline.${lead.pipeline}`)}
+                className={classes.statusChip}
+                variant='outlined'
+              />
+              <Chip
+                label={i18n.t(`leads.temperature.${lead.temperature}`)}
+                className={classes.statusChip}
+                style={{
+                  backgroundColor: getTemperatureColor(lead.temperature),
+                  color: lead.temperature === 'warm' ? 'black' : 'white',
+                }}
+              />
+            </Box>
           </Box>
-        </Box>
-        <Box className={classes.actions}>
-          <Button
-            variant='outlined'
-            color='primary'
-            startIcon={<Edit />}
-            onClick={handleEdit}
-          >
-            {i18n.t('common.edit')}
-          </Button>
+          <Box className={classes.actions}>
+            <Button
+              variant='contained'
+              color='primary'
+              startIcon={<Edit />}
+              onClick={handleEdit}
+            >
+              {i18n.t('common.edit')}
+            </Button>
+          </Box>
         </Box>
       </Paper>
 
-      <Grid container spacing={3}>
+      {/* Main Content Grid */}
+      <Grid container spacing={3} className={classes.contentGrid}>
+        {/* Contact Information */}
         <Grid item xs={12} md={6}>
-          <Card className={classes.infoCard}>
-            <CardHeader title={i18n.t('leads.sections.contact')} />
-            <CardContent>
+          <Card className={classes.card}>
+            <CardHeader
+              className={classes.cardHeader}
+              title={i18n.t('leads.sections.contact')}
+              avatar={<User size={20} />}
+            />
+            <CardContent className={classes.cardContent}>
               <div className={classes.infoItem}>
                 <User className={classes.infoIcon} />
-                <span className={classes.infoLabel}>
-                  {i18n.t('leads.fields.contact')}:
-                </span>
-                <span className={classes.infoValue}>{lead.contact?.name}</span>
+                <div className={classes.infoContent}>
+                  <div className={classes.infoLabel}>
+                    {i18n.t('leads.fields.contact')}
+                  </div>
+                  <div className={classes.infoValue}>{lead.contact?.name}</div>
+                </div>
               </div>
+
               {lead.contact?.number && (
                 <div className={classes.infoItem}>
                   <Phone className={classes.infoIcon} />
-                  <span className={classes.infoLabel}>
-                    {i18n.t('leads.fields.phone')}:
-                  </span>
-                  <span className={classes.infoValue}>
-                    {lead.contact.number}
-                  </span>
+                  <div className={classes.infoContent}>
+                    <div className={classes.infoLabel}>
+                      {i18n.t('leads.fields.phone')}
+                    </div>
+                    <div className={classes.infoValue}>
+                      {lead.contact.number}
+                    </div>
+                  </div>
                 </div>
               )}
+
               {lead.contact?.email && (
                 <div className={classes.infoItem}>
                   <Mail className={classes.infoIcon} />
-                  <span className={classes.infoLabel}>
-                    {i18n.t('leads.fields.email')}:
-                  </span>
-                  <span className={classes.infoValue}>
-                    {lead.contact.email}
-                  </span>
+                  <div className={classes.infoContent}>
+                    <div className={classes.infoLabel}>
+                      {i18n.t('leads.fields.email')}
+                    </div>
+                    <div className={classes.infoValue}>
+                      {lead.contact.email}
+                    </div>
+                  </div>
                 </div>
               )}
+
               {lead.source && (
                 <div className={classes.infoItem}>
                   <MapPin className={classes.infoIcon} />
-                  <span className={classes.infoLabel}>
-                    {i18n.t('leads.fields.source')}:
-                  </span>
-                  <span className={classes.infoValue}>{lead.source}</span>
+                  <div className={classes.infoContent}>
+                    <div className={classes.infoLabel}>
+                      {i18n.t('leads.fields.source')}
+                    </div>
+                    <div className={classes.infoValue}>{lead.source}</div>
+                  </div>
                 </div>
               )}
+
               {lead.assignedTo && (
                 <div className={classes.infoItem}>
                   <User className={classes.infoIcon} />
-                  <span className={classes.infoLabel}>
-                    {i18n.t('leads.fields.assignedTo')}:
-                  </span>
-                  <div className={classes.assignedUser}>
-                    <Avatar className={classes.userAvatar}>
-                      {getInitials(lead.assignedTo.name)}
-                    </Avatar>
-                    <span className={classes.infoValue}>
-                      {lead.assignedTo.name}
-                    </span>
+                  <div className={classes.infoContent}>
+                    <div className={classes.infoLabel}>
+                      {i18n.t('leads.fields.assignedTo')}
+                    </div>
+                    <div className={classes.assignedUser}>
+                      <Avatar className={classes.userAvatar}>
+                        {getInitials(lead.assignedTo.name)}
+                      </Avatar>
+                      <span className={classes.infoValue}>
+                        {lead.assignedTo.name}
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
@@ -407,25 +521,38 @@ const LeadDetail = () => {
           </Card>
         </Grid>
 
+        {/* Financial Information */}
         <Grid item xs={12} md={6}>
-          <Card className={classes.financialCard}>
-            <CardHeader title={i18n.t('leads.sections.financial')} />
-            <CardContent>
-              {lead.expectedValue && (
+          <Card className={classes.card}>
+            <CardHeader
+              className={classes.cardHeader}
+              title={i18n.t('leads.sections.financial')}
+              avatar={<DollarSign size={20} />}
+            />
+            <CardContent className={classes.cardContent}>
+              {lead.expectedValue ? (
                 <div className={classes.financialItem}>
                   <div className={classes.financialLabel}>
-                    <DollarSign />
+                    <DollarSign size={16} />
                     <span>{i18n.t('leads.fields.expectedValue')}</span>
                   </div>
                   <span className={classes.financialValue}>
                     {formatExpectedValue(lead)}
                   </span>
                 </div>
+              ) : (
+                <div className={classes.emptyState}>
+                  <DollarSign size={24} />
+                  <Typography variant='body2'>
+                    {i18n.t('leads.noFinancialData')}
+                  </Typography>
+                </div>
               )}
+
               {lead.probability && (
                 <div className={classes.financialItem}>
                   <div className={classes.financialLabel}>
-                    <Percent />
+                    <Percent size={16} />
                     <span>{i18n.t('leads.fields.probability')}</span>
                   </div>
                   <span className={classes.financialValue}>
@@ -433,10 +560,11 @@ const LeadDetail = () => {
                   </span>
                 </div>
               )}
+
               {lead.expectedClosingDate && (
                 <div className={classes.financialItem}>
                   <div className={classes.financialLabel}>
-                    <Calendar />
+                    <Calendar size={16} />
                     <span>{i18n.t('leads.fields.expectedClosingDate')}</span>
                   </div>
                   <span className={classes.financialValue}>
@@ -448,21 +576,24 @@ const LeadDetail = () => {
           </Card>
         </Grid>
 
-        {lead.tags && lead.tags.length > 0 && (
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardHeader
-                title={i18n.t('leads.sections.tags')}
-                action={
-                  <IconButton
-                    size='small'
-                    onClick={() => setShowAddTagDialog(true)}
-                  >
-                    <Plus />
-                  </IconButton>
-                }
-              />
-              <CardContent>
+        {/* Tags Section */}
+        <Grid item xs={12} md={6}>
+          <Card className={classes.card}>
+            <CardHeader
+              className={classes.cardHeader}
+              title={i18n.t('leads.sections.tags')}
+              avatar={<TagIcon size={20} />}
+              action={
+                <IconButton
+                  size='small'
+                  onClick={() => setShowAddTagDialog(true)}
+                >
+                  <Plus />
+                </IconButton>
+              }
+            />
+            <CardContent className={classes.cardContent}>
+              {lead.tags && lead.tags.length > 0 ? (
                 <Box display='flex' flexWrap='wrap'>
                   {lead.tags.map((tag) => (
                     <Chip
@@ -473,43 +604,72 @@ const LeadDetail = () => {
                     />
                   ))}
                 </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
+              ) : (
+                <div className={classes.emptyState}>
+                  <TagIcon size={24} />
+                  <Typography variant='body2'>
+                    {i18n.t('leads.noTags')}
+                  </Typography>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
 
-        {lead.customFields && Object.keys(lead.customFields).length > 0 && (
-          <Grid item xs={12} md={6}>
-            <Card className={classes.customFieldsCard}>
-              <CardHeader title={i18n.t('leads.sections.customFields')} />
-              <CardContent>
-                {Object.entries(lead.customFields).map(([key, value]) => (
+        {/* Custom Fields */}
+        <Grid item xs={12} md={6}>
+          <Card className={classes.card}>
+            <CardHeader
+              className={classes.cardHeader}
+              title={i18n.t('leads.sections.customFields')}
+              avatar={<Settings size={20} />}
+            />
+            <CardContent className={classes.cardContent}>
+              {lead.customFields &&
+              Object.keys(lead.customFields).length > 0 ? (
+                Object.entries(lead.customFields).map(([key, value]) => (
                   <div key={key} className={classes.customField}>
                     <span className={classes.customFieldLabel}>{key}:</span>
                     <span className={classes.customFieldValue}>{value}</span>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
+                ))
+              ) : (
+                <div className={classes.emptyState}>
+                  <Settings size={24} />
+                  <Typography variant='body2'>
+                    {i18n.t('leads.noCustomFields')}
+                  </Typography>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
 
+        {/* Notes Section */}
         {lead.notes && (
           <Grid item xs={12}>
-            <Card>
-              <CardHeader title={i18n.t('leads.sections.notes')} />
-              <CardContent>
-                <Typography>{lead.notes}</Typography>
-              </CardContent>
+            <Card className={classes.notesCard}>
+              <CardHeader
+                className={classes.cardHeader}
+                title={i18n.t('leads.sections.notes')}
+                avatar={<FileText size={20} />}
+              />
+              <div className={classes.notesContent}>
+                <Typography variant='body1' style={{ lineHeight: 1.6 }}>
+                  {lead.notes}
+                </Typography>
+              </div>
             </Card>
           </Grid>
         )}
       </Grid>
 
+      {/* Timeline Section */}
       <Box className={classes.timelineSection}>
         <LeadTimeline leadId={id} onUpdate={loadLead} />
       </Box>
 
+      {/* Modals */}
       <LeadModal
         open={showEditModal}
         onClose={handleCloseEditModal}

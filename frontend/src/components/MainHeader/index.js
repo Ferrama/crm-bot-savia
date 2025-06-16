@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
 		backgroundPosition: 'center', 
 		backgroundSize: 'cover', 
 		backgroundRepeat: 'no-repeat', 
+		
 	},
 }));
 

@@ -9,7 +9,6 @@ import React, {
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,9 +20,11 @@ import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import ConfirmationModal from '../../components/ConfirmationModal/';
 import ContactListItemModal from '../../components/ContactListItemModal';
+import ContactSelectorModal from '../../components/ContactSelectorModal';
 import TableRowSkeleton from '../../components/TableRowSkeleton';
 import api from '../../services/api';
 
@@ -37,7 +38,17 @@ import toastError from '../../errors/toastError';
 import useContactLists from '../../hooks/useContactLists';
 import { i18n } from '../../translate/i18n';
 
-import { Ban, CheckCircle, Edit, Search, Trash2 } from 'lucide-react';
+import {
+  Ban,
+  CheckCircle,
+  ChevronLeft,
+  Edit,
+  Plus,
+  Search,
+  Trash2,
+  Upload,
+  Users,
+} from 'lucide-react';
 import planilhaExemplo from '../../assets/planilha.xlsx';
 import { SocketContext } from '../../context/Socket/SocketContext';
 
@@ -108,10 +119,13 @@ const ContactListItems = () => {
   const [selectedContactId, setSelectedContactId] = useState(null);
   const [contactListItemModalOpen, setContactListItemModalOpen] =
     useState(false);
+  const [contactSelectorModalOpen, setContactSelectorModalOpen] =
+    useState(false);
   const [deletingContact, setDeletingContact] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [contactList, setContactList] = useState({});
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const fileUploadRef = useRef(null);
 
   const { findById: findContactList } = useContactLists();
@@ -148,7 +162,7 @@ const ContactListItems = () => {
       fetchContacts();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [searchParam, pageNumber, contactListId]);
+  }, [searchParam, pageNumber, contactListId, refreshTrigger]);
 
   useEffect(() => {
     const companyId = localStorage.getItem('companyId');
@@ -246,6 +260,35 @@ const ContactListItems = () => {
     history.push('/contact-lists');
   };
 
+  const handleOpenContactSelectorModal = () => {
+    setContactSelectorModalOpen(true);
+  };
+
+  const handleCloseContactSelectorModal = () => {
+    setContactSelectorModalOpen(false);
+  };
+
+  const handleContactsAdded = async () => {
+    // Refresh the contact list after adding contacts
+    dispatch({ type: 'RESET' });
+    setPageNumber(1);
+    setSearchParam('');
+
+    // Force immediate reload
+    setLoading(true);
+    try {
+      const { data } = await api.get(`contact-list-items`, {
+        params: { searchParam: '', pageNumber: 1, contactListId },
+      });
+      dispatch({ type: 'LOAD_CONTACTS', payload: data.contacts });
+      setHasMore(data.hasMore);
+      setLoading(false);
+    } catch (err) {
+      toastError(err);
+      setLoading(false);
+    }
+  };
+
   return (
     <MainContainer className={classes.mainContainer}>
       <ContactListItemModal
@@ -254,6 +297,12 @@ const ContactListItems = () => {
         aria-labelledby='form-dialog-title'
         contactId={selectedContactId}
       ></ContactListItemModal>
+      <ContactSelectorModal
+        open={contactSelectorModalOpen}
+        onClose={handleCloseContactSelectorModal}
+        contactListId={contactListId}
+        onContactsAdded={handleContactsAdded}
+      />
       <ConfirmationModal
         title={
           deletingContact
@@ -282,10 +331,30 @@ const ContactListItems = () => {
         )}
       </ConfirmationModal>
       <MainHeader>
-        <Grid style={{ width: '99.6%' }} container>
-          <Grid xs={12} sm={5} item>
+        <Grid
+          style={{ width: '99.6%' }}
+          container
+          justifyContent='space-between'
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'end',
+              width: '33%',
+              gap: '10px',
+            }}
+          >
+            <Tooltip title={i18n.t('contactListItems.buttons.lists')}>
+              <IconButton
+                variant='contained'
+                color='secondary'
+                onClick={goToContactLists}
+              >
+                <ChevronLeft size={20} />
+              </IconButton>
+            </Tooltip>
             <Title>{contactList.name}</Title>
-          </Grid>
+          </div>
           <Grid xs={12} sm={7} item>
             <Grid spacing={2} container>
               <Grid xs={12} sm={6} item>
@@ -304,38 +373,48 @@ const ContactListItems = () => {
                   }}
                 />
               </Grid>
-              <Grid xs={4} sm={2} item>
-                <Button
-                  fullWidth
-                  variant='contained'
-                  color='primary'
-                  onClick={goToContactLists}
-                >
-                  {i18n.t('contactListItems.buttons.lists')}
-                </Button>
-              </Grid>
-              <Grid xs={4} sm={2} item>
-                <Button
-                  fullWidth
-                  variant='contained'
-                  color='primary'
-                  onClick={() => {
-                    fileUploadRef.current.value = null;
-                    fileUploadRef.current.click();
-                  }}
-                >
-                  {i18n.t('contactListItems.buttons.import')}
-                </Button>
-              </Grid>
-              <Grid xs={4} sm={2} item>
-                <Button
-                  fullWidth
-                  variant='contained'
-                  color='primary'
-                  onClick={handleOpenContactListItemModal}
-                >
-                  {i18n.t('contactListItems.buttons.add')}
-                </Button>
+              <Grid xs={12} sm={6} item>
+                <Grid spacing={1} container justifyContent='flex-end'>
+                  <Grid item></Grid>
+                  <Grid item>
+                    <Tooltip title={i18n.t('contactListItems.buttons.import')}>
+                      <IconButton
+                        variant='contained'
+                        color='secondary'
+                        onClick={() => {
+                          fileUploadRef.current.value = null;
+                          fileUploadRef.current.click();
+                        }}
+                      >
+                        <Upload size={20} />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip
+                      title={i18n.t('contactListItems.buttons.addFromSystem')}
+                    >
+                      <IconButton
+                        variant='contained'
+                        color='secondary'
+                        onClick={handleOpenContactSelectorModal}
+                      >
+                        <Users size={20} />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip title={i18n.t('contactListItems.buttons.add')}>
+                      <IconButton
+                        variant='contained'
+                        color='secondary'
+                        onClick={handleOpenContactListItemModal}
+                      >
+                        <Plus size={20} />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -382,7 +461,7 @@ const ContactListItems = () => {
               {contacts.map((contact) => (
                 <TableRow key={contact.id}>
                   <TableCell align='center' style={{ width: '0%' }}>
-                    <IconButton>
+                    <IconButton variant='contained' color='secondary'>
                       {contact.isWhatsappValid ? (
                         <CheckCircle
                           titleAccess='Whatsapp Válido'
@@ -404,6 +483,8 @@ const ContactListItems = () => {
                   <TableCell align='center'>
                     <IconButton
                       size='small'
+                      variant='contained'
+                      color='secondary'
                       onClick={() => hadleEditContact(contact.id)}
                     >
                       <Edit size={20} />
@@ -414,6 +495,8 @@ const ContactListItems = () => {
                       yes={() => (
                         <IconButton
                           size='small'
+                          variant='contained'
+                          color='secondary'
                           onClick={() => {
                             setConfirmOpen(true);
                             setDeletingContact(contact);

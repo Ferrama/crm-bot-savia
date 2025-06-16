@@ -203,7 +203,7 @@ const ScheduleModal = ({
       <Dialog
         open={open}
         onClose={handleClose}
-        maxWidth='xs'
+        maxWidth='md'
         fullWidth
         scroll='paper'
       >

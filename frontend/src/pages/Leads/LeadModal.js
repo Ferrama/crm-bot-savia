@@ -20,7 +20,19 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { DollarSign, FileText, Info, Tag, User } from 'lucide-react';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {
+  DollarSign,
+  FileText,
+  Info,
+  Palette,
+  Plus,
+  Tag,
+  User,
+  X,
+} from 'lucide-react';
+import { ColorBox } from 'material-ui-color';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
@@ -104,6 +116,18 @@ const useStyles = makeStyles((theme) => ({
     color:
       theme.palette.mode === 'light' ? theme.palette.primary.main : '#F3F4F6',
   },
+  newTagForm: {
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(2),
+  },
+  colorPreview: {
+    width: 20,
+    height: 20,
+    borderRadius: '50%',
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
@@ -119,6 +143,15 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [customFields, setCustomFields] = useState({});
   const [currenciesLoading, setCurrenciesLoading] = useState(false);
+  const [showNewTagForm, setShowNewTagForm] = useState(false);
+  const [newTag, setNewTag] = useState({ name: '', color: '#1976d2' });
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
+
+  // Estados para búsqueda y paginación de contactos
+  const [searchParam, setSearchParam] = useState('');
+  const [pageNumber, setPageNumber] = useState(1);
+  const [hasMoreContacts, setHasMoreContacts] = useState(false);
+  const [loadingContacts, setLoadingContacts] = useState(false);
 
   // Global form state to maintain data across tabs
   const [globalFormData, setGlobalFormData] = useState({
@@ -147,11 +180,75 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
     { id: 4, label: i18n.t('leads.tabs.notes'), icon: <FileText /> },
   ];
 
+  // Campos requeridos por sección
+  const requiredFieldsBySection = [
+    // Sección 0: Básico
+    ['name'],
+    // Sección 1: Contacto
+    ['contactId', 'columnId'],
+    // Sección 2: Financiero
+    ['currencyId'],
+    // Sección 3: Tags y custom fields (ningún campo requerido)
+    [],
+    // Sección 4: Notas (ningún campo requerido)
+    [],
+  ];
+
+  // Validación de campos requeridos para la sección actual
+  const isSectionValid = () => {
+    const required = requiredFieldsBySection[activeSection];
+    return required.every((field) => {
+      const value = globalFormData[field];
+      return value !== undefined && value !== null && value !== '';
+    });
+  };
+
+  // Navegación entre secciones
+  const handleNext = () => {
+    if (activeSection < sections.length - 1) {
+      setActiveSection((prev) => prev + 1);
+    }
+  };
+  const handlePrev = () => {
+    if (activeSection > 0) {
+      setActiveSection((prev) => prev - 1);
+    }
+  };
+
+  // Mapeo de estados a códigos de columna
+  const statusToColumnCode = {
+    new: 'new',
+    contacted: 'contacted',
+    follow_up: 'follow_up',
+    proposal: 'proposal',
+    negotiation: 'negotiation',
+    qualified: 'qualified',
+    unqualified: 'not_qualified',
+    converted: 'converted',
+    lost: 'lost',
+    closed_won: 'closed_won',
+    closed_lost: 'closed_lost',
+  };
+
+  // Función para encontrar la columna por código
+  const findColumnByCode = (code) => {
+    return columns.find((column) => column.code === code);
+  };
+
+  // Función para actualizar la columna basada en el estado
+  const updateColumnFromStatus = (status) => {
+    const columnCode = statusToColumnCode[status];
+    if (columnCode) {
+      const correspondingColumn = findColumnByCode(columnCode);
+      if (correspondingColumn) {
+        updateGlobalFormData('columnId', correspondingColumn.id);
+      }
+    }
+  };
+
   useEffect(() => {
     if (open && !dataLoaded) {
       setLoading(true);
-
-      // Initialize global form data
       const initialData = {
         name: lead?.name || '',
         title: lead?.title || '',
@@ -167,14 +264,14 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
         expectedValue: lead?.expectedValue || '',
         expectedClosingDate: lead?.expectedClosingDate
           ? lead.expectedClosingDate.split('T')[0]
-          : '',
+          : moment().add(5, 'days').format('YYYY-MM-DD'),
         assignedToId: lead?.assignedToId || '',
         notes: lead?.notes || '',
       };
       setGlobalFormData(initialData);
-
+      setPageNumber(1);
       Promise.all([
-        loadContacts(),
+        loadContacts('', 1),
         loadUsers(),
         loadColumns(),
         loadTags(),
@@ -182,7 +279,13 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
       ])
         .then(() => {
           if (lead) {
-            setSelectedTags(lead.tags || []);
+            setSelectedTags(
+              (lead.tagRelations || []).map((tag) => ({
+                id: tag.id,
+                name: tag.name,
+                color: tag.color,
+              }))
+            );
             setCustomFields(lead.customFields || {});
           }
           setDataLoaded(true);
@@ -197,14 +300,66 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
     }
   }, [open, lead, dataLoaded, columnId]);
 
-  const loadContacts = async () => {
+  // Actualizar el formulario cuando el lead cambie (para modo edición)
+  useEffect(() => {
+    if (open && dataLoaded && lead) {
+      const updatedData = {
+        name: lead.name || '',
+        title: lead.title || '',
+        description: lead.description || '',
+        contactId: lead.contactId || '',
+        columnId: lead.columnId || columnId || '',
+        temperature: lead.temperature || 'warm',
+        status: lead.status || 'new',
+        pipeline: lead.pipeline || 'default',
+        source: lead.source || '',
+        currencyId: lead.currencyId || '',
+        probability: lead.probability || 50,
+        expectedValue: lead.expectedValue || '',
+        expectedClosingDate: lead.expectedClosingDate
+          ? lead.expectedClosingDate.split('T')[0]
+          : moment().add(5, 'days').format('YYYY-MM-DD'),
+        assignedToId: lead.assignedToId || '',
+        notes: lead.notes || '',
+      };
+      setGlobalFormData(updatedData);
+      setSelectedTags(
+        (lead.tagRelations || []).map((tag) => ({
+          id: tag.id,
+          name: tag.name,
+          color: tag.color,
+        }))
+      );
+      setCustomFields(lead.customFields || {});
+    }
+  }, [lead, open, dataLoaded, columnId]);
+
+  useEffect(() => {
+    if (open && dataLoaded) {
+      setPageNumber(1);
+      loadContacts(searchParam, 1);
+    }
+    // eslint-disable-next-line
+  }, [searchParam]);
+
+  const loadContacts = async (search = '', page = 1) => {
+    setLoadingContacts(true);
     try {
-      const { data } = await api.get('/contacts');
-      setContacts(data.contacts || []);
+      const { data } = await api.get('/contacts', {
+        params: { searchParam: search, pageNumber: page },
+      });
+      if (page === 1) {
+        setContacts(data.contacts || []);
+      } else {
+        setContacts((prev) => [...prev, ...(data.contacts || [])]);
+      }
+      setHasMoreContacts(data.hasMore);
     } catch (err) {
       console.error('Error loading contacts:', err);
-      setContacts([]);
-      throw err;
+      if (page === 1) setContacts([]);
+      setHasMoreContacts(false);
+    } finally {
+      setLoadingContacts(false);
     }
   };
 
@@ -244,28 +399,22 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
   const loadCurrencies = async () => {
     setCurrenciesLoading(true);
     try {
-      console.log('Loading currencies...');
-
       // Try different possible endpoints
       let currenciesData = [];
 
       try {
         const { data } = await api.get('/currencies');
-        console.log('Currencies response:', data);
+
         currenciesData = data.currencies || data || [];
       } catch (firstError) {
-        console.log('First endpoint failed, trying alternative...');
         try {
           const { data } = await api.get('/currency');
-          console.log('Alternative currencies response:', data);
+
           currenciesData = data.currencies || data || [];
         } catch (secondError) {
-          console.log(
-            'Alternative endpoint also failed, trying /settings/currencies...'
-          );
           try {
             const { data } = await api.get('/settings/currencies');
-            console.log('Settings currencies response:', data);
+
             currenciesData = data.currencies || data || [];
           } catch (thirdError) {
             console.error('All currency endpoints failed');
@@ -274,7 +423,6 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
         }
       }
 
-      console.log('Final processed currencies:', currenciesData);
       setCurrencies(currenciesData);
 
       if (currenciesData.length === 0) {
@@ -317,47 +465,161 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
   };
 
   const updateGlobalFormData = (field, value) => {
-    setGlobalFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setGlobalFormData((prev) => {
+      const newData = {
+        ...prev,
+        [field]: value,
+      };
+
+      // Si se está actualizando el status, actualizar automáticamente la columna
+      if (field === 'status' && value) {
+        const columnCode = statusToColumnCode[value];
+        if (columnCode) {
+          const correspondingColumn = findColumnByCode(columnCode);
+          if (correspondingColumn) {
+            newData.columnId = correspondingColumn.id;
+          }
+        }
+      }
+
+      return newData;
+    });
   };
 
   const handleSave = async () => {
     try {
+      // Limpiar campos numéricos opcionales y setear expectedClosingDate si está vacío
+      let expectedClosingDate = globalFormData.expectedClosingDate;
+      if (!expectedClosingDate) {
+        expectedClosingDate = moment().add(5, 'days').format('YYYY-MM-DD');
+      }
       const leadData = {
         ...globalFormData,
-        tags: selectedTags,
+        tagIds: selectedTags.map((tag) => tag.id),
         customFields,
+        assignedToId:
+          globalFormData.assignedToId === '' ||
+          globalFormData.assignedToId === undefined
+            ? undefined
+            : Number(globalFormData.assignedToId),
+        expectedValue:
+          globalFormData.expectedValue === '' ||
+          globalFormData.expectedValue === undefined
+            ? undefined
+            : Number(globalFormData.expectedValue),
+        probability:
+          globalFormData.probability === '' ||
+          globalFormData.probability === undefined
+            ? undefined
+            : Number(globalFormData.probability),
+        expectedClosingDate,
       };
 
+      // Eliminar claves con valor undefined
+      Object.keys(leadData).forEach(
+        (key) => leadData[key] === undefined && delete leadData[key]
+      );
+
+      let response;
       if (lead) {
-        await api.put(`/leads/${lead.id}`, leadData);
+        response = await api.put(`/leads/${lead.id}`, leadData);
         toast.success(i18n.t('leads.toasts.updated'));
+
+        // Crear un objeto lead actualizado con los datos de la respuesta
+        const updatedLead = {
+          ...response.data,
+          tagRelations: selectedTags,
+          customFields: customFields,
+        };
+
+        // Llamar a reload con el lead actualizado
+        reload(updatedLead);
       } else {
-        await api.post('/leads', leadData);
+        response = await api.post('/leads', leadData);
         toast.success(i18n.t('leads.toasts.created'));
+        reload();
       }
 
-      reload();
       handleClose();
     } catch (err) {
       toast.error(err.response?.data?.error || 'Error saving lead');
     }
   };
 
-  const handleTagAdd = (tag) => {
-    if (tag && !selectedTags.includes(tag)) {
-      setSelectedTags([...selectedTags, tag]);
+  const handleTagAdd = (tagName) => {
+    if (tagName) {
+      // Buscar el tag completo en la lista de tags disponibles
+      const tagObject = tags.find((tag) => tag.name === tagName);
+      if (tagObject && !selectedTags.some((tag) => tag.id === tagObject.id)) {
+        setSelectedTags([...selectedTags, tagObject]);
+      }
     }
   };
 
   const handleTagDelete = (tagToDelete) => {
-    setSelectedTags(selectedTags.filter((tag) => tag !== tagToDelete));
+    setSelectedTags(selectedTags.filter((tag) => tag.id !== tagToDelete.id));
+  };
+
+  const handleCreateNewTag = async () => {
+    if (!newTag.name.trim()) {
+      toast.error(i18n.t('leads.toasts.tagNameRequired'));
+      return;
+    }
+
+    if (newTag.name.length < 3) {
+      toast.error(i18n.t('leads.toasts.tagNameMinLength'));
+      return;
+    }
+
+    try {
+      const { data } = await api.post('/tags', {
+        name: newTag.name.trim(),
+        color: newTag.color,
+        kanban: 0,
+      });
+
+      // Agregar el nuevo tag a la lista de tags disponibles
+      setTags((prevTags) => [...prevTags, data]);
+
+      // Agregar el nuevo tag a los tags seleccionados
+      setSelectedTags((prev) => [...prev, data]);
+
+      // Limpiar el formulario
+      setNewTag({ name: '', color: '#1976d2' });
+      setShowNewTagForm(false);
+      setColorPickerOpen(false);
+
+      toast.success(i18n.t('leads.toasts.tagCreated'));
+    } catch (err) {
+      toast.error(
+        err.response?.data?.error || i18n.t('leads.toasts.tagCreationError')
+      );
+    }
+  };
+
+  const handleCancelNewTag = () => {
+    setNewTag({ name: '', color: '#1976d2' });
+    setShowNewTagForm(false);
+    setColorPickerOpen(false);
   };
 
   const handleCustomFieldChange = (key, value) => {
     setCustomFields({ ...customFields, [key]: value });
+  };
+
+  // Función para cargar más contactos al scrollear
+  const handleContactScroll = (event) => {
+    const listboxNode = event.currentTarget;
+    if (
+      hasMoreContacts &&
+      !loadingContacts &&
+      listboxNode.scrollTop + listboxNode.clientHeight >=
+        listboxNode.scrollHeight - 100
+    ) {
+      const nextPage = pageNumber + 1;
+      setPageNumber(nextPage);
+      loadContacts(searchParam, nextPage);
+    }
   };
 
   const renderBasicInfo = () => (
@@ -506,21 +768,51 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <FormControl fullWidth variant='outlined' margin='dense'>
-            <InputLabel>{i18n.t('leads.form.contact')}</InputLabel>
-            <Select
-              value={globalFormData.contactId}
-              onChange={(e) =>
-                updateGlobalFormData('contactId', e.target.value)
+            <Autocomplete
+              fullWidth
+              options={contacts}
+              value={
+                contacts.find((c) => c.id === globalFormData.contactId) || null
               }
-              label={i18n.t('leads.form.contact')}
-            >
-              {contacts &&
-                contacts.map((contact) => (
-                  <MenuItem key={contact.id} value={contact.id}>
-                    {contact.name} - {contact.number}
-                  </MenuItem>
-                ))}
-            </Select>
+              onChange={(e, contact) => {
+                updateGlobalFormData('contactId', contact ? contact.id : '');
+              }}
+              getOptionLabel={(option) =>
+                option.name
+                  ? `${option.name}${
+                      option.number ? ' - ' + option.number : ''
+                    }`
+                  : ''
+              }
+              getOptionSelected={(option, value) => option.id === value.id}
+              loading={loadingContacts}
+              onInputChange={(event, value, reason) => {
+                if (reason === 'input') {
+                  setSearchParam(value);
+                }
+              }}
+              ListboxProps={{ onScroll: handleContactScroll }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  margin='dense'
+                  label={i18n.t('leads.form.contact')}
+                  placeholder={i18n.t('scheduleModal.form.contactPlaceholder')}
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {loadingContacts ? (
+                          <CircularProgress color='inherit' size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                />
+              )}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -532,12 +824,50 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
               label={i18n.t('leads.form.column')}
             >
               {columns &&
-                columns.map((column) => (
-                  <MenuItem key={column.id} value={column.id}>
-                    {column.name}
-                  </MenuItem>
-                ))}
+                columns.map((column) => {
+                  const isAutoSelected =
+                    statusToColumnCode[globalFormData.status] === column.code;
+                  return (
+                    <MenuItem key={column.id} value={column.id}>
+                      <Box
+                        display='flex'
+                        alignItems='center'
+                        justifyContent='space-between'
+                        width='100%'
+                      >
+                        <span>
+                          {column.code
+                            ? i18n.t(`leads.columnCodes.${column.code}`)
+                            : column.name}
+                        </span>
+                        {isAutoSelected && (
+                          <Chip
+                            label='Auto'
+                            size='small'
+                            style={{
+                              backgroundColor: '#4caf50',
+                              color: 'white',
+                              fontSize: '0.7rem',
+                              height: 18,
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </MenuItem>
+                  );
+                })}
             </Select>
+            {globalFormData.status &&
+              statusToColumnCode[globalFormData.status] && (
+                <Typography
+                  variant='caption'
+                  color='textSecondary'
+                  style={{ marginTop: 4, display: 'block' }}
+                >
+                  💡 La columna se actualiza automáticamente según el estado
+                  seleccionado
+                </Typography>
+              )}
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -662,42 +992,140 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
             {selectedTags &&
               selectedTags.map((tag) => (
                 <Chip
-                  key={tag}
-                  label={tag}
+                  key={tag.id}
+                  label={tag.name}
                   onDelete={() => handleTagDelete(tag)}
                   className={classes.chip}
+                  style={{
+                    backgroundColor: tag.color,
+                    color: '#fff',
+                  }}
                 />
               ))}
           </Box>
-          <FormControl
-            fullWidth
-            variant='outlined'
-            margin='dense'
-            className={classes.tagInput}
-          >
-            <InputLabel>{i18n.t('leads.form.addTag')}</InputLabel>
-            <Select
-              value=''
-              onChange={(e) => handleTagAdd(e.target.value)}
-              label={i18n.t('leads.form.addTag')}
-            >
-              {tags &&
-                tags.map((tag) => (
-                  <MenuItem key={tag.id} value={tag.name}>
-                    <Box display='flex' alignItems='center'>
-                      <Box
-                        width={16}
-                        height={16}
-                        borderRadius='50%'
-                        bgcolor={tag.color}
-                        mr={1}
-                      />
-                      {tag.name}
-                    </Box>
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
+
+          {!showNewTagForm ? (
+            <Box display='flex' gap={1} alignItems='center' mt={2}>
+              <FormControl
+                variant='outlined'
+                margin='dense'
+                style={{ flex: 1 }}
+              >
+                <InputLabel>{i18n.t('leads.form.addTag')}</InputLabel>
+                <Select
+                  value=''
+                  onChange={(e) => handleTagAdd(e.target.value)}
+                  label={i18n.t('leads.form.addTag')}
+                >
+                  {tags &&
+                    tags.map((tag) => (
+                      <MenuItem key={tag.id} value={tag.name}>
+                        <Box display='flex' alignItems='center'>
+                          <Box
+                            width={16}
+                            height={16}
+                            borderRadius='50%'
+                            bgcolor={tag.color}
+                            mr={1}
+                          />
+                          {tag.name}
+                        </Box>
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+              <Button
+                variant='outlined'
+                startIcon={<Plus />}
+                onClick={() => setShowNewTagForm(true)}
+                size='small'
+              >
+                {i18n.t('leads.form.newTag')}
+              </Button>
+            </Box>
+          ) : (
+            <Box className={classes.newTagForm}>
+              <Typography variant='subtitle2' gutterBottom>
+                {i18n.t('leads.form.createNewTag')}
+              </Typography>
+              <Grid container spacing={2} alignItems='center'>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label={i18n.t('leads.form.tagName')}
+                    value={newTag.name}
+                    onChange={(e) =>
+                      setNewTag({ ...newTag, name: e.target.value })
+                    }
+                    variant='outlined'
+                    margin='dense'
+                    size='small'
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label={i18n.t('leads.form.tagColor')}
+                    value={newTag.color}
+                    onChange={(e) =>
+                      setNewTag({ ...newTag, color: e.target.value })
+                    }
+                    variant='outlined'
+                    margin='dense'
+                    size='small'
+                    InputProps={{
+                      startAdornment: (
+                        <Box
+                          className={classes.colorPreview}
+                          style={{ backgroundColor: newTag.color }}
+                        />
+                      ),
+                      endAdornment: (
+                        <Button
+                          size='small'
+                          onClick={() => setColorPickerOpen(!colorPickerOpen)}
+                        >
+                          <Palette size={16} />
+                        </Button>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                  <Box display='flex' gap={1}>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      size='small'
+                      onClick={handleCreateNewTag}
+                    >
+                      {i18n.t('leads.form.createTag')}
+                    </Button>
+                    <Button
+                      variant='outlined'
+                      size='small'
+                      onClick={handleCancelNewTag}
+                    >
+                      <X size={16} />
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
+
+              {colorPickerOpen && (
+                <Box mt={2}>
+                  <ColorBox
+                    disableAlpha={true}
+                    hslGradient={false}
+                    value={newTag.color}
+                    onChange={(val) => {
+                      setNewTag({ ...newTag, color: `#${val.hex}` });
+                    }}
+                  />
+                </Box>
+              )}
+            </Box>
+          )}
         </Grid>
         <Grid item xs={12}>
           <Typography variant='h6' gutterBottom>
@@ -758,8 +1186,43 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
             variant='outlined'
             margin='dense'
             multiline
-            rows={12}
+            rows={20}
+            inputProps={{
+              maxLength: 50000, // 50,000 caracteres máximo
+              style: {
+                fontSize: '14px',
+                lineHeight: '1.5',
+                fontFamily: 'monospace',
+              },
+            }}
+            helperText={`${
+              globalFormData.notes?.length || 0
+            }/50,000 caracteres`}
+            placeholder={i18n.t('leads.form.notesPlaceholder')}
           />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant='body2' color='textSecondary' gutterBottom>
+            💡 <strong>{i18n.t('leads.form.tourismSuggestions')}</strong>
+          </Typography>
+          <Typography
+            variant='body2'
+            color='textSecondary'
+            style={{ fontSize: '12px' }}
+          >
+            {i18n
+              .t('leads.form.tourismSuggestionsList')
+              .split(', ')
+              .map((suggestion, index) => (
+                <React.Fragment key={index}>
+                  • {suggestion}
+                  {index <
+                    i18n.t('leads.form.tourismSuggestionsList').split(', ')
+                      .length -
+                      1 && <br />}
+                </React.Fragment>
+              ))}
+          </Typography>
         </Grid>
       </Grid>
     </Box>
@@ -797,21 +1260,42 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
       <DialogContent className={classes.dialogContent}>
         <Box className={classes.sidebar}>
           <List className={classes.sidebarList}>
-            {sections.map((section) => (
-              <ListItem
-                key={section.id}
-                button
-                className={
-                  activeSection === section.id
-                    ? classes.sidebarItemActive
-                    : classes.sidebarItem
+            {sections.map((section, idx) => {
+              // En modo edición, permitir navegación libre
+              // En modo creación, seguir patrón de validación secuencial
+              let disabled = false;
+
+              if (!lead) {
+                // Modo creación: solo permitir sección actual, anteriores, o siguiente si la actual es válida
+                if (idx > activeSection) {
+                  if (idx === activeSection + 1) {
+                    disabled = !isSectionValid();
+                  } else {
+                    disabled = true;
+                  }
                 }
-                onClick={() => setActiveSection(section.id)}
-              >
-                <ListItemIcon>{section.icon}</ListItemIcon>
-                <ListItemText primary={section.label} />
-              </ListItem>
-            ))}
+              }
+              // En modo edición (lead existe), todas las secciones están habilitadas
+
+              return (
+                <ListItem
+                  key={section.id}
+                  button
+                  disabled={disabled}
+                  className={
+                    activeSection === section.id
+                      ? classes.sidebarItemActive
+                      : classes.sidebarItem
+                  }
+                  onClick={() => {
+                    if (!disabled) setActiveSection(section.id);
+                  }}
+                >
+                  <ListItemIcon>{section.icon}</ListItemIcon>
+                  <ListItemText primary={section.label} />
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
         <Box className={classes.content}>
@@ -822,13 +1306,30 @@ const LeadModal = ({ open, onClose, reload, lead, columnId }) => {
         <Button onClick={handleClose} color='secondary' variant='contained'>
           {i18n.t('common.cancel')}
         </Button>
-        <Button
-          onClick={() => handleSave()}
-          color='primary'
-          variant='contained'
-        >
-          {lead ? i18n.t('common.update') : i18n.t('common.create')}
-        </Button>
+        {activeSection > 0 && (
+          <Button onClick={handlePrev} color='default' variant='outlined'>
+            {i18n.t('common.back')}
+          </Button>
+        )}
+        {activeSection < sections.length - 1 ? (
+          <Button
+            onClick={handleNext}
+            color='primary'
+            variant='contained'
+            disabled={!isSectionValid()}
+          >
+            {i18n.t('common.next')}
+          </Button>
+        ) : (
+          <Button
+            onClick={() => handleSave()}
+            color='primary'
+            variant='contained'
+            disabled={!isSectionValid()}
+          >
+            {lead ? i18n.t('common.update') : i18n.t('common.create')}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

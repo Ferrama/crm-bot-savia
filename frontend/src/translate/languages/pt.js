@@ -611,6 +611,7 @@ const messages = {
           add: 'Novo',
           lists: 'Listas',
           import: 'Importar',
+          addFromSystem: 'Adicionar do Sistema',
         },
         dialog: {
           name: 'Nome',
@@ -638,6 +639,23 @@ const messages = {
         },
         toasts: {
           deleted: 'Registro excluído',
+        },
+      },
+      contactSelector: {
+        title: 'Selecionar Contatos do Sistema',
+        searchPlaceholder: 'Pesquisar contatos...',
+        selectedCount: '{{count}} contatos selecionados',
+        noContactsSelected: 'Nenhum contato selecionado',
+        contactsAddedSuccess: 'Contatos adicionados com sucesso',
+        table: {
+          name: 'Nome',
+          number: 'Número',
+          email: 'E-mail',
+          status: 'Status',
+        },
+        buttons: {
+          cancel: 'Cancelar',
+          add: 'Adicionar',
         },
       },
       campaigns: {
@@ -1390,6 +1408,9 @@ const messages = {
           board: 'Quadro',
           list: 'Lista',
         },
+        board: {
+          title: 'Quadro de Leads',
+        },
         tabs: {
           basic: 'Básico',
           contact: 'Contato',
@@ -1552,6 +1573,7 @@ const messages = {
             add: 'Nova Coluna',
             save: 'Salvar',
             cancel: 'Cancelar',
+            updateColors: 'Atualizar Cores',
           },
           dialog: {
             new: 'Nova Coluna',
@@ -1573,6 +1595,7 @@ const messages = {
             created: 'Coluna criada com sucesso',
             updated: 'Coluna atualizada com sucesso',
             deleted: 'Coluna excluída com sucesso',
+            colorsUpdated: 'Cores das colunas atualizadas com sucesso!',
           },
         },
       },

@@ -5,7 +5,8 @@
         "edit": "Edit",
         "delete": "Delete",
         "save": "Save",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "updateColors": "Update Colors"
     },
     "dialog": {
         "new": "New Column",
@@ -20,7 +21,8 @@
         "created": "Column created successfully!",
         "updated": "Column updated successfully!",
         "deleted": "Column deleted successfully!",
-        "hasLeads": "Cannot delete a column that contains leads"
+        "hasLeads": "Cannot delete a column that contains leads",
+        "colorsUpdated": "Column colors updated successfully!"
     },
     "validation": {
         "name": {

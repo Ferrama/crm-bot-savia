@@ -1,14 +1,14 @@
 import {
-  AutoIncrement,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  ForeignKey,
-  HasMany,
-  Model,
-  PrimaryKey,
-  Table,
-  UpdatedAt
+    AutoIncrement,
+    BelongsTo,
+    Column,
+    CreatedAt,
+    ForeignKey,
+    HasMany,
+    Model,
+    PrimaryKey,
+    Table,
+    UpdatedAt
 } from "sequelize-typescript";
 import Company from "./Company";
 import Lead from "./Lead";
@@ -31,6 +31,18 @@ class LeadColumn extends Model {
 
   @Column
   order: number;
+
+  @Column({
+    allowNull: true,
+    comment: 'Code for generic columns (e.g., "new", "contacted", "proposal"). Null for custom columns.'
+  })
+  code: string;
+
+  @Column({
+    defaultValue: false,
+    comment: 'Whether this is a system column that cannot be deleted'
+  })
+  isSystem: boolean;
 
   @ForeignKey(() => Company)
   @Column

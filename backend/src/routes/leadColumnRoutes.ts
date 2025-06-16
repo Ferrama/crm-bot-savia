@@ -1,8 +1,8 @@
-import { Router } from "express";
+import express from "express";
 import * as LeadColumnController from "../controllers/LeadColumnController";
 import isAuth from "../middleware/isAuth";
 
-const leadColumnRoutes = Router();
+const leadColumnRoutes = express.Router();
 
 leadColumnRoutes.get("/lead-columns", isAuth, LeadColumnController.index);
 
@@ -16,10 +16,22 @@ leadColumnRoutes.delete(
   LeadColumnController.remove
 );
 
-leadColumnRoutes.post(
-  "/lead-columns/reorder",
+leadColumnRoutes.put(
+  "/lead-columns/order",
   isAuth,
-  LeadColumnController.reorder
+  LeadColumnController.updateOrder
+);
+
+leadColumnRoutes.get(
+  "/lead-columns/defaults",
+  isAuth,
+  LeadColumnController.getDefaultColumnsConfig
+);
+
+leadColumnRoutes.post(
+  "/lead-columns/from-default",
+  isAuth,
+  LeadColumnController.createFromDefault
 );
 
 export default leadColumnRoutes;

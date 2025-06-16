@@ -6,30 +6,48 @@ import { getIO } from "../libs/socket";
 import Contact from "../models/Contact";
 import Currency from "../models/Currency";
 import Interaction, {
-    InteractionCategory,
-    InteractionType
+  InteractionCategory,
+  InteractionType
 } from "../models/Interaction";
 import Lead from "../models/Lead";
 import LeadColumn from "../models/LeadColumn";
 import Tag from "../models/Tag";
 import Ticket from "../models/Ticket";
 import User from "../models/User";
+import { LeadStatus } from "../types/lead";
 
-interface LeadData {
-  name: string;
-  contactId: number;
-  columnId: number;
-  temperature: string;
-  source: string;
-  expectedValue: number;
-  currencyId: number;
-  probability: number;
-  expectedClosingDate: Date;
-  assignedToId: number;
-  notes: string;
-  customFields: any;
-  tagIds?: number[];
-}
+// Mapeo de códigos de columna a estados
+const columnCodeToStatus = {
+  new: LeadStatus.NEW,
+  contacted: LeadStatus.CONTACTED,
+  follow_up: LeadStatus.FOLLOW_UP,
+  proposal: LeadStatus.PROPOSAL,
+  negotiation: LeadStatus.NEGOTIATION,
+  qualified: LeadStatus.QUALIFIED,
+  not_qualified: LeadStatus.UNQUALIFIED,
+  converted: LeadStatus.CONVERTED,
+  lost: LeadStatus.LOST,
+  closed_won: LeadStatus.CLOSED_WON,
+  closed_lost: LeadStatus.CLOSED_LOST
+};
+
+// Función para obtener el status basado en el columnId
+const getStatusFromColumnId = async (
+  columnId: number,
+  companyId: number
+): Promise<string> => {
+  const column = await LeadColumn.findOne({
+    where: { id: columnId, companyId },
+    attributes: ["code"]
+  });
+
+  if (column && column.code && columnCodeToStatus[column.code]) {
+    return columnCodeToStatus[column.code];
+  }
+
+  // Si no se encuentra la columna o no tiene código, devolver "new" por defecto
+  return LeadStatus.NEW;
+};
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const { companyId } = req.user;
@@ -60,7 +78,11 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     include: [
       { model: Contact, as: "contact", attributes: ["id", "name", "number"] },
       { model: User, as: "assignedTo", attributes: ["id", "name"] },
-      { model: LeadColumn, as: "column", attributes: ["id", "name", "color"] },
+      {
+        model: LeadColumn,
+        as: "column",
+        attributes: ["id", "name", "color", "code"]
+      },
       { model: Tag, as: "tagRelations", attributes: ["id", "name", "color"] },
       {
         model: Currency,
@@ -88,11 +110,12 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     probability,
     expectedClosingDate,
     assignedToId,
-    companyId,
     notes,
     customFields,
-    currencyId
+    currencyId,
+    tagIds
   } = req.body;
+  const { companyId } = req.user;
 
   const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -106,9 +129,10 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     probability: Yup.number().min(0).max(100),
     expectedClosingDate: Yup.date(),
     assignedToId: Yup.number(),
-    notes: Yup.string(),
+    notes: Yup.string().max(50000, "Notes must be at most 50,000 characters"),
     customFields: Yup.object(),
-    currencyId: Yup.number().required("Currency is required")
+    currencyId: Yup.number().required("Currency is required"),
+    tagIds: Yup.array().of(Yup.number())
   });
 
   try {
@@ -147,30 +171,72 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     }
   }
 
-  const lead = await Lead.create({
+  // Validar que todos los tags existan y pertenezcan a la compañía
+  if (tagIds && tagIds.length > 0) {
+    const tags = await Tag.findAll({
+      where: { id: tagIds, companyId }
+    });
+
+    if (tags.length !== tagIds.length) {
+      throw new AppError("One or more tags not found");
+    }
+  }
+
+  // Sanitize data - convert empty strings to null for numeric fields
+  const sanitizedData = {
     name,
-    title,
-    description,
+    title: title || null,
+    description: description || null,
     contactId,
     columnId,
     temperature,
-    source,
-    expectedValue,
-    probability,
-    expectedClosingDate,
-    assignedToId,
+    source: source || null,
+    expectedValue:
+      expectedValue === "" ||
+      expectedValue === null ||
+      expectedValue === undefined
+        ? null
+        : expectedValue,
+    probability:
+      probability === "" || probability === null || probability === undefined
+        ? null
+        : probability,
+    expectedClosingDate: expectedClosingDate || null,
+    assignedToId:
+      assignedToId === "" || assignedToId === null || assignedToId === undefined
+        ? null
+        : assignedToId,
     companyId,
-    notes,
-    customFields,
+    notes: notes || null,
+    customFields: customFields || {},
     currencyId
-  });
+  };
+
+  // Obtener el status basado en la columna seleccionada
+  const statusFromColumn = await getStatusFromColumnId(columnId, companyId);
+
+  // Agregar el status al objeto de datos
+  const leadData = {
+    ...sanitizedData,
+    status: statusFromColumn
+  };
+
+  const lead = await Lead.create(leadData);
+
+  // Asociar tags con el lead
+  if (tagIds && tagIds.length > 0) {
+    await lead.$add("tagRelations", tagIds);
+  }
 
   // Registrar la interacción de creación
   await Interaction.create({
     leadId: lead.id,
     type: InteractionType.NOTE,
     category: InteractionCategory.INTERNAL_NOTE,
+    priority: "medium",
     notes: `Lead creado${title ? ` con título: ${title}` : ""}`,
+    tags: [],
+    attachments: [],
     userId: Number(req.user.id),
     isPrivate: true
   });
@@ -181,7 +247,27 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     lead
   });
 
-  return res.status(201).json(lead);
+  // Obtener el lead creado con todas las relaciones
+  const createdLead = await Lead.findByPk(lead.id, {
+    include: [
+      { model: Contact, as: "contact" },
+      { model: User, as: "assignedTo", attributes: ["id", "name"] },
+      { model: Ticket, as: "tickets" },
+      { model: Tag, as: "tagRelations", attributes: ["id", "name", "color"] },
+      {
+        model: Currency,
+        as: "currency",
+        attributes: ["id", "code", "symbol", "name"]
+      },
+      {
+        model: LeadColumn,
+        as: "column",
+        attributes: ["id", "name", "color", "code"]
+      }
+    ]
+  });
+
+  return res.status(201).json(createdLead);
 };
 
 export const show = async (req: Request, res: Response): Promise<Response> => {
@@ -198,6 +284,11 @@ export const show = async (req: Request, res: Response): Promise<Response> => {
         model: Currency,
         as: "currency",
         attributes: ["id", "code", "symbol", "name"]
+      },
+      {
+        model: LeadColumn,
+        as: "column",
+        attributes: ["id", "name", "color", "code"]
       }
     ]
   });
@@ -214,6 +305,7 @@ export const update = async (
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
+  const { companyId } = req.user;
   const {
     name,
     title,
@@ -226,10 +318,10 @@ export const update = async (
     probability,
     expectedClosingDate,
     assignedToId,
-    companyId,
     notes,
     customFields,
-    currencyId
+    currencyId,
+    tagIds
   } = req.body;
 
   const schema = Yup.object().shape({
@@ -244,9 +336,10 @@ export const update = async (
     probability: Yup.number().min(0).max(100),
     expectedClosingDate: Yup.date(),
     assignedToId: Yup.number(),
-    notes: Yup.string(),
+    notes: Yup.string().max(50000, "Notes must be at most 50,000 characters"),
     customFields: Yup.object(),
-    currencyId: Yup.number().required("Currency is required")
+    currencyId: Yup.number().required("Currency is required"),
+    tagIds: Yup.array().of(Yup.number())
   });
 
   try {
@@ -265,23 +358,61 @@ export const update = async (
   const oldTitle = lead.title;
   const oldDescription = lead.description;
 
-  await lead.update({
+  // Validar que todos los tags existan y pertenezcan a la compañía
+  if (tagIds && tagIds.length > 0) {
+    const tags = await Tag.findAll({
+      where: { id: tagIds, companyId }
+    });
+
+    if (tags.length !== tagIds.length) {
+      throw new AppError("One or more tags not found");
+    }
+  }
+
+  // Sanitize data - convert empty strings to null for numeric fields
+  const sanitizedUpdateData = {
     name,
-    title,
-    description,
+    title: title || null,
+    description: description || null,
     contactId,
     columnId,
     temperature,
-    source,
-    expectedValue,
-    probability,
-    expectedClosingDate,
-    assignedToId,
-    companyId,
-    notes,
-    customFields,
+    source: source || null,
+    expectedValue:
+      expectedValue === "" ||
+      expectedValue === null ||
+      expectedValue === undefined
+        ? null
+        : expectedValue,
+    probability:
+      probability === "" || probability === null || probability === undefined
+        ? null
+        : probability,
+    expectedClosingDate: expectedClosingDate || null,
+    assignedToId:
+      assignedToId === "" || assignedToId === null || assignedToId === undefined
+        ? null
+        : assignedToId,
+    notes: notes || null,
+    customFields: customFields || {},
     currencyId
-  });
+  };
+
+  // Obtener el status basado en la columna seleccionada
+  const statusFromColumn = await getStatusFromColumnId(columnId, companyId);
+
+  // Agregar el status al objeto de datos de actualización
+  const updateData = {
+    ...sanitizedUpdateData,
+    status: statusFromColumn
+  };
+
+  await lead.update(updateData);
+
+  // Actualizar asociaciones de tags
+  if (tagIds !== undefined) {
+    await lead.$set("tagRelations", tagIds || []);
+  }
 
   // Registrar cambios en el título o descripción
   if (title !== oldTitle || description !== oldDescription) {
@@ -299,7 +430,10 @@ export const update = async (
       leadId: lead.id,
       type: InteractionType.NOTE,
       category: InteractionCategory.INTERNAL_NOTE,
+      priority: "medium",
       notes: changeNote,
+      tags: [],
+      attachments: [],
       userId: Number(req.user.id),
       isPrivate: true
     });
@@ -311,7 +445,27 @@ export const update = async (
     lead
   });
 
-  return res.json(lead);
+  // Obtener el lead actualizado con todas las relaciones
+  const updatedLead = await Lead.findByPk(id, {
+    include: [
+      { model: Contact, as: "contact" },
+      { model: User, as: "assignedTo", attributes: ["id", "name"] },
+      { model: Ticket, as: "tickets" },
+      { model: Tag, as: "tagRelations", attributes: ["id", "name", "color"] },
+      {
+        model: Currency,
+        as: "currency",
+        attributes: ["id", "code", "symbol", "name"]
+      },
+      {
+        model: LeadColumn,
+        as: "column",
+        attributes: ["id", "name", "color", "code"]
+      }
+    ]
+  });
+
+  return res.json(updatedLead);
 };
 
 export const remove = async (
@@ -377,7 +531,10 @@ export const moveLead = async (
     throw new AppError("Lead column not found");
   }
 
-  await lead.update({ columnId });
+  // Obtener el status basado en la nueva columna
+  const statusFromColumn = await getStatusFromColumnId(columnId, companyId);
+
+  await lead.update({ columnId, status: statusFromColumn });
 
   const io = getIO();
   io.emit(`lead:${companyId}`, {

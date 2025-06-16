@@ -5,6 +5,9 @@
         "board": "Quadro",
         "list": "Lista"
     },
+    "board": {
+        "title": "Quadro de Leads"
+    },
     "table": {
         "lead": "Lead",
         "name": "Nome",

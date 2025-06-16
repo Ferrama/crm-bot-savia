@@ -210,10 +210,8 @@ const MainListItems = (props) => {
       setInvisible(true);
     }
   }, [chats, user.id]);
-  console.log('cshow', localStorage.getItem('cshow'));
   useEffect(() => {
     if (localStorage.getItem('cshow')) {
-      console.log('cshow', localStorage.getItem('cshow'));
       setShowCampaigns(true);
     }
   }, []);

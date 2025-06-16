@@ -5,7 +5,8 @@
         "edit": "Editar",
         "delete": "Excluir",
         "save": "Salvar",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "updateColors": "Atualizar Cores"
     },
     "dialog": {
         "new": "Nova Coluna",
@@ -20,7 +21,8 @@
         "created": "Coluna criada com sucesso!",
         "updated": "Coluna atualizada com sucesso!",
         "deleted": "Coluna excluída com sucesso!",
-        "hasLeads": "Não é possível excluir uma coluna que contém leads"
+        "hasLeads": "Não é possível excluir uma coluna que contém leads",
+        "colorsUpdated": "Cores das colunas atualizadas com sucesso!"
     },
     "validation": {
         "name": {

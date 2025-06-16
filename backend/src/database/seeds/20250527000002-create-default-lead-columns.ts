@@ -8,49 +8,84 @@ module.exports = {
         { type: queryInterface.sequelize.QueryTypes.SELECT, transaction: t }
       );
 
-      // Definir las columnas por defecto con sus estados y pipelines correspondientes
-      const defaultColumns = [
+      // Definir las columnas por defecto con sus códigos
+      const DEFAULT_LEAD_COLUMNS = [
         {
+          code: "new",
           name: "New",
           color: "#7C8A96",
           order: 1,
-          status: "new",
-          pipeline: "default"
+          isSystem: true
         },
         {
-          name: "Qualified",
+          code: "contacted",
+          name: "Contacted",
           color: "#00A8FF",
           order: 2,
-          status: "qualified",
-          pipeline: "default"
+          isSystem: true
         },
         {
+          code: "follow_up",
+          name: "Follow Up",
+          color: "#9C27B0",
+          order: 3,
+          isSystem: true
+        },
+        {
+          code: "proposal",
           name: "Proposal",
           color: "#FFB300",
-          order: 3,
-          status: "proposal",
-          pipeline: "default"
+          order: 4,
+          isSystem: true
         },
         {
+          code: "negotiation",
           name: "Negotiation",
           color: "#FF6B6B",
-          order: 4,
-          status: "negotiation",
-          pipeline: "default"
+          order: 5,
+          isSystem: true
         },
         {
+          code: "qualified",
+          name: "Qualified",
+          color: "#4CAF50",
+          order: 6,
+          isSystem: true
+        },
+        {
+          code: "not_qualified",
+          name: "Not Qualified",
+          color: "#FF9800",
+          order: 7,
+          isSystem: true
+        },
+        {
+          code: "converted",
+          name: "Converted",
+          color: "#00C853",
+          order: 8,
+          isSystem: true
+        },
+        {
+          code: "lost",
+          name: "Lost",
+          color: "#FF5252",
+          order: 9,
+          isSystem: true
+        },
+        {
+          code: "closed_won",
           name: "Closed Won",
           color: "#00C853",
-          order: 5,
-          status: "closed_won",
-          pipeline: "default"
+          order: 10,
+          isSystem: true
         },
         {
+          code: "closed_lost",
           name: "Closed Lost",
           color: "#FF5252",
-          order: 6,
-          status: "closed_lost",
-          pipeline: "default"
+          order: 11,
+          isSystem: true
         }
       ];
 
@@ -62,10 +97,14 @@ module.exports = {
         transaction: t
       });
 
-      // Crear columnas para todas las compañías
+      // Crear columnas para todas las compañías usando la configuración por defecto
       const columnsToInsert = companyIds.flatMap((companyId: number) =>
-        defaultColumns.map(column => ({
-          ...column,
+        DEFAULT_LEAD_COLUMNS.map(column => ({
+          name: column.name,
+          color: column.color,
+          order: column.order,
+          code: column.code,
+          isSystem: column.isSystem,
           companyId,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -78,7 +117,7 @@ module.exports = {
 
       // Actualizar los leads existentes para asignarlos a la columna "New" si no tienen columna
       const newColumns = await queryInterface.sequelize.query(
-        "SELECT id FROM \"LeadColumns\" WHERE name = 'New'",
+        "SELECT id FROM \"LeadColumns\" WHERE code = 'new'",
         { type: queryInterface.sequelize.QueryTypes.SELECT, transaction: t }
       );
 
