@@ -3,6 +3,7 @@ import AppError from "../../errors/AppError";
 import Company from "../../models/Company";
 import Setting from "../../models/Setting";
 import User from "../../models/User";
+import { NocoDBService } from "../NocoDBService";
 
 interface CompanyData {
   name: string;
@@ -55,6 +56,20 @@ const CreateCompanyService = async (
     await companySchema.validate({ name });
   } catch (err: any) {
     throw new AppError(err.message);
+  }
+
+  // Buscar la compañía en NocoDB para obtener el API key
+  let nocodbApiKey: string | undefined;
+  try {
+    const nocodbService = new NocoDBService();
+    const nocodbCompany = await nocodbService.findCompany(
+      name,
+      ["Apikey"],
+      "Company"
+    );
+    nocodbApiKey = nocodbCompany.Apikey;
+  } catch (error: any) {
+    console.warn(`Company ${name} not found in NocoDB: ${error.message}`);
   }
 
   const company = await Company.create({
@@ -223,8 +238,22 @@ const CreateCompanyService = async (
     }
   });
 
+  if (nocodbApiKey) {
+    await Setting.findOrCreate({
+      where: {
+        companyId: company.id,
+        key: "nocodb_apikey"
+      },
+      defaults: {
+        companyId: company.id,
+        key: "nocodb_apikey",
+        value: nocodbApiKey
+      }
+    });
+  }
+
   if (companyData.campaignsEnabled !== undefined) {
-    const [setting, created] = await Setting.findOrCreate({
+    const [setting, settingCreated] = await Setting.findOrCreate({
       where: {
         companyId: company.id,
         key: "campaignsEnabled"
@@ -235,7 +264,7 @@ const CreateCompanyService = async (
         value: `${campaignsEnabled}`
       }
     });
-    if (!created) {
+    if (!settingCreated) {
       await setting.update({ value: `${campaignsEnabled}` });
     }
   }

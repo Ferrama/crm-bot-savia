@@ -50,7 +50,6 @@ const CreateUserFromSaviaService = async ({
       company.saviaDbUrl,
       async (prisma: PrismaClient) => {
         // Fetch all users from the Savia database
-        console.log("Fetching users from Savia database...");
 
         const users = await prisma.usuario.findMany({
           select: {
@@ -72,9 +71,6 @@ const CreateUserFromSaviaService = async ({
             nombre: "asc"
           }
         });
-
-        console.log(`Raw Savia users found: ${users.length}`);
-        console.log("Sample user data:", users.slice(0, 2));
 
         // Transform Savia users to our format
         const mappedUsers: MappedUser[] = users.map(user => ({
@@ -100,8 +96,6 @@ const CreateUserFromSaviaService = async ({
       }
     );
 
-    console.log(`Fetched ${saviaUsers.length} users from Savia DB`);
-
     // Helper function to clean username for email generation
     const cleanUsernameForEmail = (username: string): string => {
       return username
@@ -115,49 +109,32 @@ const CreateUserFromSaviaService = async ({
     const validUsers = saviaUsers.filter(saviaUser => {
       // Skip users with idTipoUsuario = 1
       if (saviaUser.userType === 1) {
-        console.log(
-          `Skipping user ${saviaUser.username} - idTipoUsuario = 1 (system user)`
-        );
         return false;
       }
 
       // Validate required fields
       if (!saviaUser.email || !saviaUser.username || !saviaUser.password) {
-        console.log(
-          `Skipping user ${saviaUser.username} - missing required fields (email: ${!!saviaUser.email}, username: ${!!saviaUser.username}, password: ${!!saviaUser.password})`
-        );
         return false;
       }
 
       // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(saviaUser.email)) {
-        console.log(
-          `Skipping user ${saviaUser.username} - invalid email format: ${saviaUser.email}`
-        );
         return false;
       }
 
       // Validate password length (minimum 5 characters)
       if (saviaUser.password.length < 5) {
-        console.log(
-          `Skipping user ${saviaUser.username} - password too short (${saviaUser.password.length} chars)`
-        );
         return false;
       }
 
       // Validate username length (minimum 2 characters)
       if (saviaUser.username.length < 2) {
-        console.log(
-          `Skipping user ${saviaUser.username} - username too short (${saviaUser.username.length} chars)`
-        );
         return false;
       }
 
       return true;
     });
-
-    console.log(`Valid users found: ${validUsers.length}`);
 
     // Group users by original email to handle duplicates
     const usersByEmail = new Map<string, typeof validUsers>();
@@ -169,8 +146,6 @@ const CreateUserFromSaviaService = async ({
       }
       usersByEmail.get(email)!.push(user);
     });
-
-    console.log(`Found ${usersByEmail.size} unique email groups`);
 
     // Process each email group to ensure unique emails (all in memory)
     const preparedUsers = [];
@@ -197,15 +172,7 @@ const CreateUserFromSaviaService = async ({
           });
 
           usedEmails.add(originalEmail);
-          console.log(
-            `Using original email for single user: ${user.username} -> ${originalEmail}`
-          );
         } else {
-          // Multiple users with same email, need to modify them
-          console.log(
-            `Multiple users with email ${originalEmail}, modifying emails`
-          );
-
           // Process each user in the group with unique modified emails
           for (let i = 0; i < users.length; i += 1) {
             const user = users[i];
@@ -220,10 +187,6 @@ const CreateUserFromSaviaService = async ({
               finalEmail = `${cleanUsername}${counter}@${domain}`;
               counter += 1;
             }
-
-            console.log(
-              `Modified email for user ${user.username}: ${originalEmail} -> ${finalEmail}`
-            );
 
             // Determine profile and enabled status based on idTipoUsuario
             const profile = user.userType === 4 ? "admin" : "user";
@@ -248,8 +211,6 @@ const CreateUserFromSaviaService = async ({
       }
     }
 
-    console.log(`Prepared ${preparedUsers.length} users for creation`);
-
     // Validate all prepared users before creation
     const finalUsersToCreate = preparedUsers.filter(userData => {
       // Additional validation before creation
@@ -264,8 +225,6 @@ const CreateUserFromSaviaService = async ({
       }
       return true;
     });
-
-    console.log(`Final users to create: ${finalUsersToCreate.length}`);
 
     // Now create all users in parallel using Promise.all
     const results = await Promise.all(
@@ -290,9 +249,6 @@ const CreateUserFromSaviaService = async ({
             }
           }
 
-          console.log(
-            `Created user: ${userData.username} with email: ${userData.email}, profile: ${userData.profile}, enabled: ${userData.enabled}`
-          );
           return { type: "created", user: userData.username };
         } catch (error) {
           const errorMsg = `Failed to create user ${userData.username}: ${error.message}`;

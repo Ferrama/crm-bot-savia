@@ -6051,6 +6051,22 @@ model notificacioneswhatsapp {
   recapturaFrase                                                String? @db.Text
   recapturaURL                                                  String? @db.Text
   recapturaMesesPosteriores                                     Int?
+  horaDesdeCumpleanios                                          Int?
+  horaHastaCumpleanios                                          Int?
+  horaDesdeBuenViaje                                            Int?
+  horaHastaBuenViaje                                            Int?
+  horaDesdeEncuesta                                             Int?
+  horaHastaEncuesta                                             Int?
+  horaDesdeCalificacion                                         Int?
+  horaHastaCalificacion                                         Int?
+  horaDesdeVoucher                                              Int?
+  horaHastaVoucher                                              Int?
+  horaDesdeExpectativa                                          Int?
+  horaHastaExpectativa                                          Int?
+  horaDesdePasaporte                                            Int?
+  horaHastaPasaporte                                            Int?
+  horaDesdeRecaptura                                            Int?
+  horaHastaRecaptura                                            Int?
   imagen_notificacioneswhatsapp_idCalificacionPrincipalToimagen imagen? @relation("notificacioneswhatsapp_idCalificacionPrincipalToimagen", fields: [idCalificacionPrincipal], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK2F3023DC2B7DBC73")
   imagen_notificacioneswhatsapp_idBuenViajePrincipalToimagen    imagen? @relation("notificacioneswhatsapp_idBuenViajePrincipalToimagen", fields: [idBuenViajePrincipal], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK2F3023DC3344A97D")
   imagen_notificacioneswhatsapp_idVoucherPrincipalToimagen      imagen? @relation("notificacioneswhatsapp_idVoucherPrincipalToimagen", fields: [idVoucherPrincipal], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK2F3023DC70C4F9BC")
